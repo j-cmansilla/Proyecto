@@ -121,9 +121,13 @@ public class Login extends javax.swing.JFrame {
         if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
             User usuario = new User();
             try {
-                if(usuario.ValidateUserAndPassword(txtUser.getText(), txtPass.getText()));
-                
+                usuario.ValidateUserAndPassword(txtUser.getText(), txtPass.getText());
+                this.hide();
+                PerfilUsuario perfil = new PerfilUsuario();
+                perfil.show();
             } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

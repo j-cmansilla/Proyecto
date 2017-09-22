@@ -24,8 +24,8 @@ import javax.swing.JOptionPane;
  */
 public class ManejadorDeUsuarios {
     
-    private final String DEFAULT_DIRECTORY = "C:\\MEIA\\users.txt";
-    
+    private final String DEFAULT_DIRECTORY = "C:\\MEIA\\Usuario.txt";
+    private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
     
     public byte[] cifra(String sinCifrar) throws Exception {
 	final byte[] bytes = sinCifrar.getBytes("UTF-8");
@@ -57,6 +57,42 @@ public class ManejadorDeUsuarios {
 	return aes;
     }
     
+    public void CloseSession(){
+        setUserToLogin("", "", "");
+    }
+    
+    public User getUserLogin() throws FileNotFoundException{
+        File archivoUsuarios = new File(DEFAULT_LOGIN_USER_DIRECTORY);
+        if (archivoUsuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_LOGIN_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split(",");
+                boolean isAdmin = false;
+                if (credenciales[2].equals("true")) {
+                    isAdmin = true;
+                }
+                return new User(credenciales[0], credenciales[1], isAdmin);
+            }
+        }    
+        return new User();
+    }
+    
+    public void setUserToLogin(String userName, String pass, String isAdmin){
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(DEFAULT_LOGIN_USER_DIRECTORY), "utf-8"));
+            writer.write(userName+","+pass+","+isAdmin+System.getProperty("line.separator"));
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
     
     public boolean UserExists(String user, String pass) throws FileNotFoundException, IOException, Exception{
         //Validate if the file exists
@@ -71,6 +107,7 @@ public class ManejadorDeUsuarios {
                 String [] credenciales = line.split(",");
                 if (user.equals(credenciales[0]) && pass.equals(credenciales[1])) {
                     JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    setUserToLogin(credenciales[0], credenciales[1], credenciales[2]);
                     return true;
                 }
             } 
@@ -79,6 +116,7 @@ public class ManejadorDeUsuarios {
                 BufferedWriter bw = new BufferedWriter(Escribir);
                 bw.write(user+","+pass+","+"false"+System.getProperty("line.separator"));
                 JOptionPane.showMessageDialog(null, user+" creado correctamente!");
+                setUserToLogin(user, pass, "false");
                 bw.close();
                 Escribir.close();
             }catch(IOException e){
@@ -91,6 +129,7 @@ public class ManejadorDeUsuarios {
                         new FileOutputStream(DEFAULT_DIRECTORY), "utf-8"));
                 writer.write(user+","+pass+","+"true"+System.getProperty("line.separator"));
                 JOptionPane.showMessageDialog(null, "El usuario: "+user+" ha sido creado!");
+                setUserToLogin(user, pass, "true");
                 return true;
             } catch (IOException ex) {
                 // report
