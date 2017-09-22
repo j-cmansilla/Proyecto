@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.security.MessageDigest;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
 import javax.swing.JOptionPane;
 
@@ -23,8 +26,41 @@ public class ManejadorDeUsuarios {
     
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\users.txt";
     
-    public boolean UserExists(String user, String pass) throws FileNotFoundException, IOException{
+    
+    public byte[] cifra(String sinCifrar) throws Exception {
+	final byte[] bytes = sinCifrar.getBytes("UTF-8");
+	final Cipher aes = obtieneCipher(true);
+	final byte[] cifrado = aes.doFinal(bytes);
+	return cifrado;
+    }
+
+    public String descifra(byte[] cifrado) throws Exception {
+	final Cipher aes = obtieneCipher(false);
+	final byte[] bytes = aes.doFinal(cifrado);
+	final String sinCifrar = new String(bytes, "UTF-8");
+	return sinCifrar;
+    }
+
+    private Cipher obtieneCipher(boolean paraCifrar) throws Exception {
+	final String frase = "JBook";
+	final MessageDigest digest = MessageDigest.getInstance("SHA");
+	digest.update(frase.getBytes("UTF-8"));
+	final SecretKeySpec key = new SecretKeySpec(digest.digest(), 0, 16, "AES");
+
+	final Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+	if (paraCifrar) {
+		aes.init(Cipher.ENCRYPT_MODE, key);
+	} else {
+		aes.init(Cipher.DECRYPT_MODE, key);
+	}
+
+	return aes;
+    }
+    
+    
+    public boolean UserExists(String user, String pass) throws FileNotFoundException, IOException, Exception{
         //Validate if the file exists
+        
         File archivoUsuarios = new File(DEFAULT_DIRECTORY);
         if (archivoUsuarios.exists()) {
             Scanner scanner = new Scanner(DEFAULT_DIRECTORY);

@@ -121,7 +121,8 @@ public class Login extends javax.swing.JFrame {
         if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
             User usuario = new User();
             try {
-                usuario.ValidateUserAndPassword(txtUser.getText(), txtPass.getText());
+                if(usuario.ValidateUserAndPassword(txtUser.getText(), txtPass.getText()));
+                
             } catch (IOException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -136,7 +137,8 @@ public class Login extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null,"Inserte un nombre de usuario!");
             }
         }
-        
+        txtPass.setText("");
+        txtUser.setText("");
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     /**
