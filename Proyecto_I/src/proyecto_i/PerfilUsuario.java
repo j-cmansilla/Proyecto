@@ -22,7 +22,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     public PerfilUsuario() throws FileNotFoundException {
         initComponents();
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        txtUsuarioLogueado.setText(manejador.getUserLogin().getUserName());
+        txtUsuarioLogueado.setText(manejador.getUserLogin());
     }
 
     /**

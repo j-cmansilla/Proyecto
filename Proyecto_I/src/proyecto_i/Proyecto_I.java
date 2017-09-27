@@ -19,8 +19,10 @@ public class Proyecto_I {
     public static void main(String[] args) {
         // TODO code application logic here
         File directorio = new File("c:\\MEIA");
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         if (!directorio.exists()) {
             directorio.mkdirs();
+            manejador.CrearArchivos();
         }
         Login login = new Login();
         login.show();

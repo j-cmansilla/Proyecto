@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.security.MessageDigest;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
@@ -24,8 +27,168 @@ import javax.swing.JOptionPane;
  */
 public class ManejadorDeUsuarios {
     
-    private final String DEFAULT_DIRECTORY = "C:\\MEIA\\Usuario.txt";
+    private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
+    private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
+    private final String DEFAULT_TEMP_DIRECTORY = "Temp.txt";
+    private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
+    private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
+    
+    public void CrearArchivos(){
+        try{
+            File archivoUsuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File descriptorUsuarios = new File(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY);
+            File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+            archivoUsuarios.createNewFile();
+            descriptorUsuarios.createNewFile();
+            archivoBitacora.createNewFile();
+            descriptorBitacora.createNewFile();
+        }catch(IOException e){
+            
+        }
+    }
+    
+    public boolean usuarioExistente(String user, String password) throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+        File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("\\|");
+                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                    JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    scanner.close();
+                    return true;
+                }
+            }
+        }
+        //buscarlo en el master
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                    JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    scanner.close();
+                    return true;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, "El usuario: "+user+" no existe en el contexto actual!");
+        return false;
+    }
+    
+    public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException{
+        File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+        boolean isFull = false;
+        String newUser="";
+        if (desBitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            if (!scanner.hasNextLine()) {
+                newUser = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"modified"+System.getProperty("line.separator")+"1"+System.getProperty("line.separator")+"0"+System.getProperty("line.separator")+"3";
+                usuario.setRol(1);
+            }else{
+                usuario.setRol(0);
+                ArrayList lista = new ArrayList();
+                while(scanner.hasNextLine()){
+                    lista.add(scanner.nextLine());
+                }
+                scanner.close();
+                int count = Integer.parseInt(lista.get(3).toString()) + Integer.parseInt(lista.get(4).toString()); 
+                int lenght = Integer.parseInt(lista.get(5).toString());
+                if (count+1 > lenght) {
+                    isFull = true;
+                    for (int i = 0; i < lista.size(); i++) {
+                        if (i==0) {
+                            newUser = newUser+userName+System.getProperty("line.separator");
+                        }else{
+                            if (i == 2) {
+                            newUser = newUser+zdt.toString()+System.getProperty("line.separator");
+                            }else{
+                                if (i == 4) {
+                                    newUser = newUser+"0"+System.getProperty("line.separator");
+                                }else{
+                                    if (i == 3) {
+                                        newUser = newUser+"1"+System.getProperty("line.separator");
+                                    }else{  
+                                        newUser = newUser+lista.get(i)+System.getProperty("line.separator");
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                }else{
+                  for (int i = 0; i < lista.size(); i++) {
+                        if (i == 2) {
+                            newUser = newUser+zdt.toString()+System.getProperty("line.separator");
+                        }else{
+                            if (i == 3) {
+                                int newCount = Integer.parseInt(lista.get(i).toString());
+                                newCount++;
+                                newUser = newUser+newCount+System.getProperty("line.separator");
+                            }else{  
+                                newUser = newUser+lista.get(i)+System.getProperty("line.separator");
+                            }
+                        }
+                    }  
+                }
+            }
+            Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY), "utf-8"));
+                writer.write(newUser);
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+            llenarBitacora(isFull, retornarUsuarioParaBitacora(usuario));
+        }
+    }
+    
+    private String retornarUsuarioParaBitacora(Usuario usuario){
+        return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
+    }
+    
+    private void llenarBitacora(boolean isFull, String newUser) throws FileNotFoundException{
+        if (isFull) {
+            
+           Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY), "utf-8"));
+                writer.write(newUser);
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            } 
+        }else{
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            try{
+                FileWriter Escribir = new FileWriter(archivo,true);
+                BufferedWriter bw = new BufferedWriter(Escribir);
+                bw.write(newUser+System.getProperty("line.separator"));
+                //setUserToLogin(user, pass, "false");
+                bw.close();
+                Escribir.close();
+            }catch(IOException e){
+
+            }
+        }
+    }
     
     public byte[] cifra(String sinCifrar) throws Exception {
 	final byte[] bytes = sinCifrar.getBytes("UTF-8");
@@ -58,10 +221,10 @@ public class ManejadorDeUsuarios {
     }
     
     public void CloseSession(){
-        setUserToLogin("", "", "");
+        setUserToLogin("");
     }
     
-    public User getUserLogin() throws FileNotFoundException{
+    public String getUserLogin() throws FileNotFoundException{
         File archivoUsuarios = new File(DEFAULT_LOGIN_USER_DIRECTORY);
         if (archivoUsuarios.exists()) {
             Scanner scanner = new Scanner(DEFAULT_LOGIN_USER_DIRECTORY);
@@ -70,22 +233,18 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(",");
-                boolean isAdmin = false;
-                if (credenciales[2].equals("true")) {
-                    isAdmin = true;
-                }
-                return new User(credenciales[0], credenciales[1], isAdmin);
+                return (credenciales[0]);
             }
         }    
-        return new User();
+        return "";
     }
     
-    public void setUserToLogin(String userName, String pass, String isAdmin){
+    public void setUserToLogin(String userName){
         Writer writer = null;
         try {
             writer = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(DEFAULT_LOGIN_USER_DIRECTORY), "utf-8"));
-            writer.write(userName+","+pass+","+isAdmin+System.getProperty("line.separator"));
+            writer.write(userName+System.getProperty("line.separator"));
         } catch (IOException ex) {
             // report
         } finally {
@@ -93,6 +252,35 @@ public class ManejadorDeUsuarios {
         }
     }
     
+    public boolean UsuarioCorrecto(String user, String pass) throws FileNotFoundException{
+        File archivoUsuarios = new File(DEFAULT_DIRECTORY);
+        if (archivoUsuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (user.equals(credenciales[0]) && pass.equals(credenciales[1])) {
+                    JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    
+                    return true;
+                }
+            }
+        }else{
+            Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DIRECTORY), "utf-8"));
+                writer.write("");
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+        }
+        return false;
+    }
     
     public boolean UserExists(String user, String pass) throws FileNotFoundException, IOException, Exception{
         //Validate if the file exists
@@ -107,7 +295,7 @@ public class ManejadorDeUsuarios {
                 String [] credenciales = line.split(",");
                 if (user.equals(credenciales[0]) && pass.equals(credenciales[1])) {
                     JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
-                    setUserToLogin(credenciales[0], credenciales[1], credenciales[2]);
+                    
                     return true;
                 }
             } 
@@ -116,7 +304,7 @@ public class ManejadorDeUsuarios {
                 BufferedWriter bw = new BufferedWriter(Escribir);
                 bw.write(user+","+pass+","+"false"+System.getProperty("line.separator"));
                 JOptionPane.showMessageDialog(null, user+" creado correctamente!");
-                setUserToLogin(user, pass, "false");
+                
                 bw.close();
                 Escribir.close();
             }catch(IOException e){
@@ -129,7 +317,7 @@ public class ManejadorDeUsuarios {
                         new FileOutputStream(DEFAULT_DIRECTORY), "utf-8"));
                 writer.write(user+","+pass+","+"true"+System.getProperty("line.separator"));
                 JOptionPane.showMessageDialog(null, "El usuario: "+user+" ha sido creado!");
-                setUserToLogin(user, pass, "true");
+                
                 return true;
             } catch (IOException ex) {
                 // report

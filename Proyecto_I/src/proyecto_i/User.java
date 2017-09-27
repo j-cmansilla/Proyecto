@@ -21,8 +21,7 @@ public class User {
     
     public boolean ValidateUserAndPassword(String user, String pass) throws FileNotFoundException, IOException, Exception{
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        manejador.UserExists(user,pass);
-        return false;
+        return manejador.UsuarioCorrecto(user, pass);
     }
     
     /**

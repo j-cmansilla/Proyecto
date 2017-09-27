@@ -118,13 +118,20 @@ public class Login extends javax.swing.JFrame {
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
         // TODO add your handling code here:
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
-            User usuario = new User();
+            Usuario usuario = new Usuario();
             try {
-                usuario.ValidateUserAndPassword(txtUser.getText(), txtPass.getText());
-                this.hide();
-                PerfilUsuario perfil = new PerfilUsuario();
-                perfil.show();
+                if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
+                    manejador.setUserToLogin(txtUser.getText());
+                    this.hide();
+                    PerfilUsuario perfil = new PerfilUsuario();
+                    perfil.show();
+                }else{
+                    this.hide();
+                    CrearUsuario crearUsuario = new CrearUsuario();
+                    crearUsuario.show();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             } catch (Exception ex) {
