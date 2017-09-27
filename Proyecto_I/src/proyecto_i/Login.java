@@ -152,6 +152,16 @@ public class Login extends javax.swing.JFrame {
         txtUser.setText("");
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
+    public String Sha1(String password)
+    {
+        byte[] PassB = password.getBytes();
+         String result = "";
+         for (int i=0; i < PassB.length; i++)
+         {
+             result += Integer.toString( ( PassB[i] & 0xff ) + 0x100, 16).substring( 1 );
+         }
+         return result;
+    }
     /**
      * @param args the command line arguments
      */
