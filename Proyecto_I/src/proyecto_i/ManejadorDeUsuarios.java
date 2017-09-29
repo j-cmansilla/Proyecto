@@ -327,6 +327,27 @@ public class ManejadorDeUsuarios {
         }
         return false;
     }
+    
+    public Usuario getUserData(String user) throws FileNotFoundException{
+        File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        Usuario result;
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (user.equals(credenciales[0])) {
+                    result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+                    scanner.close();
+                    return result;
+                }
+            }
+        }
+        return null;        
+    }
 }
 
 
