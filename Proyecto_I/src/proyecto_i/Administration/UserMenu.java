@@ -20,23 +20,30 @@ import proyecto_i.Usuario;
  * @author sebas
  */
 public class UserMenu {
-    public boolean Admin;
-    public  boolean Status = true;
-    public void setAdmin(int ad) {
-        this.Admin = ad != 0;
+    private String User = "";
+    public String getUsuario() {
+        return User;
     }
+    public void setUsuario(String user) {
+        this.User = user;
+    }
+    
+  
    /* public void setStatus(int ad) {
         this.Status = ad != 0;
     }*/
     
-    public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
+    //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver metodo en la ultima version ********************************************** 
+    public void Main() throws FileNotFoundException
     {
         UserMenu UM = new UserMenu();
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
+        Usuario MainUser = MDU.getUserData(User);
+        
         String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario" };
         String[] choices = { "Modificar Perfil", "Desactivar cuenta", };
-        if(UM.Admin)
+        if(MainUser.Rol()==1)
         {
             choices = chAdmin;
         }
@@ -48,8 +55,13 @@ public class UserMenu {
             }
             else if (input.equals(choices[1]))
             {
-                //UM.setStatus(0);
-                UM.Status = false;
+                JDialog.setDefaultLookAndFeelDecorated(true);
+                int response = JOptionPane.showConfirmDialog(null, "Seguro desea desactivar la cuenta?", "Confirm",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (response == JOptionPane.YES_OPTION) {
+                    MainUser.setEstatus(0);
+                } 
+                //Reemplazar usuario en el apilo o master...  ***************************************************
             }
             else if (input.equals(choices[2]))
             {
@@ -59,7 +71,7 @@ public class UserMenu {
             else if(input.equals(choices[3]))
             {
                JFrame frame = new JFrame(); 
-               Object result = JOptionPane.showInputDialog(frame, "Enter printer name:");
+               Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea buscar:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                
@@ -69,7 +81,7 @@ public class UserMenu {
             else if(input.equals(choices[4]))
             {
                JFrame frame = new JFrame(); 
-               Object result = JOptionPane.showInputDialog(frame, "Enter printer name:");
+               Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea desactivar:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                user.setEstatus(0);
