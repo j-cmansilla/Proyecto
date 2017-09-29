@@ -30,6 +30,7 @@ public class ManejadorDeUsuarios {
     private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
     private final String DEFAULT_TEMP_DIRECTORY = "Temp.txt";
+    private final String DEFAULT_BACKUP_BITACORA_DIRECTORY = "bitacora_backup.txt";
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
@@ -40,10 +41,12 @@ public class ManejadorDeUsuarios {
             File descriptorUsuarios = new File(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY);
             File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
             File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+            File bitacoraBackup = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
             archivoUsuarios.createNewFile();
             descriptorUsuarios.createNewFile();
             archivoBitacora.createNewFile();
             descriptorBitacora.createNewFile();
+            bitacoraBackup.createNewFile();
         }catch(IOException e){
             
         }
