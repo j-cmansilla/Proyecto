@@ -93,6 +93,12 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel5.setText("FIRST NAME:");
 
+        txtDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDateActionPerformed(evt);
+            }
+        });
+
         jLabel7.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel7.setText("BIRTH DATE:");
 
@@ -299,6 +305,10 @@ public class CrearUsuario extends javax.swing.JFrame {
         regresar.show();
         this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDateActionPerformed
 
     
     
