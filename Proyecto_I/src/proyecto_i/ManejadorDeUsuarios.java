@@ -14,6 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.security.MessageDigest;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,7 +91,7 @@ public class ManejadorDeUsuarios {
         return false;
     }
     
-    public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException{
+    public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException, IOException{
         File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
         boolean isFull = false;
         String newUser="";
@@ -165,9 +166,136 @@ public class ManejadorDeUsuarios {
         return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
     }
     
-    private void llenarBitacora(boolean isFull, String newUser) throws FileNotFoundException{
+    private boolean pasarDatosAlMaster(String userName) throws FileNotFoundException, IOException{
+        ZoneId zonedId = ZoneId.of( "America/Guatemala" );
+        ZonedDateTime zdt = ZonedDateTime.now( zonedId );
+        File descriptorDelMaster = new File(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY);
+        if (!descriptorDelMaster.exists()) return false;
+        Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY);
+        File archivo = new File(scanner.nextLine());
+        scanner = new Scanner(archivo);
+        String newDescriptor = "";
+        if (!scanner.hasNextLine()){
+            newDescriptor = DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY+System.getProperty("line.separator")+"Usuarios del sistema"+System.getProperty("line.separator")+"Archivo de datos"+System.getProperty("line.separator")+"Secuencial"+System.getProperty("line.separator");
+            newDescriptor = newDescriptor+userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"Sin modificacion"+System.getProperty("line.separator")+"|"+System.getProperty("line.separator")+"userName"+System.getProperty("line.separator")+"Ascendente"+System.getProperty("line.separator")+"1"+System.getProperty("line.separator")+"0";
+        }else{
+            ArrayList lista = new ArrayList();
+            while(scanner.hasNextLine()){
+                lista.add(scanner.nextLine());
+            }
+            scanner.close();
+            lista.set(4, userName);
+            lista.set(6, zdt.toString());
+            for (int i = 0; i < lista.size(); i++) {
+                newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
+            }
+            //reorganizarMaster();
+        } 
+        Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY), "utf-8"));
+                writer.write(newDescriptor);
+                return true;
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+        return false; 
+    }
+    
+    public int tamanioDeBitacora() throws FileNotFoundException{
+        File descriptorDelMaster = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+        Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+        File archivo = new File(scanner.nextLine());
+        scanner = new Scanner(archivo);
+        ArrayList lista = new ArrayList();
+        while(scanner.hasNextLine()){
+            lista.add(scanner.nextLine());
+        }
+        scanner.close();
+        return Integer.parseInt(lista.get(10).toString());
+    }
+    
+    private void ordenarMaster() throws FileNotFoundException {
+        boolean ordenado=false;
+        ArrayList lista = retornarLista();
+        int cuentaIntercambios=0;
+         // Cuando sean archivos, no es necesario que el master tenga el 
+         // tamaño de la bitacora 
+        //Usamos un bucle anidado, saldra cuando este ordenado el array
+        while(!ordenado){
+            for(int i=0;i<lista.size()-1;i++){
+                if (lista.get(i).toString().split("\\|")[0].compareTo(lista.get(i+1).toString().split("\\|")[0])>0){
+                    //Intercambiamos valores
+                    String aux=lista.get(i).toString();
+                    lista.set(i, lista.get(i+1).toString());
+                    lista.set(i+1, aux);
+                    //indicamos que hay un cambio
+                    cuentaIntercambios++;
+                }
+            }
+            //Si no hay intercambios, es que esta ordenado.
+            if (cuentaIntercambios==0){
+                ordenado=true;
+            }
+            //Inicializamos la variable de nuevo para que empiece a contar de nuevo
+            cuentaIntercambios=0;
+        }
+        llenarMaster(lista);
+    }
+    
+    private void llenarMaster(ArrayList lista){
+        String newString = "";
+        for (int i = 0; i < lista.size(); i++) {
+            newString = newString+lista.get(i)+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY), "utf-8"));
+            writer.write(newString);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    
+    private ArrayList retornarLista() throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+        File master = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        if (master.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
+    private void llenarBitacora(boolean isFull, String newUser) throws FileNotFoundException, IOException{
         if (isFull) {
-            
+           pasarDatosAlMaster(newUser.split("\\|")[0]);
+           ordenarMaster();
            Writer writer = null;
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
