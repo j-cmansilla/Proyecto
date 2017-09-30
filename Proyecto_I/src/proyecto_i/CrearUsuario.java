@@ -93,6 +93,12 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel5.setText("FIRST NAME:");
 
+        txtDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDateActionPerformed(evt);
+            }
+        });
+
         jLabel7.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel7.setText("BIRTH DATE:");
 
@@ -127,6 +133,11 @@ public class CrearUsuario extends javax.swing.JFrame {
         });
 
         btnCancelar.setText("Exit");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel11.setText("PHONE:");
@@ -277,6 +288,9 @@ public class CrearUsuario extends javax.swing.JFrame {
                     }else{
                         Iniciar();
                         JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" created!");
+                        Login returnL=new Login();
+                        returnL.show();
+                        this.dispose();
                     } 
                 }
             }
@@ -284,6 +298,17 @@ public class CrearUsuario extends javax.swing.JFrame {
             Logger.getLogger(CrearUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCrearUsuarioActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        Login regresar=new Login();
+        regresar.show();
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDateActionPerformed
 
     
     

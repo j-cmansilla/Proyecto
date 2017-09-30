@@ -125,7 +125,9 @@ public class Login extends javax.swing.JFrame {
                 if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
                     manejador.setUserToLogin(txtUser.getText());
                     this.hide();
+                    usuario = manejador.getUserData(txtUser.getText());
                     PerfilUsuario perfil = new PerfilUsuario();
+                    perfil.setUsuario(usuario);
                     perfil.show();
                 }else{
                     this.hide();

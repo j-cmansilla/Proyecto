@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class ManejadorDeUsuarios {
     private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
     private final String DEFAULT_TEMP_DIRECTORY = "Temp.txt";
+    private final String DEFAULT_BACKUP_BITACORA_DIRECTORY = "bitacora_backup.txt";
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
@@ -40,10 +42,12 @@ public class ManejadorDeUsuarios {
             File descriptorUsuarios = new File(DEFAULT_DES_DIR+DEFAULT_USER_DIRECTORY);
             File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
             File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
+            File bitacoraBackup = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
             archivoUsuarios.createNewFile();
             descriptorUsuarios.createNewFile();
             archivoBitacora.createNewFile();
             descriptorBitacora.createNewFile();
+            bitacoraBackup.createNewFile();
         }catch(IOException e){
             
         }
@@ -327,6 +331,79 @@ public class ManejadorDeUsuarios {
         }
         return false;
     }
+    
+    public Usuario getUserData(String user) throws FileNotFoundException{
+        File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        Usuario result;
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (user.equals(credenciales[0])) {
+                    result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+                    scanner.close();
+                    return result;
+                }
+            }
+        }
+        return null;        
+    }
+    //********************************************************************************************
+    public void SetUserData(Usuario newUser) throws FileNotFoundException  //pending test*********
+    {
+        int Index = getIndexUser(newUser.getUsuario());
+        String NewstrUser = retornarUsuarioParaBitacora(newUser);
+        if(Index>0) //DEFAULT_USER_DIRECTORY
+        {
+           
+            return;
+        }//else DEFAULT_BITACORA_DIRECTORY
+        Index = -1 *Index;
+          
+    }
+    
+    private  int getIndexUser(String strUser) throws FileNotFoundException //pending test*********
+    {
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
+        int count = 0;
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (strUser.equals(credenciales[0])) {
+                    scanner.close();
+                    return count ;
+                }
+                count++;
+            }
+        }
+        count = 0;
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+        if (usuarios.exists()) {
+           Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (strUser.equals(credenciales[0])) {
+                    scanner.close();
+                    return count ;
+                }
+                count--;
+            }
+            scanner.close();  
+        }
+        return 0;
+    }
+    
 }
 
 
