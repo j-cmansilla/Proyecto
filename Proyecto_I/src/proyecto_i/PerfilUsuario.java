@@ -8,7 +8,9 @@ package proyecto_i;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import proyecto_i.Administration.UserMenu;
 
 /**
  *
@@ -37,6 +39,19 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jPopupMenu1 = new javax.swing.JPopupMenu();
+        jLabelImage = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jTextField3 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jTextField4 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField5 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
         txtUsuarioLogueado = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -50,6 +65,67 @@ public class PerfilUsuario extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(500, 500));
         setResizable(false);
         getContentPane().setLayout(null);
+
+        jLabelImage.setText("FOTO");
+        getContentPane().add(jLabelImage);
+        jLabelImage.setBounds(10, 50, 170, 140);
+
+        jLabel1.setText("USUARIO:");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(10, 10, 50, 15);
+
+        jTextField1.setEditable(false);
+        jTextField1.setText("jTextField1");
+        getContentPane().add(jTextField1);
+        jTextField1.setBounds(70, 10, 110, 30);
+
+        jTextField2.setEditable(false);
+        jTextField2.setText("jTextField2");
+        getContentPane().add(jTextField2);
+        jTextField2.setBounds(210, 50, 310, 30);
+
+        jTextField3.setEditable(false);
+        jTextField3.setText("jTextField3");
+        getContentPane().add(jTextField3);
+        jTextField3.setBounds(210, 90, 310, 30);
+
+        jButton1.setText("Opciones");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(10, 200, 170, 25);
+
+        jTextField4.setEditable(false);
+        jTextField4.setText("jTextField4");
+        getContentPane().add(jTextField4);
+        jTextField4.setBounds(260, 130, 260, 30);
+
+        jLabel3.setText("Telefono: ");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(210, 130, 50, 40);
+
+        jLabel6.setText("Correo:");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(210, 170, 40, 40);
+
+        jTextField5.setEditable(false);
+        jTextField5.setText("jTextField5");
+        getContentPane().add(jTextField5);
+        jTextField5.setBounds(260, 170, 260, 30);
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(210, 240, 320, 140);
+
+        jLabel7.setText("Descripcion: ");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(220, 220, 70, 15);
 
         txtUsuarioLogueado.setText("File");
 
@@ -76,6 +152,22 @@ public class PerfilUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    Usuario MainUser; 
+    public void setUsuario(Usuario user) {
+        this.MainUser = user;   
+    }
+    
+    public void SetDATA()
+    {              //"C:\\MEIA\\FOTOS"
+        ImageIcon image = new ImageIcon(MainUser.getFotografia());
+        jTextField1.setText(MainUser.getUsuario());
+        jTextField2.setText(MainUser.getNombre() + " " +  MainUser.getApellido());
+        jTextField3.setText(MainUser.getFechaDeNacimiento());
+        jTextField4.setText(MainUser.getTelefono());
+        jTextField5.setText(MainUser.getCorreo());
+        jTextArea1.setText(MainUser.getDescripcion());
+    }
+    
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu6ActionPerformed
@@ -88,6 +180,17 @@ public class PerfilUsuario extends javax.swing.JFrame {
         Login login = new Login();
         login.show();
     }//GEN-LAST:event_jMenu6MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here
+        UserMenu UM = new UserMenu();
+      //  UM.setUsuario(MainUser.getUsuario());
+        try {
+            UM.Main();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -129,12 +232,25 @@ public class PerfilUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabelImage;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPopupMenu jPopupMenu1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField jTextField5;
     private javax.swing.JMenu txtUsuarioLogueado;
     // End of variables declaration//GEN-END:variables
 }

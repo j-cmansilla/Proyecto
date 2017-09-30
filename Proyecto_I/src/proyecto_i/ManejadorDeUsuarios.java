@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -351,6 +352,58 @@ public class ManejadorDeUsuarios {
         }
         return null;        
     }
+    
+    public void SetUserData(Usuario newUser) throws FileNotFoundException  //pending test*********
+    {
+        int Index = getIndexUser(newUser.getUsuario());
+        String NewstrUser = retornarUsuarioParaBitacora(newUser);
+        if(Index>0) //DEFAULT_USER_DIRECTORY
+        {
+           
+            return;
+        }//else DEFAULT_BITACORA_DIRECTORY
+        Index = -1 *Index;
+          
+    }
+    
+    private  int getIndexUser(String strUser) throws FileNotFoundException //pending test*********
+    {
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
+        int count = 0;
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (strUser.equals(credenciales[0])) {
+                    scanner.close();
+                    return count ;
+                }
+                count++;
+            }
+        }
+        count = 0;
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+        if (usuarios.exists()) {
+           Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (strUser.equals(credenciales[0])) {
+                    scanner.close();
+                    return count ;
+                }
+                count--;
+            }
+            scanner.close();  
+        }
+        return 0;
+    }
+    
 }
 
 

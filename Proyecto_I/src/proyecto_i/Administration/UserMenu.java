@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import proyecto_i.CrearUsuario;
 import proyecto_i.ManejadorDeUsuarios;
+import proyecto_i.PerfilUsuario;
 import proyecto_i.Usuario;
 
 
@@ -28,11 +29,6 @@ public class UserMenu {
         this.User = user;
     }
     
-  
-   /* public void setStatus(int ad) {
-        this.Status = ad != 0;
-    }*/
-    
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver metodo en la ultima version ********************************************** 
     public void Main() throws FileNotFoundException
@@ -43,12 +39,12 @@ public class UserMenu {
         
         String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario" };
         String[] choices = { "Modificar Perfil", "Desactivar cuenta", };
-        if(MainUser.Rol()==1)
+       // if(MainUser.Rol()==1)
         {
             choices = chAdmin;
         }
             String input = (String) JOptionPane.showInputDialog(null, "Escoja una opcion",
-                    "The Choice of a Lifetime", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                    "The Choice", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
             if(input == choices[0]){
                 ChangeProfile CP = new ChangeProfile();
                 CP.show();
@@ -61,7 +57,7 @@ public class UserMenu {
                 if (response == JOptionPane.YES_OPTION) {
                     MainUser.setEstatus(0);
                 } 
-                //Reemplazar usuario en el apilo o master...  ***************************************************
+                MDU.SetUserData(MainUser);
             }
             else if (input.equals(choices[2]))
             {
@@ -75,8 +71,9 @@ public class UserMenu {
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                
-               //Mostrar perfil usuario ***************************************************************
-               
+               PerfilUsuario PU = new PerfilUsuario();
+               PU.setUsuario(user);
+               PU.show();
             }
             else if(input.equals(choices[4]))
             {
@@ -85,7 +82,7 @@ public class UserMenu {
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                user.setEstatus(0);
-               //Reemplazar usuario en el apilo o master...  ***************************************************
+               MDU.SetUserData(user);
             }
             
         
