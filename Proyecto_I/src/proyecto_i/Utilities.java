@@ -12,7 +12,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-//import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -32,7 +32,7 @@ public class Utilities {
                 directory.mkdirs();
             }
             File actualDirectory = new File(DEFAULT_DIRECTORY);
-            //FileUtils.copyDirectory(actualDirectory, directory);
+            FileUtils.copyDirectory(actualDirectory, directory);
             
             File updateBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
             if(updateBitacora.exists())
