@@ -52,6 +52,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         txtUsuarioLogueado = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -127,6 +128,15 @@ public class PerfilUsuario extends javax.swing.JFrame {
         getContentPane().add(jLabel7);
         jLabel7.setBounds(220, 220, 70, 15);
 
+        jButton2.setText("Salir");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton2);
+        jButton2.setBounds(10, 240, 55, 25);
+
         txtUsuarioLogueado.setText("File");
 
         jMenu6.setText("Logout");
@@ -156,9 +166,16 @@ public class PerfilUsuario extends javax.swing.JFrame {
     public void setUsuario(Usuario user) {
         this.MainUser = user;   
     }
-    
+    private  boolean FlagOptions = true;
+    public void setFlagOptions(boolean fg) {
+        this.FlagOptions = fg;   
+    }
     public void SetDATA()
     {              //"C:\\MEIA\\FOTOS"
+        if(!FlagOptions){
+            jButton2.enable(false);
+            jButton1.enable(false);
+        }
         ImageIcon image = new ImageIcon(MainUser.getFotografia());
         jTextField1.setText(MainUser.getUsuario());
         jTextField2.setText(MainUser.getNombre() + " " +  MainUser.getApellido());
@@ -184,13 +201,20 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here
         UserMenu UM = new UserMenu();
-      //  UM.setUsuario(MainUser.getUsuario());
+        UM.setUsuario(MainUser.getUsuario());
         try {
             UM.Main();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Login regresar=new Login();
+        regresar.show();
+        this.dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -233,6 +257,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;

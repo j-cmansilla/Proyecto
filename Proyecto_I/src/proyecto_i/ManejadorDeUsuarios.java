@@ -352,7 +352,7 @@ public class ManejadorDeUsuarios {
         }
         return null;        
     }
-    
+    //********************************************************************************************
     public void SetUserData(Usuario newUser) throws FileNotFoundException  //pending test*********
     {
         int Index = getIndexUser(newUser.getUsuario());

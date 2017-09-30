@@ -22,9 +22,6 @@ import proyecto_i.Usuario;
  */
 public class UserMenu {
     private String User = "";
-    public String getUsuario() {
-        return User;
-    }
     public void setUsuario(String user) {
         this.User = user;
     }
@@ -39,12 +36,12 @@ public class UserMenu {
         
         String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario" };
         String[] choices = { "Modificar Perfil", "Desactivar cuenta", };
-       // if(MainUser.Rol()==1)
+        if(MainUser.Rol()==1)
         {
             choices = chAdmin;
         }
             String input = (String) JOptionPane.showInputDialog(null, "Escoja una opcion",
-                    "The Choice", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                    "Escoja una opcion :)", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
             if(input == choices[0]){
                 ChangeProfile CP = new ChangeProfile();
                 CP.show();
@@ -72,6 +69,7 @@ public class UserMenu {
                Usuario user = MDU.getUserData(usuario);
                
                PerfilUsuario PU = new PerfilUsuario();
+               PU.setFlagOptions(false);
                PU.setUsuario(user);
                PU.show();
             }
