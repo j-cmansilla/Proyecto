@@ -7,6 +7,7 @@ package proyecto_i;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.logging.Level;
@@ -296,6 +297,8 @@ public class CrearUsuario extends javax.swing.JFrame {
             }
         }catch(FileNotFoundException ex){
             Logger.getLogger(CrearUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(CrearUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCrearUsuarioActionPerformed
 
@@ -312,7 +315,7 @@ public class CrearUsuario extends javax.swing.JFrame {
 
     
     
-    private void Iniciar() throws FileNotFoundException{
+    private void Iniciar() throws FileNotFoundException, IOException{
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );

@@ -128,6 +128,7 @@ public class Login extends javax.swing.JFrame {
                     usuario = manejador.getUserData(txtUser.getText());
                     PerfilUsuario perfil = new PerfilUsuario();
                     perfil.setUsuario(usuario);
+                    perfil.SetDATA();
                     perfil.show();
                 }else{
                     this.hide();

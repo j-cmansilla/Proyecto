@@ -73,22 +73,22 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
         jLabel1.setText("USUARIO:");
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(10, 10, 50, 15);
+        jLabel1.setBounds(10, 10, 60, 30);
 
         jTextField1.setEditable(false);
         jTextField1.setText("jTextField1");
         getContentPane().add(jTextField1);
-        jTextField1.setBounds(70, 10, 110, 30);
+        jTextField1.setBounds(90, 10, 110, 30);
 
         jTextField2.setEditable(false);
         jTextField2.setText("jTextField2");
         getContentPane().add(jTextField2);
-        jTextField2.setBounds(210, 50, 310, 30);
+        jTextField2.setBounds(210, 50, 350, 30);
 
         jTextField3.setEditable(false);
         jTextField3.setText("jTextField3");
         getContentPane().add(jTextField3);
-        jTextField3.setBounds(210, 90, 310, 30);
+        jTextField3.setBounds(210, 90, 350, 30);
 
         jButton1.setText("Opciones");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -102,31 +102,31 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jTextField4.setEditable(false);
         jTextField4.setText("jTextField4");
         getContentPane().add(jTextField4);
-        jTextField4.setBounds(260, 130, 260, 30);
+        jTextField4.setBounds(300, 130, 260, 30);
 
         jLabel3.setText("Telefono: ");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(210, 130, 50, 40);
+        jLabel3.setBounds(210, 130, 80, 40);
 
         jLabel6.setText("Correo:");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(210, 170, 40, 40);
+        jLabel6.setBounds(210, 170, 80, 40);
 
         jTextField5.setEditable(false);
         jTextField5.setText("jTextField5");
         getContentPane().add(jTextField5);
-        jTextField5.setBounds(260, 170, 260, 30);
+        jTextField5.setBounds(300, 170, 260, 30);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(210, 240, 320, 140);
+        jScrollPane1.setBounds(210, 240, 350, 140);
 
         jLabel7.setText("Descripcion: ");
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(220, 220, 70, 15);
+        jLabel7.setBounds(210, 220, 70, 15);
 
         jButton2.setText("Salir");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -135,7 +135,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jButton2);
-        jButton2.setBounds(10, 240, 55, 25);
+        jButton2.setBounds(10, 240, 170, 25);
 
         txtUsuarioLogueado.setText("File");
 
@@ -175,8 +175,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
         if(!FlagOptions){
             jButton2.enable(false);
             jButton1.enable(false);
+            jButton1.setVisible(false);
         }
         ImageIcon image = new ImageIcon(MainUser.getFotografia());
+        jLabelImage.setIcon(image);
+        
         jTextField1.setText(MainUser.getUsuario());
         jTextField2.setText(MainUser.getNombre() + " " +  MainUser.getApellido());
         jTextField3.setText(MainUser.getFechaDeNacimiento());
@@ -211,8 +214,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        Login regresar=new Login();
-        regresar.show();
+        if(FlagOptions)
+        {
+            Login regresar=new Login();
+            regresar.show();
+        }
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

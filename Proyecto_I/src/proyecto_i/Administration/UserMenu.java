@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import proyecto_i.CrearUsuario;
+import proyecto_i.Login;
 import proyecto_i.ManejadorDeUsuarios;
 import proyecto_i.PerfilUsuario;
 import proyecto_i.Usuario;
@@ -55,6 +56,8 @@ public class UserMenu {
                     MainUser.setEstatus(0);
                 } 
                 MDU.SetUserData(MainUser);
+                Login regresar=new Login();
+                regresar.show();
             }
             else if (input.equals(choices[2]))
             {
