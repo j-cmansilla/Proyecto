@@ -462,16 +462,16 @@ public class ManejadorDeUsuarios {
     }
     
     public Usuario getUserData(String user) throws FileNotFoundException{
-        File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
         Usuario result;
                     
         if (usuarios.exists()) {
-            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
             File archivo = new File(scanner.nextLine());
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                String [] credenciales = line.split("|");
+                String [] credenciales = line.split(Pattern.quote("|"));
                 if (user.equals(credenciales[0])) {
                     result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
                     scanner.close();
@@ -479,10 +479,10 @@ public class ManejadorDeUsuarios {
                 }
             }
         }
-        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
                             
         if (usuarios.exists()) {
-            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
             File archivo = new File(scanner.nextLine());
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
