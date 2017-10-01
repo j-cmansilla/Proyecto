@@ -8,10 +8,20 @@ package proyecto_i;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -51,4 +61,44 @@ public class Utilities {
         }
     }
     
+    
+    //Modificar el descriptor **************************************
+    private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
+    private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
+    public void ChangeMaxReorg(int NumberMax,String User) throws IOException
+    {
+        Path path = Paths.get(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY);
+        Charset charset = Charset.forName("ISO-8859-1");
+        List<String> lines = Files.readAllLines(path,charset);
+        lines.remove(lines.size() - 1);
+        lines.add(String.valueOf(NumberMax));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        lines.set(2, dateFormat.format(date) + "[America/Guatemala]"); 
+        lines.set(0,User);
+        
+        LlenarArchivo(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY, lines);
+        
+    }
+     public boolean LlenarArchivo(String strPath,List<String> lines)
+    {
+        File Archivo = new File(strPath);
+        
+       
+           //File Archivo = new File(strPath);
+            try
+            {
+                FileWriter writer = new FileWriter(strPath); 
+                for(String str: lines) {
+                    writer.write(str +String.format("%n"));  
+                }
+                writer.close();
+                return true;
+            }
+            catch(IOException ex)
+            {
+                return false;
+            } 
+        
+    }
 }

@@ -6,6 +6,7 @@
 package proyecto_i.Administration;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import javafx.scene.control.cell.CheckBoxListCell;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -15,6 +16,7 @@ import proyecto_i.Login;
 import proyecto_i.ManejadorDeUsuarios;
 import proyecto_i.PerfilUsuario;
 import proyecto_i.Usuario;
+import proyecto_i.Utilities;
 
 
 /**
@@ -28,15 +30,16 @@ public class UserMenu {
     }
     
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
-            //Volver metodo en la ultima version ********************************************** 
-    public boolean Main() throws FileNotFoundException
+            //Volver funcion en la ultima version ********************************************** 
+    public boolean Main() throws FileNotFoundException, IOException
     {
         UserMenu UM = new UserMenu();
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
         Usuario MainUser = MDU.getUserData(User);
-        
-        String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario" };
+        Utilities Utilidades = new Utilities();
+        String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario", "Modificar el numero maximo para Reorganizar", "Realizar Back-Up" };
         String[] choices = { "Modificar Perfil", "Desactivar cuenta", };
+        
         if(MainUser.Rol()==1)
         {
             choices = chAdmin;
@@ -63,6 +66,7 @@ public class UserMenu {
             else if (input.equals(choices[2]))
             {
                 CrearUsuario crearUsuario = new CrearUsuario();
+                crearUsuario.SETFLAG(false);
                 crearUsuario.show();
             }
             else if(input.equals(choices[3]))
@@ -71,7 +75,11 @@ public class UserMenu {
                Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea buscar:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
-               
+               if(user==null)
+               {
+                   JOptionPane.showMessageDialog(null,"El usuario no existe");
+                   return false;
+               }
                PerfilUsuario PU = new PerfilUsuario();
                PU.setFlagOptions(false);
                PU.setUsuario(user);
@@ -83,8 +91,43 @@ public class UserMenu {
                Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea desactivar:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
+               if(user==null)
+               {
+                   JOptionPane.showMessageDialog(null,"El usuario no existe");
+                   return false;
+               }
                user.setEstatus(0);
                MDU.SetUserData(user);
+            }
+            else if (input.equals(choices[5]))
+            {
+                int NewMax = 5;
+                boolean f = true;
+                while(f)
+                {
+                    JFrame frame = new JFrame(); 
+                    Object result = JOptionPane.showInputDialog(frame, "Ingrese el numero maximo para Reorganizar:");
+                    try {
+                        NewMax = Integer.parseInt(result.toString());
+                        f = false;
+                        if(NewMax < 0)
+                        {
+                            JOptionPane.showMessageDialog(null,"Inserte un numero positivo!");
+                            f =true;
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null,"Inserte un numero!");
+                    }
+                    
+                }
+                Utilidades.ChangeMaxReorg(NewMax,User);  
+            }else if(input.equals(choices[6]))
+            {
+               JFrame frame = new JFrame(); 
+               Object result = JOptionPane.showInputDialog(frame, "Ingrese el path donde desea guardar ");
+              
+               //VALIDAR ESTO*********************************************************************************
+               Utilidades.createBackUp((String) result, User);
             }
             return  false;
     }
