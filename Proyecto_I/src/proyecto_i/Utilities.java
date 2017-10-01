@@ -65,6 +65,15 @@ public class Utilities {
     //Modificar el descriptor **************************************
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
+   
+    private int MaxforReorganize = 1;
+    private void setMax() throws IOException {
+        Path path = Paths.get(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY);
+        Charset charset = Charset.forName("ISO-8859-1");
+        List<String> lines = Files.readAllLines(path,charset);
+        MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
+    }
+    
     public void ChangeMaxReorg(int NumberMax,String User) throws IOException
     {
         Path path = Paths.get(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY);
@@ -76,16 +85,12 @@ public class Utilities {
         Date date = new Date();
         lines.set(2, dateFormat.format(date) + "[America/Guatemala]"); 
         lines.set(0,User);
-        
+   
         LlenarArchivo(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY, lines);
         
     }
      public boolean LlenarArchivo(String strPath,List<String> lines)
     {
-        File Archivo = new File(strPath);
-        
-       
-           //File Archivo = new File(strPath);
             try
             {
                 FileWriter writer = new FileWriter(strPath); 
