@@ -12,12 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
@@ -114,7 +112,7 @@ public class ManejadorDeUsuarios {
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("\\|");
                 if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
-                    JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    JOptionPane.showMessageDialog(null, "The user: "+user+" and it password are correct!");
                     scanner.close();
                     return true;
                 }
@@ -129,13 +127,13 @@ public class ManejadorDeUsuarios {
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("|");
                 if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
-                    JOptionPane.showMessageDialog(null, "El usuario: "+user+" y su pass son correctos!");
+                    JOptionPane.showMessageDialog(null, "The user: "+user+" and it password are correct!");
                     scanner.close();
                     return true;
                 }
             }
         }
-        JOptionPane.showMessageDialog(null, "El usuario: "+user+" no existe en el contexto actual!");
+        JOptionPane.showMessageDialog(null, "The User: "+user+" doesn't exist in the actual context!", "Warning", 2);
         return false;
     }
     
@@ -544,20 +542,25 @@ public class ManejadorDeUsuarios {
         }
         return null;        
     }
-    //********************************************************************************************
-    public void SetUserData(Usuario newUser) throws FileNotFoundException  //pending test*********
+
+    public void SetUserData(Usuario newUser) throws FileNotFoundException, IOException
     {
         int Index = getIndexUser(newUser.getUsuario());
         String NewstrUser = retornarUsuarioParaBitacora(newUser);
-        if(Index>0) //DEFAULT_USER_DIRECTORY
+        Utilities objUtilities = new Utilities();
+        if(Index>0)
         {
-           
+            objUtilities.removeLine(newUser.getUsuario(), NewstrUser, Index);
             return;
-        }//else DEFAULT_BITACORA_DIRECTORY
+        }
+        else if (Index==0) 
+        {              
+            objUtilities.removeLine(newUser.getUsuario(), NewstrUser, Index);
+        }
         Index = -1 *Index;
           
     }
-    //********************************************************************************************
+
     private  int getIndexUser(String strUser) throws FileNotFoundException 
     {
         File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
