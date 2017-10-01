@@ -341,7 +341,8 @@ public class ManejadorDeUsuarios {
     private void llenarBitacora(boolean isFull, String newUser) throws FileNotFoundException, IOException{
         if (isFull) {
            pasarDatosAlMaster(newUser.split("\\|")[0]);
-           ordenarMaster();
+           REO reorganizar = new REO();
+           reorganizar.Reorganize(newUser.split("\\|")[0]);
            Writer writer = null;
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(

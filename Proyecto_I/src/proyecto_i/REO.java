@@ -53,7 +53,7 @@ public class REO {
         return false;
     }
     
-    private void Reorganize(String MainUser) throws IOException
+    public void Reorganize(String MainUser) throws IOException
     {
         File TemporalFile = new File(DEFAULT_TEMP_DIRECTORY);
         TemporalFile.createNewFile();

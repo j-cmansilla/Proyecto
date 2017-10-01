@@ -61,6 +61,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Profile");
+        setResizable(false);
 
         jTextField2.setEditable(false);
         jTextField2.setText("jTextField2");
