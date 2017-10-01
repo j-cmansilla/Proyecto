@@ -224,7 +224,7 @@ public class ChangeProfile extends javax.swing.JFrame {
     private String Password, Desc, Mail, User, Name, LastName, date, Photo;
     private int Number, Admin;
     private int[] Settings = {6,3,2,1,2,4,6,3};
-    private int CheckPass(String pass)
+    public int CheckPass(String pass)
     {
         int points = pass.length() * Settings[1];
         int[] countCase = getUpLowCase(pass);
@@ -241,12 +241,10 @@ public class ChangeProfile extends javax.swing.JFrame {
         if(countNL[0]==0 && countNL[2]==0)
         {
             points-= Settings[7];
-        }
-        
+        } 
         return points;
-        
     }
-    private int [] getLNCount(String str)
+    public int [] getLNCount(String str)
     {
         int[] res = new int[3];
         char[] array = str.toCharArray();
@@ -267,7 +265,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         
         return  res;
     }
-    private int []getUpLowCase(String str)
+    public int []getUpLowCase(String str)
     {
         int[] res = new int[2];
         for (int k = 0; k < str.length(); k++) 
@@ -277,7 +275,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         }
         return res;
     }
-    private String Result(int points)
+    public String Result(int points)
     {
         if (points < 26)
         {
@@ -298,6 +296,28 @@ public class ChangeProfile extends javax.swing.JFrame {
             pBar=100;
             return "Contraseña muy segura.";
         }
+    }
+    public boolean CU = true;
+    public String PASSVER(String STRA,String STRB)
+    {
+        if(STRA.length()< Settings[0])
+        {
+            CU = false;
+            return ("Debe ingresar una contraseña con mas de 6 caracteres");
+        }
+        if(STRA != STRB)
+        {
+            CU = false;
+             return ("Las contraseñas no concuerdan");
+        }
+        if (CheckPass(STRA)<=25)
+        {
+            CU = false;
+            return "La contraseña no cumple los requisitos mínimos de seguridad!";
+        }
+        return (Result(CheckPass(STRA)) + "\nPuntuación: " +CheckPass(STRA));
+        
+      
     }
     public boolean DoPassVerification()
      {

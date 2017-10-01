@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import proyecto_i.Administration.ChangeProfile;
 
 /**
  *
@@ -63,6 +64,9 @@ public class CrearUsuario extends javax.swing.JFrame {
         btnCancelar = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         txtPhone = new javax.swing.JTextField();
+        txtPass1 = new javax.swing.JPasswordField();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,12 +149,24 @@ public class CrearUsuario extends javax.swing.JFrame {
 
         txtPhone.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
 
+        txtPass1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtPass1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPass1ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        jLabel6.setText("PASS CONF:");
+
+        jTextField1.setEditable(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(242, Short.MAX_VALUE)
+                .addContainerGap(275, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(169, 169, 169))
             .addGroup(layout.createSequentialGroup()
@@ -164,11 +180,9 @@ public class CrearUsuario extends javax.swing.JFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(26, 26, 26)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel7)
                                 .addComponent(jLabel5)
                                 .addComponent(jLabel2)
-                                .addComponent(jLabel8)
-                                .addComponent(jLabel11))
+                                .addComponent(jLabel6))
                             .addGap(40, 40, 40)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
@@ -178,11 +192,7 @@ public class CrearUsuario extends javax.swing.JFrame {
                     .addComponent(txtName)
                     .addComponent(txtUser)
                     .addComponent(txtSecondName, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtPass)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(txtEmail)
-                        .addGap(2, 2, 2)))
+                    .addComponent(txtPass))
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -191,17 +201,32 @@ public class CrearUsuario extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel10)
                             .addComponent(jLabel9))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(40, 40, 40)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnCrearUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtDescription)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(38, 38, 38)
+                                .addComponent(btnSelectPicture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel11))
                         .addGap(40, 40, 40)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCrearUsuario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDescription)
-                            .addComponent(btnSelectPicture, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(144, 144, 144)
-                        .addComponent(txtPhone)
-                        .addGap(12, 12, 12))))
+                            .addComponent(txtPass1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtEmail)
+                                .addGap(2, 2, 2))
+                            .addComponent(txtPhone))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,8 +251,14 @@ public class CrearUsuario extends javax.swing.JFrame {
                     .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPass1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(5, 5, 5)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
@@ -248,9 +279,9 @@ public class CrearUsuario extends javax.swing.JFrame {
                 .addComponent(btnCrearUsuario)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCancelar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblPicture)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -279,10 +310,14 @@ public class CrearUsuario extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Fill all the fields!");
             }else{
                 //VALIDATE PASSWORD
-                JOptionPane.showMessageDialog(null, DeterminarPuntuacion(txtPass.getText()));
-                if (DeterminarPuntuacion(txtPass.getText())<=25) {
+                ChangeProfile CP = new ChangeProfile();
+                jTextField1.setText(CP.PASSVER(txtPass.getText(), txtPass1.getText()));
+               /* JOptionPane.showMessageDialog(null, DeterminarPuntuacion(txtPass.getText()));
+                if (CP.CheckPass(txtPass.getText())<=25) {
                     JOptionPane.showMessageDialog(null, "La contraseña no cumple los requisitos mínimos de seguridad! "+txtPass.getText());
-                }else{
+               */
+                if (CP.CU) {      
+              // }else{
                    if (!validateEmail(txtEmail.getText())) {
                         JOptionPane.showMessageDialog(null, "El correo no coincide con un correo correcto!");
                         txtEmail.setText("");
@@ -312,6 +347,10 @@ public class CrearUsuario extends javax.swing.JFrame {
     private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtDateActionPerformed
+
+    private void txtPass1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPass1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPass1ActionPerformed
 
     
     
@@ -375,7 +414,7 @@ public class CrearUsuario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Picture selected!");
         }
     }
-
+/*
     private int DeterminarPuntuacion(String password){
         int puntuacion = 0;
         if (determinarPuntuacion[0] > password.length()) {
@@ -395,11 +434,13 @@ public class CrearUsuario extends javax.swing.JFrame {
         }
         return puntuacion;
     }
-    
+    */
+    /*
     private int NumeroDeSimbolos(String password){
         return password.length() - NumeroDeLetras(password)-NumeroDeNumeros(password);
     }
-    
+    */
+    /*
     private int NumeroDeNumeros(String password){
         int count = 0;
         for (int i = 0; i < password.length(); i++) {
@@ -410,9 +451,9 @@ public class CrearUsuario extends javax.swing.JFrame {
             }
         }
         return count;
-    }
+    }*/
     
-    private int NumeroDeLetras(String password){
+   /* private int NumeroDeLetras(String password){
         int count = 0;
         for (int i = 0; i < password.length(); i++) {
             for (int j = 0; j < mayu.length(); j++) {
@@ -422,9 +463,9 @@ public class CrearUsuario extends javax.swing.JFrame {
             }
         }
         return count;
-    }
+    }*/
     
-    private int NumeroDeMayusculas(String password){
+   /* private int NumeroDeMayusculas(String password){
         int count = 0;
         for (int i = 0; i < password.length(); i++) {
             for (int j = 0; j < mayu.length(); j++) {
@@ -434,12 +475,13 @@ public class CrearUsuario extends javax.swing.JFrame {
             }
         }
         return count;
-    }
+    }*/
     
-    String minu ="abcdefghijklmnopqrstuvwxyz";
+    /*String minu ="abcdefghijklmnopqrstuvwxyz";
     String mayu ="ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
     String num = "0123456789";
     int [] determinarPuntuacion = {6,3,2,1,2,4,6,3};
+    */
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
     Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -453,15 +495,18 @@ public class CrearUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblPicture;
     private org.jdesktop.swingx.JXDatePicker txtDate;
     private javax.swing.JTextField txtDescription;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtName;
     private javax.swing.JPasswordField txtPass;
+    private javax.swing.JPasswordField txtPass1;
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtSecondName;
     private javax.swing.JTextField txtUser;
