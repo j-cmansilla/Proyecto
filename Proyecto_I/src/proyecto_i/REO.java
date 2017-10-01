@@ -5,9 +5,11 @@
  */
 package proyecto_i;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -39,7 +41,24 @@ public class REO {
     private String CreationDate;
     private int ActiveAccounts = 0;
     
-    public void Reorganize(String MainUser) throws IOException
+    public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
+    {
+        setMaxFirst();
+        BufferedReader reader = new BufferedReader(new FileReader(LOGBOOK_PATH));
+        int lines = 0;
+        while (reader.readLine() != null) lines++;
+        reader.close();
+        
+        if(MaxforReorganize>lines)
+        {
+            Reorganize(MainUser);
+            return true;
+        }
+        
+        return false;
+    }
+    
+    private void Reorganize(String MainUser) throws IOException
     {
         File TemporalFile = new File(DEFAULT_TEMP_DIRECTORY);
         TemporalFile.createNewFile();
@@ -87,7 +106,7 @@ public class REO {
     private String getUserName(String ScanerLine,Scanner reader)
     {
         Usuario user = getUser(ScanerLine);
-        if(user.getEstatus()==0)
+        if(user.getEstatus()==0) //IDK if this works
             getUserName(readLine(reader), reader);
         return user.getUsuario();
     }
