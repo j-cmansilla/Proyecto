@@ -84,6 +84,7 @@ public class UserMenu {
                PerfilUsuario PU = new PerfilUsuario();
                PU.setFlagOptions(false);
                PU.setUsuario(user);
+               PU.SetDATA();
                PU.show();
             }
             else if(input.equals(choices[4]))
