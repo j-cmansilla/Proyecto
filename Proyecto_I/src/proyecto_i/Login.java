@@ -131,35 +131,7 @@ public class Login extends javax.swing.JFrame {
         String pass = txtPass.getText();
         if (user.equals("") && pass.equals("")) return false;
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
-            Usuario usuario;
-            try {
-                usuario = manejador.getUserData(txtUser.getText());
-                if(usuario!=null && !usuario.getPassword().equals(txtPass.getText()))
-                {
-                    JOptionPane.showMessageDialog(null,"Incorrect Password");
-                    txtPass.setText("");
-                    return false;
-                }    
-                if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
-                    manejador.setUserToLogin(txtUser.getText());
-                    this.hide();
-                    usuario = manejador.getUserData(txtUser.getText());
-                    PerfilUsuario perfil = new PerfilUsuario();
-                    perfil.setUsuario(usuario);
-                    perfil.SetDATA();
-                    perfil.show();
-                }
-                else{
-                    this.hide();
-                    CrearUsuario crearUsuario = new CrearUsuario();
-                    crearUsuario.show();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        Usuario usuario;
         usuario = manejador.getUserData(user);
         if (manejador.validarUsuario(user, pass) == 1) {
             manejador.setUserToLogin(txtUser.getText());
@@ -171,15 +143,6 @@ public class Login extends javax.swing.JFrame {
             perfil.show();
             return true;
         }
-        if (txtUser.getText().equals("") && txtPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null,"Fill both fields.");
-        }else{
-            if (txtPass.getText().equals("")) {
-                JOptionPane.showMessageDialog(null,"Enter a Password");
-            }
-            if (txtUser.getText().equals("")) {
-                JOptionPane.showMessageDialog(null,"Enter a Username");
-            }
         if (manejador.validarUsuario(user, pass) == -1) {
             JOptionPane.showMessageDialog(null, "Verifique su contraseña!");
             return false;
@@ -189,9 +152,6 @@ public class Login extends javax.swing.JFrame {
             CrearUsuario crearUsuario = new CrearUsuario();
             crearUsuario.show();
             return false;
-        }
-        return false;
-    }
         }
         return false;
     }
