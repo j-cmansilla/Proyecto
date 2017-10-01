@@ -5,6 +5,7 @@
  */
 package proyecto_i;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -116,48 +117,44 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassActionPerformed
 
-    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-        // TODO add your handling code here:
+    private boolean casosDeLogin() throws FileNotFoundException{
+        String user = txtUser.getText();
+        String pass = txtPass.getText();
+        if (user.equals("") && pass.equals("")) return false;
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
-            Usuario usuario;
-            try {
-                usuario = manejador.getUserData(txtUser.getText());
-                if(usuario!=null && !usuario.getPassword().equals(txtPass.getText()))
-                {
-                    JOptionPane.showMessageDialog(null,"Contraseña incorrecta");
-                    txtPass.setText("");
-                    return;
-                }    
-                if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
-                    manejador.setUserToLogin(txtUser.getText());
-                    this.hide();
-                    usuario = manejador.getUserData(txtUser.getText());
-                    PerfilUsuario perfil = new PerfilUsuario();
-                    perfil.setUsuario(usuario);
-                    perfil.SetDATA();
-                    perfil.show();
-                }
-                else{
-                    this.hide();
-                    CrearUsuario crearUsuario = new CrearUsuario();
-                    crearUsuario.show();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (Exception ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        Usuario usuario;
+        usuario = manejador.getUserData(user);
+        if (manejador.validarUsuario(user, pass) == 1) {
+            manejador.setUserToLogin(txtUser.getText());
+            this.hide();
+            usuario = manejador.getUserData(txtUser.getText());
+            PerfilUsuario perfil = new PerfilUsuario();
+            perfil.setUsuario(usuario);
+            perfil.SetDATA();
+            perfil.show();
+            return true;
         }
-        if (txtUser.getText().equals("") && txtPass.getText().equals("")) {
-            JOptionPane.showMessageDialog(null,"Llene los dos campos!");
-        }else{
-            if (txtPass.getText().equals("")) {
-                JOptionPane.showMessageDialog(null,"Inserte una contraseña!");
-            }
-            if (txtUser.getText().equals("")) {
-                JOptionPane.showMessageDialog(null,"Inserte un nombre de usuario!");
-            }
+        if (manejador.validarUsuario(user, pass) == -1) {
+            JOptionPane.showMessageDialog(null, "Verifique su contraseña!");
+            return false;
+        }
+        if (manejador.validarUsuario(user, pass) == 0) {
+            this.hide();
+            CrearUsuario crearUsuario = new CrearUsuario();
+            crearUsuario.show();
+            return false;
+        }
+        return false;
+    }
+    
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+       ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+       Usuario usuario;
+        try {
+            // TODO add your handling code here:
+            casosDeLogin(); 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         txtPass.setText("");
         txtUser.setText("");

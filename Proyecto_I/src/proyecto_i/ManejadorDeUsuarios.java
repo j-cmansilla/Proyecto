@@ -60,6 +60,48 @@ public class ManejadorDeUsuarios {
         }
     }
     
+    public int validarUsuario(String user, String password) throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+        File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("\\|");
+                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                    scanner.close();
+                    return 1;
+                }
+                if (user.equals(credenciales[0]) && !password.equals(credenciales[1])) {
+                    scanner.close();
+                    return -1;
+                }
+            }
+        }
+        //buscarlo en el master
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("|");
+                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                    scanner.close();
+                    return 1;
+                }
+                if (user.equals(credenciales[0]) && !password.equals(credenciales[1])) {
+                    scanner.close();
+                    return -1;
+                }
+            }
+        }
+        return 0;
+    }
+    
     public boolean usuarioExistente(String user, String password) throws FileNotFoundException{
         File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
         File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
