@@ -65,14 +65,6 @@ public class Utilities {
     //Modificar el descriptor **************************************
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
-   
-    private int MaxforReorganize = 1;
-    private void setMax() throws IOException {
-        Path path = Paths.get(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY);
-        Charset charset = Charset.forName("ISO-8859-1");
-        List<String> lines = Files.readAllLines(path,charset);
-        MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
-    }
     
     public void ChangeMaxReorg(int NumberMax,String User) throws IOException
     {

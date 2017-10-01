@@ -39,6 +39,8 @@ public class ManejadorDeUsuarios {
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
     private final String DEFAULT_PROFILE_PICTURES = "IMAGES";
     
+    REO reorganize = new REO();
+    
     public void CrearArchivos(){
         try{
             File archivoUsuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);

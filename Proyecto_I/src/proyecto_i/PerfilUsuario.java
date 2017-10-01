@@ -6,6 +6,7 @@
 package proyecto_i;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -211,6 +212,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 this.hide();
             }
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed

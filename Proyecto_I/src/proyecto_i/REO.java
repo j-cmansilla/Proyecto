@@ -6,6 +6,7 @@
 package proyecto_i;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,12 +45,7 @@ public class REO {
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
     {
         setMaxFirst();
-        BufferedReader reader = new BufferedReader(new FileReader(LOGBOOK_PATH));
-        int lines = 0;
-        while (reader.readLine() != null) lines++;
-        reader.close();
-        
-        if(MaxforReorganize>lines)
+        if(MaxforReorganize > ActiveAccounts)
         {
             Reorganize(MainUser);
             return true;
@@ -92,22 +88,53 @@ public class REO {
         MasterScanner.close();
         LogBookScanner.close();
         
+        DeleteInactive();
         CleanLastStep(MainUser);
     }
     
+    private void DeleteInactive() throws IOException
+    {
+        File inputFile = new File(USER_PATH);
+        File tempFile = new File(DEFAULT_TEMP_DIRECTORY);
+
+        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        String currentLine;
+
+        while((currentLine = reader.readLine()) != null) {
+            if(CheckStatus(currentLine)) {
+                writer.write(currentLine + System.getProperty("line.separator"));
+            }
+        }
+        writer.close(); 
+        reader.close(); 
+        tempFile.renameTo(inputFile);
+    }
+    
      //*************************************************************************************************************
+    private void getCountAcounts() throws IOException
+    {
+         BufferedReader reader = new BufferedReader(new FileReader(LOGBOOK_PATH));
+        ActiveAccounts = 0;
+        while (reader.readLine() != null) ActiveAccounts++;
+        reader.close();
+    }
     private String readLine(Scanner reader) {
         if (reader.hasNextLine())
             return reader.nextLine();
         else
             return null;
   }
-    
+    private Boolean CheckStatus(String line)
+    {
+        Usuario user = getUser(line);
+        return user.getEstatus() != 0;
+    }
     private String getUserName(String ScanerLine,Scanner reader)
     {
         Usuario user = getUser(ScanerLine);
-        if(user.getEstatus()==0) //IDK if this works
-            getUserName(readLine(reader), reader);
+       // if(user.getEstatus()==0) //IDK if this works
+         //   getUserName(readLine(reader), reader);
         return user.getUsuario();
     }
     private Usuario getUser(String ScanerLine)
@@ -127,7 +154,6 @@ public class REO {
                 usuario.getCorreo()+"|"+usuario.getDescripcion();
         FileWriter writerTEMP = new FileWriter(DEFAULT_TEMP_DIRECTORY); 
         writerTEMP.write(Userline + String.format("%n"));
-        ActiveAccounts++;
     }
    
     private void CleanLastStep(String User) throws FileNotFoundException, IOException
@@ -166,5 +192,6 @@ public class REO {
         List<String> lines = Files.readAllLines(path,charset);
         MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
         CreationDate = lines.get(1);
+        getCountAcounts();
     }
 }
