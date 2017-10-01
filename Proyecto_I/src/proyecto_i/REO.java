@@ -60,7 +60,7 @@ public class REO {
         setMaxFirst();
         File Master = new File(USER_PATH);
         Scanner MasterScanner = new Scanner(Master);
-        File LogBook = new File(LOGBOOK_PATH    );
+        File LogBook = new File(LOGBOOK_PATH);
         Scanner LogBookScanner = new Scanner(LogBook);
         //loquera
         String line1 = MasterScanner.nextLine();
@@ -108,6 +108,7 @@ public class REO {
         writer.close(); 
         reader.close(); 
         tempFile.renameTo(inputFile);
+        ActiveAccounts =  getCountlinesFile(USER_PATH);
     }
     
      //*************************************************************************************************************
@@ -192,6 +193,5 @@ public class REO {
         List<String> lines = Files.readAllLines(path,charset);
         MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
         CreationDate = lines.get(1);
-        ActiveAccounts =  getCountlinesFile(USER_PATH);
     }
 }

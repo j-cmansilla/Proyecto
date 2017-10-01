@@ -15,7 +15,7 @@ import proyecto_i.Administration.UserMenu;
 
 /**
  *
- * @author Jose Mansilla
+ * @author Sebas
  */
 public class PerfilUsuario extends javax.swing.JFrame {
 
