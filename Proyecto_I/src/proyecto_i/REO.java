@@ -99,8 +99,8 @@ public class REO {
         MasterScanner.close();
         LogBookScanner.close();
         
-        DeleteInactive();
         CleanLastStep(MainUser);
+        DeleteInactive();
     }
     
     private void DeleteInactive() throws IOException
