@@ -349,9 +349,15 @@ public class CrearUsuario extends javax.swing.JFrame {
     }
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
-        Login regresar=new Login();
-        regresar.show();
-        this.dispose();
+        if(flagForADMIN)
+        {
+            Login regresar=new Login();
+            regresar.show();
+            
+        }else{
+            this.dispose();
+        }
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDateActionPerformed

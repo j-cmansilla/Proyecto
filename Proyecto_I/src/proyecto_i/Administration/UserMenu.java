@@ -58,10 +58,11 @@ public class UserMenu {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     MainUser.setEstatus(0);
+                    JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
                 } 
                 MDU.SetUserData(MainUser);
-                Login regresar=new Login();
-                regresar.show();
+                //Login regresar=new Login();
+                //regresar.show();
             }
             else if (input.equals(choices[2]))
             {
@@ -108,13 +109,17 @@ public class UserMenu {
                     JFrame frame = new JFrame(); 
                     Object result = JOptionPane.showInputDialog(frame, "Enter the Max. Number to re-organize:");
                     try {
-                        NewMax = Integer.parseInt(result.toString());
-                        f = false;
-                        if(NewMax < 0)
-                        {
-                            JOptionPane.showMessageDialog(null,"Insert a positive number!");
-                            f =true;
-                        }
+                        if (result != null) {
+                            NewMax = Integer.parseInt(result.toString());
+                            f = false;
+                            if(NewMax < 0)
+                            {
+                                JOptionPane.showMessageDialog(null,"Insert a positive number!");
+                                f =true;
+                            } 
+                        }else{
+                            f=false;
+                        }                        
                     } catch (Exception e) {
                         JOptionPane.showMessageDialog(null,"Insert a number!");
                     }
