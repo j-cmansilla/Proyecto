@@ -63,8 +63,20 @@ public class REO {
         File LogBook = new File(LOGBOOK_PATH);
         Scanner LogBookScanner = new Scanner(LogBook);
         //loquera
-        String line1 = MasterScanner.nextLine();
-        String line2 = LogBookScanner.nextLine();
+        String line1;
+        String line2;
+        if (!MasterScanner.hasNextLine()) {
+           line1 = null;
+         }
+        else{
+        line1 =MasterScanner.nextLine();
+        }
+        if (!LogBookScanner.hasNextLine()) {
+           line2 = null;
+         }
+        else{
+        line2 = LogBookScanner.nextLine();
+        }
          while (line1 != null || line2 != null) {
             if (line1 == null) {                 //from file2 
                 WriteInTEMP(getUser(line2));
