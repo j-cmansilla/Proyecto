@@ -120,8 +120,15 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         if (!txtUser.getText().equals("") && !txtPass.getText().equals("")) {
-            Usuario usuario = new Usuario();
+            Usuario usuario;
             try {
+                usuario = manejador.getUserData(txtUser.getText());
+                if(usuario!=null && !usuario.getPassword().equals(txtPass.getText()))
+                {
+                    JOptionPane.showMessageDialog(null,"Contraseña incorrecta");
+                    txtPass.setText("");
+                    return;
+                }    
                 if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
                     manejador.setUserToLogin(txtUser.getText());
                     this.hide();
@@ -130,7 +137,8 @@ public class Login extends javax.swing.JFrame {
                     perfil.setUsuario(usuario);
                     perfil.SetDATA();
                     perfil.show();
-                }else{
+                }
+                else{
                     this.hide();
                     CrearUsuario crearUsuario = new CrearUsuario();
                     crearUsuario.show();

@@ -29,7 +29,7 @@ public class UserMenu {
     
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver metodo en la ultima version ********************************************** 
-    public void Main() throws FileNotFoundException
+    public boolean Main() throws FileNotFoundException
     {
         UserMenu UM = new UserMenu();
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
@@ -44,8 +44,9 @@ public class UserMenu {
             String input = (String) JOptionPane.showInputDialog(null, "Escoja una opcion",
                     "Escoja una opcion :)", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
             if(input == choices[0]){
-                ChangeProfile CP = new ChangeProfile();
-                CP.show();
+                ChangeProfile CP2 = new ChangeProfile();
+                CP2.show();
+                return true;
             }
             else if (input.equals(choices[1]))
             {
@@ -85,8 +86,6 @@ public class UserMenu {
                user.setEstatus(0);
                MDU.SetUserData(user);
             }
-            
-        
-        
+            return  false;
     }
  }

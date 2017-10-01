@@ -206,7 +206,10 @@ public class PerfilUsuario extends javax.swing.JFrame {
         UserMenu UM = new UserMenu();
         UM.setUsuario(MainUser.getUsuario());
         try {
-            UM.Main();
+            if(UM.Main())
+            {
+                this.hide();
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -7,11 +7,13 @@ package proyecto_i.Administration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import proyecto_i.CrearUsuario;
 import proyecto_i.ManejadorDeUsuarios;
 import proyecto_i.PerfilUsuario;
 import proyecto_i.Usuario;
@@ -109,8 +111,6 @@ public class ChangeProfile extends javax.swing.JFrame {
         });
 
         jLabel8.setText("Ingrese de nuevo la contraseña:");
-
-        jTextField3.setText("jTextField3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -224,7 +224,7 @@ public class ChangeProfile extends javax.swing.JFrame {
     private String Password, Desc, Mail, User, Name, LastName, date, Photo;
     private int Number, Admin;
     private int[] Settings = {6,3,2,1,2,4,6,3};
-    public int CheckPass(String pass)
+    private int CheckPass(String pass)
     {
         int points = pass.length() * Settings[1];
         int[] countCase = getUpLowCase(pass);
@@ -244,7 +244,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         } 
         return points;
     }
-    public int [] getLNCount(String str)
+    private int [] getLNCount(String str)
     {
         int[] res = new int[3];
         char[] array = str.toCharArray();
@@ -265,7 +265,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         
         return  res;
     }
-    public int []getUpLowCase(String str)
+    private int []getUpLowCase(String str)
     {
         int[] res = new int[2];
         for (int k = 0; k < str.length(); k++) 
@@ -275,7 +275,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         }
         return res;
     }
-    public String Result(int points)
+    private String Result(int points)
     {
         if (points < 26)
         {
@@ -305,7 +305,7 @@ public class ChangeProfile extends javax.swing.JFrame {
             CU = false;
             return ("Debe ingresar una contraseña con mas de 6 caracteres");
         }
-        if(STRA != STRB)
+        if(STRA.compareTo(STRB) != 0)
         {
             CU = false;
              return ("Las contraseñas no concuerdan");
@@ -326,8 +326,8 @@ public class ChangeProfile extends javax.swing.JFrame {
         {
             jTextField1.setText("Debe ingresar una contraseña con mas de 6 caracteres");
             return false;
-        }
-        if(jPasswordField1.getText() != jPasswordField2.getText())
+        }//"".equals(jTextField3.getText())
+        if(!jPasswordField1.getText().equals(jPasswordField2.getText()))
         {
              jTextField1.setText("Las contraseñas no concuerdan");
             return false;
@@ -354,7 +354,7 @@ public class ChangeProfile extends javax.swing.JFrame {
             jTextField4.setText("");
             return false;
         }
-        if("".equals(jTextField3.getText())){
+        if((jTextField3.getText()).length()<1){
             return false;
         }
         Desc = jTextField3.getText();
@@ -374,7 +374,14 @@ public class ChangeProfile extends javax.swing.JFrame {
        {
            if(CheckJText())
            {
-                Usuario usuario = new Usuario(User, Name, LastName, Password, Admin, date, Mail, Integer.toString(Number), Photo, Desc, 1);
+               CrearUsuario CU = new CrearUsuario();
+               Usuario usuario;
+               try {
+                   usuario = new Usuario(User, Name, LastName, Password, Admin, date, Mail, Integer.toString(Number), CU.SaveImageMEIA(Photo) , Desc, 1);
+               } catch (IOException ex) {
+                   Logger.getLogger(ChangeProfile.class.getName()).log(Level.SEVERE, null, ex);
+                       usuario = new Usuario(User, Name, LastName, Password, Admin, date, Mail, Integer.toString(Number), Photo , Desc, 1);
+               }
                 ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
                try {
                    MDU.SetUserData(usuario);
@@ -382,6 +389,7 @@ public class ChangeProfile extends javax.swing.JFrame {
                    perfil.setUsuario(usuario);
                    perfil.SetDATA();
                    perfil.show();
+                   this.dispose();
                } catch (FileNotFoundException ex) {
                    Logger.getLogger(ChangeProfile.class.getName()).log(Level.SEVERE, null, ex);
                }

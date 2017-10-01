@@ -5,19 +5,25 @@
  */
 package proyecto_i;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto_i.Administration.ChangeProfile;
+//import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -89,14 +95,14 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel3.setText("Register");
 
         jLabel4.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        jLabel4.setText("NAME:");
+        jLabel4.setText("FIRST NAME:");
 
         txtName.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
 
         txtSecondName.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        jLabel5.setText("FIRST NAME:");
+        jLabel5.setText("LAST NAME:");
 
         txtDate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,23 +177,22 @@ public class CrearUsuario extends javax.swing.JFrame {
                 .addGap(169, 169, 169))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel4)
-                                .addComponent(jLabel1))
-                            .addGap(36, 36, 36))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(26, 26, 26)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel5)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel6))
-                            .addGap(40, 40, 40)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
-                        .addComponent(lblPicture)
-                        .addGap(91, 91, 91)))
+                        .addComponent(lblPicture))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jLabel4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))))
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtName)
                     .addComponent(txtUser)
@@ -324,8 +329,11 @@ public class CrearUsuario extends javax.swing.JFrame {
                     }else{
                         Iniciar();
                         JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" created!");
-                        Login returnL=new Login();
-                        returnL.show();
+                        if(flagForADMIN)
+                        {
+                            Login returnL=new Login();
+                            returnL.show();  
+                        }
                         this.dispose();
                     } 
                 }
@@ -337,6 +345,11 @@ public class CrearUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnCrearUsuarioActionPerformed
 
+    private boolean flagForADMIN = true;
+    public void SETFLAG(boolean flag)
+    {
+        flagForADMIN = flag;
+    }
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
         Login regresar=new Login();
@@ -358,10 +371,24 @@ public class CrearUsuario extends javax.swing.JFrame {
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
-        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), txtPass.getText(),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), lblPicture.getText(), txtDescription.getText(),1);
+        
+        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), txtPass.getText(),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
         manejador.llenarBitacora(txtUser.getText(), zdt, usuario);
     }
-    
+    public String SaveImageMEIA(String originalPath) throws IOException
+    {
+        String[] vgsolution;
+        try {     
+            BufferedImage img = null;
+            vgsolution = originalPath.split(Pattern.quote("."));
+            img = ImageIO.read(new File(originalPath));  
+            File outputfile = new File("C:\\MEIA\\IMAGES\\" +txtUser.getText() +"."+ vgsolution[1]);
+            ImageIO.write(img, "png", outputfile);
+        } catch (IOException e) {
+            return  originalPath;
+        }
+      return "C:\\MEIA\\IMAGES\\" +txtUser.getText()+"."+ vgsolution[1];
+    }
     /**
      * @param args the command line arguments
      */

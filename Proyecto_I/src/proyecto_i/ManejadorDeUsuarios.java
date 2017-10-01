@@ -37,6 +37,7 @@ public class ManejadorDeUsuarios {
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
+    private final String DEFAULT_PROFILE_PICTURES = "IMAGES";
     
     public void CrearArchivos(){
         try{
@@ -45,11 +46,13 @@ public class ManejadorDeUsuarios {
             File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
             File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
             File bitacoraBackup = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
+            File CarpetaFotos = new File(DEFAULT_DIRECTORY + DEFAULT_PROFILE_PICTURES);
             archivoUsuarios.createNewFile();
             descriptorUsuarios.createNewFile();
             archivoBitacora.createNewFile();
             descriptorBitacora.createNewFile();
             bitacoraBackup.createNewFile();
+            CarpetaFotos.mkdirs();
         }catch(IOException e){
             
         }
@@ -510,8 +513,8 @@ public class ManejadorDeUsuarios {
         Index = -1 *Index;
           
     }
-    
-    private  int getIndexUser(String strUser) throws FileNotFoundException //pending test*********
+    //********************************************************************************************
+    private  int getIndexUser(String strUser) throws FileNotFoundException 
     {
         File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
         int count = 0;
@@ -521,7 +524,7 @@ public class ManejadorDeUsuarios {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                String [] credenciales = line.split("|");
+                String [] credenciales = line.split(Pattern.quote("|"));
                 if (strUser.equals(credenciales[0])) {
                     scanner.close();
                     return count ;
@@ -537,7 +540,7 @@ public class ManejadorDeUsuarios {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                String [] credenciales = line.split("|");
+                String [] credenciales = line.split(Pattern.quote("|"));
                 if (strUser.equals(credenciales[0])) {
                     scanner.close();
                     return count ;
