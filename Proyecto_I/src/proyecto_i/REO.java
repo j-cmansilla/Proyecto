@@ -45,12 +45,11 @@ public class REO {
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
     {
         setMaxFirst();
-        if(MaxforReorganize > ActiveAccounts)
+        if(MaxforReorganize > getCountlinesFile(LOGBOOK_PATH))
         {
             Reorganize(MainUser);
             return true;
         }
-        
         return false;
     }
     
@@ -112,12 +111,13 @@ public class REO {
     }
     
      //*************************************************************************************************************
-    private void getCountAcounts() throws IOException
+    private int getCountlinesFile(String path) throws IOException
     {
-         BufferedReader reader = new BufferedReader(new FileReader(LOGBOOK_PATH));
-        ActiveAccounts = 0;
-        while (reader.readLine() != null) ActiveAccounts++;
+         BufferedReader reader = new BufferedReader(new FileReader(path));
+        int lines = 0;
+        while (reader.readLine() != null) lines++;
         reader.close();
+        return lines;
     }
     private String readLine(Scanner reader) {
         if (reader.hasNextLine())
@@ -192,6 +192,6 @@ public class REO {
         List<String> lines = Files.readAllLines(path,charset);
         MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
         CreationDate = lines.get(1);
-        getCountAcounts();
+        ActiveAccounts =  getCountlinesFile(USER_PATH);
     }
 }
