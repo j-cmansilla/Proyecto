@@ -7,7 +7,6 @@ package proyecto_i.Administration;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javafx.scene.control.cell.CheckBoxListCell;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -37,16 +36,17 @@ public class UserMenu {
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
         Usuario MainUser = MDU.getUserData(User);
         Utilities Utilidades = new Utilities();
-        String[] chAdmin = { "Modificar Perfil", "Desactivar cuenta", "Ingresar nuevo usuario", "Buscar Usuario", "Desactivar Un usuario", "Modificar el numero maximo para Reorganizar", "Realizar Back-Up" };
-        String[] choices = { "Modificar Perfil", "Desactivar cuenta", };
+        String[] chAdmin = { "Modify Profile", "Deactivate Account", "Sign in New User", "Search User", "Deactivate a User", "Modify Max. Number to Re-organize", "Back-Up" };
+        String[] choices = { "Modify Profile", "Deactivate Account", };
         
         if(MainUser.Rol()==1)
         {
             choices = chAdmin;
         }
-            String input = (String) JOptionPane.showInputDialog(null, "Escoja una opcion",
-                    "Escoja una opcion :)", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-            if(input == choices[0]){
+            String input = (String) JOptionPane.showInputDialog(null, "Choose an option:",
+                    "Choose an Option :)", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+            
+            if(input.equals(choices[0])){
                 ChangeProfile CP2 = new ChangeProfile();
                 CP2.show();
                 return true;
@@ -54,7 +54,7 @@ public class UserMenu {
             else if (input.equals(choices[1]))
             {
                 JDialog.setDefaultLookAndFeelDecorated(true);
-                int response = JOptionPane.showConfirmDialog(null, "Seguro desea desactivar la cuenta?", "Confirm",
+                int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to deactivate the account?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     MainUser.setEstatus(0);
@@ -72,12 +72,12 @@ public class UserMenu {
             else if(input.equals(choices[3]))
             {
                JFrame frame = new JFrame(); 
-               Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea buscar:");
+               Object result = JOptionPane.showInputDialog(frame, "Enter the username desired:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                if(user==null)
                {
-                   JOptionPane.showMessageDialog(null,"El usuario no existe");
+                   JOptionPane.showMessageDialog(null,"The user doesn't exist.");
                    return false;
                }
                PerfilUsuario PU = new PerfilUsuario();
@@ -88,12 +88,12 @@ public class UserMenu {
             else if(input.equals(choices[4]))
             {
                JFrame frame = new JFrame(); 
-               Object result = JOptionPane.showInputDialog(frame, "Ingrese el usuario que desea desactivar:");
+               Object result = JOptionPane.showInputDialog(frame, "Enter the user you want to deactivate:");
                String usuario = (String) result;
                Usuario user = MDU.getUserData(usuario);
                if(user==null)
                {
-                   JOptionPane.showMessageDialog(null,"El usuario no existe");
+                   JOptionPane.showMessageDialog(null,"The user doesn't exist.");
                    return false;
                }
                user.setEstatus(0);
@@ -106,17 +106,17 @@ public class UserMenu {
                 while(f)
                 {
                     JFrame frame = new JFrame(); 
-                    Object result = JOptionPane.showInputDialog(frame, "Ingrese el numero maximo para Reorganizar:");
+                    Object result = JOptionPane.showInputDialog(frame, "Enter the Max. Number to re-organize:");
                     try {
                         NewMax = Integer.parseInt(result.toString());
                         f = false;
                         if(NewMax < 0)
                         {
-                            JOptionPane.showMessageDialog(null,"Inserte un numero positivo!");
+                            JOptionPane.showMessageDialog(null,"Insert a positive number!");
                             f =true;
                         }
                     } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null,"Inserte un numero!");
+                        JOptionPane.showMessageDialog(null,"Insert a number!");
                     }
                     
                 }
@@ -124,9 +124,8 @@ public class UserMenu {
             }else if(input.equals(choices[6]))
             {
                JFrame frame = new JFrame(); 
-               Object result = JOptionPane.showInputDialog(frame, "Ingrese el path donde desea guardar ");
-              
-               //VALIDAR ESTO*********************************************************************************
+               Object result = JOptionPane.showInputDialog(frame, "Enter the path where you want to save.");
+
                Utilidades.createBackUp((String) result, User);
             }
             return  false;

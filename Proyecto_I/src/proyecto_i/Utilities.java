@@ -30,9 +30,10 @@ import org.apache.commons.io.FileUtils;
  * @author Harry
  */
 public class Utilities {
-    private final String DEFAULT_BACKUP_DIRECTORY = "MEIA_Backup";
+    private final String DEFAULT_BACKUP_DIRECTORY = "\\MEIA_Backup";
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_BACKUP_BITACORA_DIRECTORY = "bitacora_backup.txt";
+    private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
     
     public void createBackUp(String newdirectory, String user){
         try 
@@ -82,7 +83,8 @@ public class Utilities {
         LlenarArchivo(DEFAULT_DES_DIR + DEFAULT_BITACORA_DIRECTORY, lines);
         
     }
-     public boolean LlenarArchivo(String strPath,List<String> lines)
+    
+    public boolean LlenarArchivo(String strPath,List<String> lines)
     {
             try
             {
@@ -97,6 +99,42 @@ public class Utilities {
             {
                 return false;
             } 
+        
+    }
+     
+    public void removeLine(String lineContent, String newLine, int op) throws IOException
+    {
+        File fileUser = new File(DEFAULT_DIRECTORY + DEFAULT_USER_DIRECTORY);
+        File fileBitacora = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
+        File temp = new File(DEFAULT_DIRECTORY + "_temp_");
+        try {
+            if (op == 0) 
+            {
+                //Bitacora
+                PrintWriter outB = new PrintWriter(new FileWriter(temp));
+                Files.lines(fileBitacora.toPath())
+                    .filter(line -> !line.contains(lineContent))
+                    .forEach(outB::println);
+                outB.write(newLine);
+                outB.flush();
+                outB.close();
+                temp.renameTo(fileBitacora);
+            }
+            
+            if (op > 0) 
+            {
+                //User
+                PrintWriter outU = new PrintWriter(new FileWriter(temp));
+                Files.lines(fileUser.toPath())
+                    .filter(line -> !line.contains(lineContent))
+                    .forEach(outU::println);
+                outU.write(newLine);
+                outU.flush();
+                outU.close();
+                temp.renameTo(fileUser);
+            }            
+        } catch (Exception e) {
+        }
         
     }
 }

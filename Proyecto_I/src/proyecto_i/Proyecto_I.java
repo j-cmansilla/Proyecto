@@ -24,6 +24,11 @@ public class Proyecto_I {
             directorio.mkdirs();
             manejador.CrearArchivos();
         }
+        
+        if(directorio.isDirectory() && directorio.list().length == 0) {
+            manejador.CrearArchivos();
+        } 
+
         Login login = new Login();
         login.show();
     }
