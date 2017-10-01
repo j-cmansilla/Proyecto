@@ -54,7 +54,6 @@ public class Login extends javax.swing.JFrame {
 
         btnIniciarSesion.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnIniciarSesion.setText("Log In");
-        btnIniciarSesion.setActionCommand("Log In");
         btnIniciarSesion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnIniciarSesionActionPerformed(evt);
@@ -109,14 +108,23 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
-        jLabel1.getAccessibleContext().setAccessibleName("USER:");
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
+            try {
+            // TODO add your handling code here:
+            casosDeLogin(); 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        txtPass.setText("");
+        txtUser.setText("");
+    }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
     private boolean casosDeLogin() throws FileNotFoundException{
         String user = txtUser.getText();
@@ -131,7 +139,7 @@ public class Login extends javax.swing.JFrame {
                 {
                     JOptionPane.showMessageDialog(null,"Incorrect Password");
                     txtPass.setText("");
-                    return;
+                    return false;
                 }    
                 if (manejador.usuarioExistente(txtUser.getText(), txtPass.getText())) {
                     manejador.setUserToLogin(txtUser.getText());
@@ -152,7 +160,6 @@ public class Login extends javax.swing.JFrame {
             } catch (Exception ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
             }
-        Usuario usuario;
         usuario = manejador.getUserData(user);
         if (manejador.validarUsuario(user, pass) == 1) {
             manejador.setUserToLogin(txtUser.getText());
@@ -185,20 +192,11 @@ public class Login extends javax.swing.JFrame {
         }
         return false;
     }
-    
-    private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-       ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-       Usuario usuario;
-        try {
-            // TODO add your handling code here:
-            casosDeLogin(); 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        txtPass.setText("");
-        txtUser.setText("");
-    }//GEN-LAST:event_btnIniciarSesionActionPerformed
-
+        return false;
+    }
+        
+    
     public String Sha1(String password)
     {
         byte[] PassB = password.getBytes();
@@ -253,3 +251,4 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }
+
