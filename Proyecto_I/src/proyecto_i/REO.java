@@ -5,18 +5,24 @@
  */
 package proyecto_i;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,7 +52,7 @@ public class REO {
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
     {
         setMaxFirst();
-        if(MaxforReorganize > getCountlinesFile(LOGBOOK_PATH))
+        if(MaxforReorganize == countLines(LOGBOOK_PATH))
         {
             Reorganize(MainUser);
             return true;
@@ -80,20 +86,44 @@ public class REO {
         }
          while (line1 != null || line2 != null) {
             if (line1 == null) {                 //from file2 
+                try{
                 WriteInTEMP(getUser(line2));
+               }
+               catch (Exception e)
+                       {
+                           WriteInTEMP_Ca(line2);
+                       }
                 line2 = readLine(LogBookScanner);
                 
             } else if (line2 == null) {          //from file1 
+               try{
                 WriteInTEMP(getUser(line1));
+               }
+               catch (Exception e)
+                       {
+                           WriteInTEMP_Ca(line1);
+                       }
                 line1 = readLine(MasterScanner);
                 
-            } else if (getUserName(line1, MasterScanner).compareToIgnoreCase(getUserName(line2, LogBookScanner)) <= 0) {
+            } else if (getUserName(line1).compareToIgnoreCase(getUserName(line2)) <= 0) {
                                                 //from file1 
+               try{
                 WriteInTEMP(getUser(line1));
+               }
+               catch (Exception e)
+                       {
+                           WriteInTEMP_Ca(line1);
+                       }
                 line1 = readLine(MasterScanner);
                 
             } else {                             //from file2 
+                try{
                 WriteInTEMP(getUser(line2));
+               }
+               catch (Exception e)
+                       {
+                           WriteInTEMP_Ca(line2);
+                       }
                 line2 = readLine(LogBookScanner);
             }
       }
@@ -104,29 +134,30 @@ public class REO {
         DeleteInactive();
     }
     
-    public void ReorganizeMaster() throws FileNotFoundException{
-        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        manejador.ordenarMaster();
-    }
-    
     private void DeleteInactive() throws IOException
     {
         File inputFile = new File(USER_PATH);
         File tempFile = new File(DEFAULT_TEMP_DIRECTORY);
-
-        BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile));
+        tempFile.createNewFile();
+        
+        File Master = new File(USER_PATH);
+        Scanner MasterScanner = new Scanner(Master);
         String currentLine;
-
-        while((currentLine = reader.readLine()) != null) {
-            if(CheckStatus(currentLine)) {
-                writer.write(currentLine + System.getProperty("line.separator"));
-            }
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
         }
-        writer.close(); 
-        reader.close(); 
+        while((currentLine) != null) {
+            if(CheckStatus(currentLine)) {
+               WriteInTEMP_Ca(currentLine);
+            }
+             currentLine = readLine(MasterScanner);
+        }
         tempFile.renameTo(inputFile);
         ActiveAccounts =  getCountlinesFile(USER_PATH);
+        ChangeDESCBIT();
     }
     
      //*************************************************************************************************************
@@ -146,36 +177,58 @@ public class REO {
   }
     private Boolean CheckStatus(String line)
     {
-        Usuario user = getUser(line);
-        return user.getEstatus() != 0;
+        try {
+             Usuario user = getUser(line);
+             return user.getEstatus() != 0;
+        } catch (Exception e) {
+            String [] credenciales = line.split(Pattern.quote("|"));
+            if(Integer.parseInt(credenciales[10])!= 0) {
+                return true;
+            } 
+            return false;
+        }  
     }
-    private String getUserName(String ScanerLine,Scanner reader)
+    private String getUserName(String ScanerLine)
     {
         Usuario user = getUser(ScanerLine);
-       // if(user.getEstatus()==0) //IDK if this works
-         //   getUserName(readLine(reader), reader);
-        return user.getUsuario();
+        if(user != null)
+            return user.getUsuario();
+        String [] credenciales = ScanerLine.split(Pattern.quote("|"));
+        return (credenciales[0]);
     }
     private Usuario getUser(String ScanerLine)
     {
-        String [] credenciales = ScanerLine.split(Pattern.quote("|"));
+        try {
+                 String [] credenciales = ScanerLine.split(Pattern.quote("|"));
         return new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
+    
+       } catch (Exception e) {
+           return  null;
+        }
+   }
+        
+    public void ReorganizeMaster() throws FileNotFoundException{
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        manejador.ordenarMaster();
     }
     
     private void WriteInTEMP(Usuario usuario) throws IOException
     {
-        String Userline = usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"
-                +usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+
-                usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+
-                usuario.getCorreo()+"|"+usuario.getDescripcion();
-        FileWriter writerTEMP = new FileWriter(DEFAULT_TEMP_DIRECTORY); 
-        writerTEMP.write(Userline + String.format("%n"));
-        writerTEMP.close();
+        String Userline =  usuario.getUsuario()+"|"+usuario.getNombre()+"|"+
+                usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+
+                usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+
+                usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+usuario.getEstatus()+System.getProperty("line.separator");
+      Files.write(Paths.get(DEFAULT_TEMP_DIRECTORY), Userline.getBytes(), StandardOpenOption.APPEND);
+    }
+    private void WriteInTEMP_Ca(String usuario) throws IOException
+    {
+        String Userline = usuario + System.lineSeparator();
+      Files.write(Paths.get(DEFAULT_TEMP_DIRECTORY), Userline.getBytes(), StandardOpenOption.APPEND);
     }
    
     private void CleanLastStep(String User) throws FileNotFoundException, IOException
     {
-        try (FileOutputStream writer = new FileOutputStream(USER_PATH)) {
+        try (FileOutputStream writer = new FileOutputStream(LOGBOOK_PATH)) {
             writer.write(("").getBytes());
             writer.close();
         }
@@ -198,7 +251,7 @@ public class REO {
         lines.remove(lines.size() - 1);
         lines.remove(lines.size() - 1);
         lines.remove(lines.size() - 1);
-        lines.add(String.valueOf(ActiveAccounts));
+        lines.add(String.valueOf(countLines(USER_PATH)));
         lines.add("0");
         Utilidades.LlenarArchivo(DESC_USER_PATH, lines);
         
@@ -211,4 +264,50 @@ public class REO {
         MaxforReorganize = Integer.parseInt(lines.get(lines.size()-1));
         CreationDate = lines.get(1);
     }
+    
+    private void ChangeDESCBIT() throws IOException
+    {
+        int acctive = countLines(USER_PATH);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        List<String> lines = new ArrayList<String>();
+        
+        File Master = new File(DESC_USER_PATH);
+        Scanner MasterScanner = new Scanner(Master);
+        String currentLine = "AD";
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
+        }
+         
+        lines.add(currentLine);
+        lines.add(CreationDate);
+        lines.add(dateFormat.format(date) + "[America/Guatemala]");
+        lines.add(String.valueOf(acctive));
+        lines.add("0");
+        Utilidades.LlenarArchivo(DESC_USER_PATH, lines);
+    }
+    
+    public int countLines(String filename) throws IOException {
+    InputStream is = new BufferedInputStream(new FileInputStream(filename));
+    try {
+        byte[] c = new byte[1024];
+        int count = 0;
+        int readChars = 0;
+        boolean empty = true;
+        while ((readChars = is.read(c)) != -1) {
+            empty = false;
+            for (int i = 0; i < readChars; ++i) {
+                if (c[i] == '\n') {
+                    ++count;
+                }
+            }
+        }
+        return (count == 0 && !empty) ? 1 : count;
+    } finally {
+        is.close();
+    }
+}
 }

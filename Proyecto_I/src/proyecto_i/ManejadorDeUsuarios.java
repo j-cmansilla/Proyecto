@@ -36,20 +36,21 @@ public class ManejadorDeUsuarios {
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
     private final String DEFAULT_PROFILE_PICTURES = "IMAGES";
-    
+       
     REO reorganize = new REO();
     
     public void agregarEnApilo(boolean isFull,Usuario usuario) throws IOException{
         ArchivoSecuencial archivo = new ArchivoSecuencial();
         archivo.crearArchivoBitacora(new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY));
-        String user = usuario.getUsuario()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+"1"+System.getProperty("line.separator");
+      //Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+         String user = usuario.getUsuario()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+"1"+System.getProperty("line.separator");
+         reorganize.CheckForREO(usuario.getUsuario());
         if (isFull) {
             Writer writer = null;
             pasarDatosAlMaster(user.split("\\|")[0]);
             //Reorganizar reorganizar = new Reorganizar();
             //reorganizar.reordenarMaster();
             REO reorganizar = new REO();
-            reorganizar.ReorganizeMaster();
             //reorganizar.Reorganize(user.split("\\|")[0]);
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
@@ -202,7 +203,8 @@ public class ManejadorDeUsuarios {
     }
     
     private String retornarUsuarioParaBitacora(Usuario usuario){
-        return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
+        return usuario.getUsuario()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+usuario.getEstatus();
+       // return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
     }
     
     private boolean pasarDatosAlMaster(String userName) throws FileNotFoundException, IOException{
@@ -398,7 +400,7 @@ public class ManejadorDeUsuarios {
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
                 if (user.equals(credenciales[0])) {
-                    result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
                     scanner.close();
                     return result;
                 }
@@ -415,7 +417,7 @@ public class ManejadorDeUsuarios {
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
                 if (user.equals(credenciales[0])) {
-                    result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
                     scanner.close();
                     return result;
                 }

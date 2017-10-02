@@ -27,7 +27,7 @@ public class UserMenu {
     public void setUsuario(String user) {
         this.User = user;
     }
-    
+    public boolean FLAGDEactive = true;
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver funcion en la ultima version ********************************************** 
     public boolean Main() throws FileNotFoundException, IOException
@@ -61,8 +61,10 @@ public class UserMenu {
                     JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
                 } 
                 MDU.SetUserData(MainUser);
-                //Login regresar=new Login();
-                //regresar.show();
+                Login regresar=new Login();
+                regresar.show();
+                return false;
+                
             }
             else if (input.equals(choices[2]))
             {
