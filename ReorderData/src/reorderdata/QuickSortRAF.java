@@ -12,10 +12,10 @@ package reorderdata;
 import java.io.*;
 class QuicksortRAF{
 protected static int L;   
-private static final String USER_PATH = "C:\\MEIA\\Usuario.txt";   
+private static final String USER_PATH = "C:\\Test\\Usuarios.txt";   
 public static void ordenar()throws IOException{
   RandomAccessFile A=new RandomAccessFile(USER_PATH,"rw" );
-  L = Integer.parseInt("7");//largo registro(en bytes)
+  L = Integer.parseInt("5");//largo registro(en bytes)
   final int n = (int) A.length()/L;//numero registros
   quicksort(A,0,n-1);
 }

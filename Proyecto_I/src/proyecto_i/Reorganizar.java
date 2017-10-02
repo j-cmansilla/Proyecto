@@ -31,6 +31,7 @@ public class Reorganizar {
         L = Integer.parseInt("150");//largo registro(en bytes)
         final int n = (int) A.length()/L;//numero registros
         quicksort(A,0,n-1);
+        A.close();
     }
     public static void quicksort(RandomAccessFile x,int ip,int iu)
     throws IOException{

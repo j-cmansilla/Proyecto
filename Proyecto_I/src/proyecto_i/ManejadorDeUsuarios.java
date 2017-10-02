@@ -46,10 +46,10 @@ public class ManejadorDeUsuarios {
         if (isFull) {
             Writer writer = null;
             pasarDatosAlMaster(user.split("\\|")[0]);
-            Reorganizar reorganizar = new Reorganizar();
-            reorganizar.reordenarMaster();
-            //REO reorganizar = new REO();
-            //reorganizar.ReorganizeMaster(); DEJAR ESTE
+            //Reorganizar reorganizar = new Reorganizar();
+            //reorganizar.reordenarMaster();
+            REO reorganizar = new REO();
+            reorganizar.ReorganizeMaster();
             //reorganizar.Reorganize(user.split("\\|")[0]);
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
