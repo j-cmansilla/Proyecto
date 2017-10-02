@@ -243,7 +243,7 @@ public class REO {
         lines.add(User);
         lines.add(CreationDate);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");
-        lines.add("0");
+        lines.add("1");
         lines.add("0");
         lines.add(String.valueOf(MaxforReorganize));
         Utilidades.LlenarArchivo(DESC_LOGBOOK_PATH, lines);
