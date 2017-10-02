@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -426,10 +429,100 @@ public class ManejadorDeUsuarios {
         }
         return null;        
     }
-
+    //**********************************************************************************************************
+ private String readLine(Scanner reader) {
+        if (reader.hasNextLine())
+            return reader.nextLine();
+        else
+            return null;
+  }
+ private void WriteInTEMP_Ca(String usuario) throws IOException
+    {
+        String Userline = usuario + System.lineSeparator();
+      Files.write(Paths.get(DEFAULT_TEMP_DIRECTORYC), Userline.getBytes(), StandardOpenOption.APPEND);
+    }
+ private void WriteInTEMP(Usuario usuario) throws IOException
+    {
+        String Userline =  usuario.getUsuario()+"|"+usuario.getNombre()+"|"+
+                usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+
+                usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+
+                usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+usuario.getEstatus()+System.getProperty("line.separator");
+      Files.write(Paths.get(DEFAULT_TEMP_DIRECTORYC), Userline.getBytes(), StandardOpenOption.APPEND);
+    }
+  private final String DEFAULT_TEMP_DIRECTORYC = "C:\\MEIA\\Temp.txt";
+    private final String USER_PATH = "C:\\MEIA\\Usuario.txt";              //MASTER
+    private final String LOGBOOK_PATH = "C:\\MEIA\\Bitacora.txt";          //APILO
+    private final String DESC_USER_PATH = "C:\\MEIA\\Desc_Usuario.txt"; 
+    private final String DESC_LOGBOOK_PATH = "C:\\MEIA\\Desc_Bitacora.txt"; 
+    
     public void SetUserData(Usuario newUser) throws FileNotFoundException, IOException
     {
         int Index = getIndexUser(newUser.getUsuario());
+        File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
+        tempFile.createNewFile();
+        
+        if(versiExiste(newUser,USER_PATH ))
+        {
+         File inputFile = new File(USER_PATH);
+        File Master = new File(USER_PATH);
+        Scanner MasterScanner = new Scanner(Master);
+        String currentLine;
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
+        }
+        while((currentLine) != null) {
+            String [] credenciales = currentLine.split(Pattern.quote("|"));
+                if (!newUser.getUsuario().equals(credenciales[0]))
+                {
+                    WriteInTEMP_Ca(currentLine);
+            }
+             currentLine = readLine(MasterScanner);
+        }
+        WriteInTEMP(newUser);
+        if(tempFile.renameTo(inputFile))
+            {
+                try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
+            writer.write(("").getBytes());
+            writer.close();
+        }
+            } 
+        }
+        else if (versiExiste(newUser, LOGBOOK_PATH))
+        {
+            Index = Index * -1;
+            File inputFile = new File(LOGBOOK_PATH);
+        File Master = new File(LOGBOOK_PATH);
+        Scanner MasterScanner = new Scanner(Master);
+        String currentLine;
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
+        }
+        while((currentLine) != null) {
+            String [] credenciales = currentLine.split(Pattern.quote("|"));
+                if (!newUser.getUsuario().equals(credenciales[0]))
+                {
+                    WriteInTEMP_Ca(currentLine);
+            }
+             currentLine = readLine(MasterScanner);
+        }
+        WriteInTEMP(newUser);     
+            if(tempFile.renameTo(inputFile))
+            {
+                try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
+            writer.write(("").getBytes());
+            writer.close();
+        }
+            }
+        }
+        
+        
+        /*
         String NewstrUser = retornarUsuarioParaBitacora(newUser);
         Utilities objUtilities = new Utilities();
         if(Index>0)
@@ -441,8 +534,31 @@ public class ManejadorDeUsuarios {
         {              
             objUtilities.removeLine(newUser.getUsuario(), NewstrUser, Index);
         }
-        Index = -1 *Index;
+        Index = -1 *Index;*/
+        
           
+    }
+    public boolean versiExiste(Usuario user, String patth) throws FileNotFoundException
+    {
+        File usuarios = new File(patth);
+        Usuario result;
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(patth);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split(Pattern.quote("|"));
+                if (user.getUsuario().equals(credenciales[0])) {
+                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
+                    scanner.close();
+                    return true;
+                }
+            }
+            scanner.close();
+        }
+        return false;
     }
 
     private  int getIndexUser(String strUser) throws FileNotFoundException 

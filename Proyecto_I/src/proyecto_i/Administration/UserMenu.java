@@ -63,7 +63,7 @@ public class UserMenu {
                 MDU.SetUserData(MainUser);
                 Login regresar=new Login();
                 regresar.show();
-                return false;
+                return true;
                 
             }
             else if (input.equals(choices[2]))

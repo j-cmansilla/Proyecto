@@ -158,6 +158,10 @@ public class REO {
         tempFile.renameTo(inputFile);
         ActiveAccounts =  getCountlinesFile(USER_PATH);
         ChangeDESCBIT();
+        try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORY)) {
+            writer.write(("").getBytes());
+            writer.close();
+        }
     }
     
      //*************************************************************************************************************
