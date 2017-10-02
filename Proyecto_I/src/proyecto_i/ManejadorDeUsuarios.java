@@ -457,12 +457,11 @@ public class ManejadorDeUsuarios {
     
     public void SetUserData(Usuario newUser) throws FileNotFoundException, IOException
     {
-        int Index = getIndexUser(newUser.getUsuario());
-        File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
-        tempFile.createNewFile();
-        
+        boolean flasdf = true;
         if(versiExiste(newUser,USER_PATH ))
         {
+            File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
+        tempFile.createNewFile();
          File inputFile = new File(USER_PATH);
         File Master = new File(USER_PATH);
         Scanner MasterScanner = new Scanner(Master);
@@ -491,8 +490,9 @@ public class ManejadorDeUsuarios {
             } 
         }
         else if (versiExiste(newUser, LOGBOOK_PATH))
-        {
-            Index = Index * -1;
+        {flasdf = false;
+            File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
+        tempFile.createNewFile();
             File inputFile = new File(LOGBOOK_PATH);
         File Master = new File(LOGBOOK_PATH);
         Scanner MasterScanner = new Scanner(Master);
@@ -521,6 +521,14 @@ public class ManejadorDeUsuarios {
             }
         }
         
+        if(flasdf)
+        {
+            new File(DEFAULT_TEMP_DIRECTORYC).renameTo(new File(USER_PATH));
+        }
+        else
+        {
+            new File(DEFAULT_TEMP_DIRECTORYC).renameTo(new File(LOGBOOK_PATH));
+        }
         
         /*
         String NewstrUser = retornarUsuarioParaBitacora(newUser);
