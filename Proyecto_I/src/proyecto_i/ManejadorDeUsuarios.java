@@ -46,9 +46,11 @@ public class ManejadorDeUsuarios {
         if (isFull) {
             Writer writer = null;
             pasarDatosAlMaster(user.split("\\|")[0]);
-            REO reorganizar = new REO();
-            //reorganizar.ReorganizeMaster();
-            reorganizar.Reorganize(user.split("\\|")[0]);
+            Reorganizar reorganizar = new Reorganizar();
+            reorganizar.reordenarMaster();
+            //REO reorganizar = new REO();
+            //reorganizar.ReorganizeMaster(); DEJAR ESTE
+            //reorganizar.Reorganize(user.split("\\|")[0]);
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
                         new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY), "utf-8"));

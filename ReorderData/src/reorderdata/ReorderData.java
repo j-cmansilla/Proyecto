@@ -18,8 +18,8 @@ public class ReorderData {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        Reordenar re = new Reordenar();
-        re.Reorder();
+        QuicksortRAF quick = new QuicksortRAF();
+        quick.ordenar();
     }
     
 }
