@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -103,6 +104,11 @@ public class REO {
         DeleteInactive();
     }
     
+    public void ReorganizeMaster() throws FileNotFoundException{
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        manejador.ordenarMaster();
+    }
+    
     private void DeleteInactive() throws IOException
     {
         File inputFile = new File(USER_PATH);
@@ -153,10 +159,7 @@ public class REO {
     private Usuario getUser(String ScanerLine)
     {
         String [] credenciales = ScanerLine.split(Pattern.quote("|"));
-        Usuario user = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], 
-                Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], 
-                credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
-        return user;
+        return new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
     }
     
     private void WriteInTEMP(Usuario usuario) throws IOException
@@ -167,14 +170,16 @@ public class REO {
                 usuario.getCorreo()+"|"+usuario.getDescripcion();
         FileWriter writerTEMP = new FileWriter(DEFAULT_TEMP_DIRECTORY); 
         writerTEMP.write(Userline + String.format("%n"));
+        writerTEMP.close();
     }
    
     private void CleanLastStep(String User) throws FileNotFoundException, IOException
     {
-        try (FileOutputStream writer = new FileOutputStream(LOGBOOK_PATH)) {
+        try (FileOutputStream writer = new FileOutputStream(USER_PATH)) {
             writer.write(("").getBytes());
+            writer.close();
         }
-        Path path = Paths.get(LOGBOOK_PATH);
+        Path path = Paths.get(USER_PATH);
         Files.delete(path);
         new File(DEFAULT_TEMP_DIRECTORY).renameTo(new File(USER_PATH));
         

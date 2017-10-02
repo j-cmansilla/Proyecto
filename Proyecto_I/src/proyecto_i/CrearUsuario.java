@@ -300,6 +300,7 @@ public class CrearUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSelectPictureActionPerformed
 
     private void btnCrearUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCrearUsuarioActionPerformed
+
         try{                                                
             // TODO add your handling code here:
             String date;
@@ -324,8 +325,15 @@ public class CrearUsuario extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "El correo no coincide con un correo correcto!");
                         txtEmail.setText("");
                     }else{
-                        Iniciar();
-                        JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" created!");
+                       ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+                       if (manejador.validarUsuario(txtUser.getText(), "randomPassword!") == 0) {
+                            Iniciar();
+                            JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" created!");
+                       }else{
+                          JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" is alredy in use!");
+                          txtUser.setText("");
+                          return;
+                       }
                         if(flagForADMIN)
                         {
                             Login returnL=new Login();
@@ -377,6 +385,9 @@ public class CrearUsuario extends javax.swing.JFrame {
         
         Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), txtPass.getText(),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
         manejador.llenarBitacora(txtUser.getText(), zdt, usuario);
+        //String user = txtUser.getText()+"|"+txtName.getText()+"|"+txtSecondName.getText()+"|"+txtPass.getText()+"|"+"-1"+"|"+txtDate.getDate().toString()+"|"+txtEmail.getText()+"|"+txtPhone.getText()+"|"+SaveImageMEIA(lblPicture.getText())+"|"+txtDescription.getText()+"|"+"1";
+        //manejador.llenarBitacora(usuario,zdt);
+        
     }
     public String SaveImageMEIA(String originalPath) throws IOException
     {

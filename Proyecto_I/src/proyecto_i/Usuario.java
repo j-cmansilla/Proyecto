@@ -187,10 +187,6 @@ public class Usuario {
         setEstatus(estatus);
     }
     
-    public boolean ValidateUserAndPassword(String user, String pass) throws FileNotFoundException, IOException, Exception{
-        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        return(manejador.UsuarioCorrecto(user,pass));
-    }
     
     private String usuario; 
     private String nombre; 
