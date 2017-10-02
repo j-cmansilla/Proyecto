@@ -96,11 +96,11 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("\\|");
-                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3])) {
                     scanner.close();
                     return 1;
                 }
-                if (user.equals(credenciales[0]) && !password.equals(credenciales[1])) {
+                if (user.equals(credenciales[0]) && !password.equals(credenciales[3])) {
                     scanner.close();
                     return -1;
                 }
@@ -115,11 +115,11 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("|");
-                if (user.equals(credenciales[0]) && password.equals(credenciales[1])) {
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3])) {
                     scanner.close();
                     return 1;
                 }
-                if (user.equals(credenciales[0]) && !password.equals(credenciales[1])) {
+                if (user.equals(credenciales[0]) && !password.equals(credenciales[3])) {
                     scanner.close();
                     return -1;
                 }
@@ -129,7 +129,7 @@ public class ManejadorDeUsuarios {
         return 0;
     }
     
-    public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException, IOException{
+    public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException, IOException, Exception{
         File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
         boolean isFull = false;
         String newUser="";
@@ -398,7 +398,7 @@ public class ManejadorDeUsuarios {
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
                 if (user.equals(credenciales[0])) {
-                    result = new Usuario(credenciales[0], credenciales[4], credenciales[5], credenciales[1], Integer.parseInt(credenciales[2]), credenciales[6], credenciales[9], credenciales[8], credenciales[7], credenciales[10], Integer.parseInt(credenciales[3]));
+                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
                     scanner.close();
                     return result;
                 }

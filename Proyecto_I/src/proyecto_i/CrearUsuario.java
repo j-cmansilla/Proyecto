@@ -327,7 +327,11 @@ public class CrearUsuario extends javax.swing.JFrame {
                     }else{
                        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
                        if (manejador.validarUsuario(txtUser.getText(), "randomPassword!") == 0) {
-                            Iniciar();
+                           try {
+                               Iniciar();
+                           } catch (Exception ex) {
+                               Logger.getLogger(CrearUsuario.class.getName()).log(Level.SEVERE, null, ex);
+                           }
                             JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" created!");
                        }else{
                           JOptionPane.showMessageDialog(null, "User "+txtUser.getText()+" is alredy in use!");
@@ -378,7 +382,7 @@ public class CrearUsuario extends javax.swing.JFrame {
 
     
     
-    private void Iniciar() throws FileNotFoundException, IOException{
+    private void Iniciar() throws FileNotFoundException, IOException, Exception{
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );

@@ -67,7 +67,7 @@ public class Usuario {
     /**
      * @param password the password to set
      */
-    private void setPassword(String password) {
+    public void setPassword(String password) {
         this.password = password;
     }
 
