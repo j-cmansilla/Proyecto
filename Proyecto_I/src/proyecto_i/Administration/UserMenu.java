@@ -58,8 +58,11 @@ public class UserMenu {
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (response == JOptionPane.YES_OPTION) {
                     MainUser.setEstatus(0);
+                    ManejadorDeUsuarios MDUU = new ManejadorDeUsuarios();
+                    MDUU.ActualizarDEs(MainUser);
                     JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
                 } 
+   
                 MDU.SetUserData(MainUser);
                 Login regresar=new Login();
                 regresar.show();

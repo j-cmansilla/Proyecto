@@ -133,6 +133,10 @@ public class Login extends javax.swing.JFrame {
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         Usuario usuario;
         usuario = manejador.getUserData(user);
+        if (manejador.validarUsuario(user, pass) == 2) {
+            JOptionPane.showMessageDialog(null, "Your account is disable!");
+            return false;
+        }
         if (manejador.validarUsuario(user, pass) == 1) {
             manejador.setUserToLogin(txtUser.getText());
             this.hide();
@@ -211,4 +215,3 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
 }
-
