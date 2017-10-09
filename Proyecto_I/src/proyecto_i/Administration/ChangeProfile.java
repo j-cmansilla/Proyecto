@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.ldap.ManageReferralControl;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -329,7 +330,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         }
         
         jTextField1.setText(Result(CheckPass(jPasswordField1.getText())) + "\nPuntuación: " +CheckPass(jPasswordField1.getText()));
-        Password = jTextField1.getText();
+        Password = jPasswordField1.getText();
         jProgressBar1.setValue(pBar);
         return  true;
      }
@@ -365,6 +366,19 @@ public class ChangeProfile extends javax.swing.JFrame {
      
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        String userLoged = "";
+        Usuario user = null;
+        try {
+            userLoged = manejador.getUserLogin();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ChangeProfile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+             user = manejador.getUserData(userLoged);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ChangeProfile.class.getName()).log(Level.SEVERE, null, ex);
+        }
        if (DoPassVerification())
        {
            if(CheckJText())
@@ -372,10 +386,10 @@ public class ChangeProfile extends javax.swing.JFrame {
                CrearUsuario CU = new CrearUsuario();
                Usuario usuario;
                try {
-                   usuario = new Usuario(User, Name, LastName, Password, Admin, date, Mail, Integer.toString(Number), CU.SaveImageMEIA(Photo) , Desc, 1);
+                   usuario = new Usuario(user.getUsuario(), user.getNombre(), user.getApellido(), Password, Admin, date, Mail, Integer.toString(Number), CU.SaveImageMEIA(Photo) , Desc, 1);
                } catch (IOException ex) {
                    Logger.getLogger(ChangeProfile.class.getName()).log(Level.SEVERE, null, ex);
-                       usuario = new Usuario(User, Name, LastName, Password, Admin, date, Mail, Integer.toString(Number), Photo , Desc, 1);
+                       usuario = new Usuario(user.getUsuario(), user.getNombre(), user.getApellido(), Password, Admin, date, Mail, Integer.toString(Number), Photo , Desc, 1);
                }
                 ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
                try {

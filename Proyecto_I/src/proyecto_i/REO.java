@@ -132,6 +132,7 @@ public class REO {
         
         CleanLastStep(MainUser);
         DeleteInactive();
+        ReorganizeMaster();
     }
     
     private void DeleteInactive() throws IOException
@@ -155,6 +156,7 @@ public class REO {
             }
              currentLine = readLine(MasterScanner);
         }
+        MasterScanner.close();
         tempFile.renameTo(inputFile);
         ActiveAccounts =  getCountlinesFile(USER_PATH);
         ChangeDESCBIT();
@@ -285,7 +287,7 @@ public class REO {
         else{
         currentLine =MasterScanner.nextLine();
         }
-         
+         MasterScanner.close();
         lines.add(currentLine);
         lines.add(CreationDate);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");

@@ -12,18 +12,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.security.MessageDigest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -100,9 +107,12 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("\\|");
-                if (user.equals(credenciales[0]) && password.equals(credenciales[3])) {
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 1) {
                     scanner.close();
                     return 1;
+                }
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 0) {
+                    return 2;
                 }
                 if (user.equals(credenciales[0]) && !password.equals(credenciales[3])) {
                     scanner.close();
@@ -119,9 +129,12 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split("|");
-                if (user.equals(credenciales[0]) && password.equals(credenciales[3])) {
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 1) {
                     scanner.close();
                     return 1;
+                }
+                if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 0) {
+                    return 2;
                 }
                 if (user.equals(credenciales[0]) && !password.equals(credenciales[3])) {
                     scanner.close();
@@ -132,6 +145,8 @@ public class ManejadorDeUsuarios {
         }
         return 0;
     }
+    
+     
     
     public void llenarBitacora(String userName, ZonedDateTime zdt, Usuario usuario) throws FileNotFoundException, IOException, Exception{
         File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
@@ -205,10 +220,7 @@ public class ManejadorDeUsuarios {
         }
     }
     
-    private String retornarUsuarioParaBitacora(Usuario usuario){
-        return usuario.getUsuario()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+usuario.getEstatus();
-       // return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
-    }
+    
     
     private boolean pasarDatosAlMaster(String userName) throws FileNotFoundException, IOException{
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
@@ -402,7 +414,7 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
-                if (user.equals(credenciales[0])) {
+                if (user.equals(credenciales[0]) && credenciales[10].equals("1")) {
                     result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
                     scanner.close();
                     return result;
@@ -419,7 +431,7 @@ public class ManejadorDeUsuarios {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
-                if (user.equals(credenciales[0])) {
+                if (user.equals(credenciales[0]) && credenciales[10].equals("1")) {
                     result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
                     scanner.close();
                     return result;
@@ -440,6 +452,76 @@ public class ManejadorDeUsuarios {
     {
         String Userline = usuario + System.lineSeparator();
       Files.write(Paths.get(DEFAULT_TEMP_DIRECTORYC), Userline.getBytes(), StandardOpenOption.APPEND);
+    }
+ public void ActualizarDEs (Usuario user) throws FileNotFoundException, IOException{
+        if (versiExiste(user,USER_PATH )) { ///master
+             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        List<String> lines = new ArrayList<String>();
+        //
+        Path path = Paths.get(DESC_USER_PATH);
+        Charset charset = Charset.forName("ISO-8859-1");
+        List<String> linesa;
+            linesa = Files.readAllLines(path,charset);
+        
+       String  CreationDate = linesa.get(1);
+       int acctive = Integer.parseInt(linesa.get(3)) -1 ;
+       int DEacctive = Integer.parseInt(linesa.get(4)) +1;
+       
+        //
+        File Master = new File(DESC_USER_PATH);
+        Scanner MasterScanner = new Scanner(Master);
+        String currentLine = "AD";
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
+        }
+         MasterScanner.close();
+        lines.add(currentLine);
+        lines.add(CreationDate);
+        lines.add(dateFormat.format(date) + "[America/Guatemala]");
+        lines.add(String.valueOf(acctive));
+        lines.add(String.valueOf(DEacctive));
+        
+        Utilities Utilidades = new Utilities();
+        Utilidades.LlenarArchivo(DESC_USER_PATH, lines);
+        }
+        else if(versiExiste(user,LOGBOOK_PATH )){ //apilo
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        List<String> lines = new ArrayList<String>();
+        //
+        Path path = Paths.get(DESC_LOGBOOK_PATH);
+        Charset charset = Charset.forName("ISO-8859-1");
+        List<String> linesa;
+            linesa = Files.readAllLines(path,charset);
+        
+       String  CreationDate = linesa.get(1);
+       int acctive = Integer.parseInt(linesa.get(3))-1;
+       int DEacctive = Integer.parseInt(linesa.get(4))+1;
+       String max = linesa.get(5);
+        //
+        File Master = new File(DESC_LOGBOOK_PATH);
+        Scanner MasterScanner = new Scanner(Master);
+        String currentLine = "AD";
+         if (!MasterScanner.hasNextLine()) {
+           currentLine = null;
+         }
+        else{
+        currentLine =MasterScanner.nextLine();
+        }
+         MasterScanner.close();
+        lines.add(currentLine);
+        lines.add(CreationDate);
+        lines.add(dateFormat.format(date) + "[America/Guatemala]");
+        lines.add(String.valueOf(acctive));
+        lines.add(String.valueOf(DEacctive));
+        lines.add(max);
+        Utilities Utilidades = new Utilities();
+        Utilidades.LlenarArchivo(DESC_LOGBOOK_PATH, lines);
+        }
     }
  private void WriteInTEMP(Usuario usuario) throws IOException
     {
@@ -481,6 +563,7 @@ public class ManejadorDeUsuarios {
              currentLine = readLine(MasterScanner);
         }
         WriteInTEMP(newUser);
+        
         if(tempFile.renameTo(inputFile))
             {
                 try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
@@ -488,6 +571,15 @@ public class ManejadorDeUsuarios {
             writer.close();
         }
             } 
+        MasterScanner.close();
+        String newFilePath = inputFile.getAbsolutePath();
+        Path path = Paths.get(inputFile.getAbsolutePath());
+        Files.delete(path);
+        File newFile=new File(newFilePath);
+        FileUtils.moveFile(tempFile, newFile);
+        try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
+            writer.write(("").getBytes());
+            writer.close();}
         }
         else if (versiExiste(newUser, LOGBOOK_PATH))
         {flasdf = false;
@@ -511,7 +603,8 @@ public class ManejadorDeUsuarios {
             }
              currentLine = readLine(MasterScanner);
         }
-        WriteInTEMP(newUser);     
+        WriteInTEMP(newUser);
+        
             if(tempFile.renameTo(inputFile))
             {
                 try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
@@ -519,6 +612,17 @@ public class ManejadorDeUsuarios {
             writer.close();
         }
             }
+            String newFilePath = inputFile.getAbsolutePath();
+        Path path = Paths.get(inputFile.getAbsolutePath());
+        MasterScanner.close();
+        Files.delete(path);
+        File newFile=new File(newFilePath);
+        FileUtils.moveFile(tempFile, newFile);
+            MasterScanner.close();
+            try (FileOutputStream writer = new FileOutputStream(DEFAULT_TEMP_DIRECTORYC)) {
+            writer.write(("").getBytes());
+            writer.close();
+        }
         }
         
         if(flasdf)
@@ -546,6 +650,12 @@ public class ManejadorDeUsuarios {
         
           
     }
+    
+    private String retornarUsuarioParaBitacora(Usuario usuario){
+        return usuario.getUsuario()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getCorreo()+"|"+usuario.getTelefono()+"|"+usuario.getFotografia()+"|"+usuario.getDescripcion()+"|"+usuario.getEstatus();
+       // return usuario.getUsuario()+"|"+usuario.getPassword()+"|"+usuario.Rol()+"|"+usuario.getEstatus()+"|"+usuario.getNombre()+"|"+usuario.getApellido()+"|"+usuario.getFechaDeNacimiento()+"|"+usuario.getFotografia()+"|"+usuario.getTelefono()+"|"+usuario.getCorreo()+"|"+usuario.getDescripcion();
+    }
+    
     public boolean versiExiste(Usuario user, String patth) throws FileNotFoundException
     {
         File usuarios = new File(patth);

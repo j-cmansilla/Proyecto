@@ -61,6 +61,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("User Profile");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jTextField2.setEditable(false);
         jTextField2.setText("jTextField2");
@@ -207,11 +212,18 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
         // TODO add your handling code here:
+        REO reorganize = new REO();        
+        try {
+            reorganize.CheckForREO(MainUser.getUsuario());
+        } catch (IOException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         manejador.CloseSession();
         this.hide();
         Login login = new Login();
         login.show();
+        
     }//GEN-LAST:event_jMenu6MouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -229,6 +241,18 @@ public class PerfilUsuario extends javax.swing.JFrame {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        REO reorganize = new REO();
+        
+        try {
+            reorganize.CheckForREO(MainUser.getUsuario());
+        } catch (IOException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
