@@ -84,12 +84,14 @@ public class ManejadorDeUsuarios {
             File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
             File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
             File bitacoraBackup = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
+            File descriptorBackup = new File(DEFAULT_DES_DIR+DEFAULT_BACKUP_BITACORA_DIRECTORY);
             File CarpetaFotos = new File(DEFAULT_DIRECTORY + DEFAULT_PROFILE_PICTURES);
             archivoUsuarios.createNewFile();
             descriptorUsuarios.createNewFile();
             archivoBitacora.createNewFile();
             descriptorBitacora.createNewFile();
             bitacoraBackup.createNewFile();
+            descriptorBackup.createNewFile();
             CarpetaFotos.mkdirs();
         }catch(IOException e){
             

@@ -7,22 +7,27 @@ package proyecto_i;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -34,10 +39,14 @@ public class Utilities {
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_BACKUP_BITACORA_DIRECTORY = "bitacora_backup.txt";
     private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
+    private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
+    private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
+
     
     public void createBackUp(String newdirectory, String user){
         try 
         {
+            ZonedDateTime zdt;
             File directory = new File(newdirectory + DEFAULT_BACKUP_DIRECTORY);
             if (!directory.exists()) 
             {
@@ -50,23 +59,83 @@ public class Utilities {
             if(updateBitacora.exists())
             {
                 ZoneId zonedId = ZoneId.of( "America/Guatemala" );
-                ZonedDateTime zdt = ZonedDateTime.now( zonedId );
-            
-                Writer writer = new BufferedWriter(new OutputStreamWriter(
-                                new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY), "utf-8"));
-                writer.write(newdirectory+DEFAULT_BACKUP_BITACORA_DIRECTORY+"|"+user+"|"+zdt.toString());
-                writer.close();
+                zdt = ZonedDateTime.now( zonedId );
+                            
+                String text=newdirectory+"\\"+DEFAULT_BACKUP_BITACORA_DIRECTORY+"|"+user+"|"+zdt.toString()+System.getProperty("line.separator");
+                flujo = new RandomAccessFile(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY, "rw");
+                setUsuario(text);           
+                
+                descBitacora(user, zdt);
             }    
-                     
-            
+
         } catch (Exception e) {
         }
     }
     
+    private static RandomAccessFile flujo; 
+
+    public static void setUsuario(String usuario) throws IOException
+    {        
+        flujo.seek(flujo.length());
+        flujo.writeBytes(usuario);            
+    }  
+
     
-    //Modificar el descriptor **************************************
-    private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
-    private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
+    public void descBitacora(String userName, ZonedDateTime zdt) throws FileNotFoundException
+    {
+        File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BACKUP_BITACORA_DIRECTORY);
+        String newBack="";
+        if (desBitacora.exists()) 
+        {
+            Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BACKUP_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            if (!scanner.hasNextLine()) 
+            {
+                newBack = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"1";
+            }
+            else
+            {                
+                ArrayList lista = new ArrayList();
+                while(scanner.hasNextLine())
+                {
+                    lista.add(scanner.nextLine());
+                }
+                scanner.close();
+                int count = Integer.parseInt(lista.get(2).toString());
+                count++;
+                for (int i = 0; i < lista.size(); i++) 
+                {
+                    switch (i) 
+                    {
+                        case 0:
+                            newBack = newBack+userName+System.getProperty("line.separator");
+                            break;
+                        case 1:
+                            newBack = newBack+zdt.toString()+System.getProperty("line.separator");
+                            break;
+                        case 2:
+                            newBack = newBack+String.valueOf(count)+System.getProperty("line.separator");
+                            break;
+                        default:
+                            break;
+                    }
+                }            
+            } 
+            
+            Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_BACKUP_BITACORA_DIRECTORY), "utf-8"));
+                writer.write(newBack);
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+        }
+    }
+
     
     public void ChangeMaxReorg(int NumberMax,String User) throws IOException
     {
