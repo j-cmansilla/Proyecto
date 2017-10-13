@@ -42,7 +42,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jLabelImage = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnGroups = new javax.swing.JButton();
         jTextField4 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -50,6 +50,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel7 = new javax.swing.JLabel();
+        btnGroups2 = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         txtUsuarioLogueado = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -73,11 +74,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jTextField3.setEditable(false);
         jTextField3.setText("jTextField3");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButton1.setText("Options");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGroups.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGroups.setText("Options");
+        btnGroups.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGroupsActionPerformed(evt);
             }
         });
 
@@ -96,6 +97,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel7.setText("Description:");
+
+        btnGroups2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnGroups2.setText("Groups");
+        btnGroups2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGroups2ActionPerformed(evt);
+            }
+        });
 
         txtUsuarioLogueado.setText("File");
 
@@ -143,8 +152,10 @@ public class PerfilUsuario extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnGroups, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnGroups2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -171,9 +182,12 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnGroups2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnGroups, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)))
                 .addContainerGap())
         );
 
@@ -192,8 +206,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
     {              //"C:\\MEIA\\FOTOS"
         if(!FlagOptions){
             //jButton2.enable(false);
-            jButton1.enable(false);
-            jButton1.setVisible(false);
+            btnGroups.enable(false);
+            btnGroups.setVisible(false);
         }
         ImageIcon image = new ImageIcon(MainUser.getFotografia());
         jLabelImage.setIcon(image);
@@ -226,7 +240,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenu6MouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroupsActionPerformed
         // TODO add your handling code here
         UserMenu UM = new UserMenu();
         UM.setUsuario(MainUser.getUsuario());
@@ -240,7 +254,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnGroupsActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -253,6 +267,12 @@ public class PerfilUsuario extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_formWindowClosing
+
+    private void btnGroups2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroups2ActionPerformed
+        // TODO add your handling code here:
+        Groups groups = new Groups();
+        groups.show();
+    }//GEN-LAST:event_btnGroups2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -294,7 +314,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGroups;
+    private javax.swing.JButton btnGroups2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

@@ -20,9 +20,11 @@ public class Proyecto_I {
         // TODO code application logic here
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();
         if (!directorio.exists()) {
             directorio.mkdirs();
             manejador.CrearArchivos();
+            manejadorG.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
