@@ -21,14 +21,18 @@ public class Proyecto_I {
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();
+        ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
         if (!directorio.exists()) {
             directorio.mkdirs();
             manejador.CrearArchivos();
             manejadorG.CrearArchivos();
+            manejadorA.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
             manejador.CrearArchivos();
+            manejadorG.CrearArchivos();
+            manejadorA.CrearArchivos();
         } 
 
         Login login = new Login();
