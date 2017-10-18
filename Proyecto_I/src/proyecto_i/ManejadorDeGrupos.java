@@ -29,6 +29,7 @@ public class ManejadorDeGrupos {
     private final String DEFAULT_TEMP_DIRECTORY = "Temp.txt";
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
+    private final String DEFAULT_GROUP_TO_EDIT = "C:\\MEIA\\GrupoAEditar.txt";
     private final String DEFAULT_LOGIN_USER_DIRECTORY = "C:\\MEIA\\UsuarioLogueado.txt";
     
     REO reorganize = new REO();
@@ -45,6 +46,171 @@ public class ManejadorDeGrupos {
             descriptorBitacoraGrupos.createNewFile();
         }catch(IOException e){
             
+        }
+    }
+    
+    private void reWriteBitacora(ArrayList bitacora){
+        String newBitacora = "";
+        for (int i = 0; i < bitacora.size(); i++) {
+            newBitacora = newBitacora+bitacora.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BITACORA_GROUP_DIRECTORY), "utf-8"));
+            writer.write(newBitacora);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    private void reWriteMaster(ArrayList master){
+        String newMaster = "";
+        for (int i = 0; i < master.size(); i++) {
+            newMaster = newMaster+master.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_GROUP_DIRECTORY), "utf-8"));
+            writer.write(newMaster);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    private void reWriteDesBitacora(ArrayList desBitacora){
+        String newDesBitacora = "";
+        for (int i = 0; i < desBitacora.size(); i++) {
+            newDesBitacora = newDesBitacora+desBitacora.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_BITACORA_GROUP_DIRECTORY), "utf-8"));
+            writer.write(newDesBitacora);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    public ArrayList getListDesBitacora() throws FileNotFoundException{
+        File Desbitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_GROUP_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (Desbitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BITACORA_GROUP_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
+    public void updateBitacora() throws FileNotFoundException{
+        ArrayList listaDesBitacora = getListDesBitacora();
+        int count = Integer.parseInt(listaDesBitacora.get(4).toString());
+        count++;
+        int count2 = Integer.parseInt(listaDesBitacora.get(3).toString());
+        count2--;
+        listaDesBitacora.set(4, count);
+        listaDesBitacora.set(3, count2);
+        reWriteDesBitacora(listaDesBitacora);
+    }
+    
+    public void editGroup(String newName, String newDescription) throws FileNotFoundException{
+        Grupo grupo = returnGroup(getGroupEdited().split("\\|")[0]);
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        ArrayList listaBitacora = retornarListaBitacora();
+        ArrayList listaMaster = retornarListaMaster();
+        String newGroup = grupo.getUsuario().getUsuario()+"|"+newName+"|"+newDescription+"|"+grupo.getMiembros()+"|"+grupo.getFechaDeTransaccion()+"|"+grupo.getEstatus();
+        String key = manejador.getUserLogin()+getGroupEdited().split("\\|")[0];
+        //Buscar en bitacora
+        for (int i = 0; i < listaBitacora.size(); i++) {
+            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
+            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                listaBitacora.set(i, newGroup);
+                reWriteBitacora(listaBitacora);
+                return;
+            }
+        }
+        for (int i = 0; i < listaMaster.size(); i++) {
+            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
+            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                listaMaster.set(i, newGroup);
+                reWriteMaster(listaMaster);
+                return;
+            }
+        }    
+    }
+    
+    public void deleteGroup(String groupName) throws FileNotFoundException{
+        Grupo grupo = returnGroup(groupName);
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        grupo.setEstatus(0);
+        ArrayList listaBitacora = retornarListaBitacora();
+        ArrayList listaMaster = retornarListaMaster();
+        String newGroup = grupo.getUsuario().getUsuario()+"|"+grupo.getGrupo()+"|"+grupo.getDescripcion()+"|"+grupo.getMiembros()+"|"+grupo.getFechaDeTransaccion()+"|"+grupo.getEstatus();
+        String key = manejador.getUserLogin()+getGroupEdited().split("\\|")[0];
+        //Buscar en bitacora
+        for (int i = 0; i < listaBitacora.size(); i++) {
+            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
+            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                listaBitacora.set(i, newGroup);
+                reWriteBitacora(listaBitacora);
+                updateBitacora();
+                return;
+            }
+        }
+        for (int i = 0; i < listaMaster.size(); i++) {
+            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
+            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                listaMaster.set(i, newGroup);
+                reWriteMaster(listaMaster);
+                return;
+            }
+        }
+    }
+    
+    
+    
+    
+    public String getGroupEdited() throws FileNotFoundException{
+        File archivoUsuarios = new File(DEFAULT_GROUP_TO_EDIT);
+        if (archivoUsuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_GROUP_TO_EDIT);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] credenciales = line.split("\\|");
+                return (credenciales[0]+"|"+credenciales[1]);
+            }
+            scanner.close();
+        }
+        return "";
+    }
+    
+    public void setGroupToEdit(String name, String description){
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(DEFAULT_GROUP_TO_EDIT), "utf-8"));
+            writer.write(name+"|"+description);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
         }
     }
     
@@ -120,6 +286,22 @@ public class ManejadorDeGrupos {
         return true;
     }
     
+    public Grupo returnGroup(String groupName) throws FileNotFoundException{
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        String key = manejador.getUserLogin() + groupName;
+        Grupo grupoARetornar = null;
+        ArrayList lista = retornarLista();
+        for (int i = 0; i < lista.size(); i++) {
+            String[] datosGrupo = lista.get(i).toString().split("\\|");
+            if (key.equals(datosGrupo[0]+datosGrupo[1])) {
+                if (Integer.parseInt(datosGrupo[5]) == 1) {
+                    grupoARetornar = new Grupo(manejador.getUserData(datosGrupo[0]), datosGrupo[1], datosGrupo[2],Integer.parseInt(datosGrupo[3]), datosGrupo[4], Integer.parseInt(datosGrupo[5]));
+                }
+            }
+        }
+        return grupoARetornar;
+    }
+    
     private boolean pasarDatosAlMaster(String userName) throws FileNotFoundException, IOException{
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
@@ -156,6 +338,40 @@ public class ManejadorDeGrupos {
                 try {writer.close();} catch (IOException ex) {/*ignore*/}
             }
         return false; 
+    }
+    
+    private ArrayList retornarListaBitacora() throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_GROUP_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_GROUP_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
+    private ArrayList retornarListaMaster() throws FileNotFoundException{
+        File master = new File(DEFAULT_DIRECTORY+DEFAULT_GROUP_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en master
+        if (master.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_GROUP_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
     }
     
     private ArrayList retornarLista() throws FileNotFoundException{
@@ -261,7 +477,10 @@ public class ManejadorDeGrupos {
     }
     
     public boolean crearGrupo(Usuario usuario, String grupo, String descripcion) throws FileNotFoundException, IOException{
-        llenarBitacora(usuario, grupo, descripcion);
+        if (returnGroup(grupo) == null) {
+            llenarBitacora(usuario, grupo, descripcion);
+            return true;
+        }
         return false;
     }
 }
