@@ -128,7 +128,7 @@ public class ManejadorDeGrupos {
         reWriteDesBitacora(listaDesBitacora);
     }
     
-    public void editGroup(String newName, String newDescription) throws FileNotFoundException{
+    public boolean editGroup(String newName, String newDescription) throws FileNotFoundException{
         Grupo grupo = returnGroup(getGroupEdited().split("\\|")[0]);
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ArrayList listaBitacora = retornarListaBitacora();
@@ -136,22 +136,29 @@ public class ManejadorDeGrupos {
         String newGroup = grupo.getUsuario().getUsuario()+"|"+newName+"|"+newDescription+"|"+grupo.getMiembros()+"|"+grupo.getFechaDeTransaccion()+"|"+grupo.getEstatus();
         String key = manejador.getUserLogin()+getGroupEdited().split("\\|")[0];
         //Buscar en bitacora
-        for (int i = 0; i < listaBitacora.size(); i++) {
-            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
-                listaBitacora.set(i, newGroup);
-                reWriteBitacora(listaBitacora);
-                return;
+        Grupo gru = returnGroup(newName);
+        if (gru == null) {
+            for (int i = 0; i < listaBitacora.size(); i++) {
+                String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
+                if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                    listaBitacora.set(i, newGroup);
+                    reWriteBitacora(listaBitacora);
+                    JOptionPane.showMessageDialog(null, "Group edited!");
+                    return true;
+                }
             }
+            for (int i = 0; i < listaMaster.size(); i++) {
+                String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
+                if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+                    listaMaster.set(i, newGroup);
+                    reWriteMaster(listaMaster);
+                    return true;
+                }
+            }   
+            return false;
         }
-        for (int i = 0; i < listaMaster.size(); i++) {
-            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
-                listaMaster.set(i, newGroup);
-                reWriteMaster(listaMaster);
-                return;
-            }
-        }    
+        JOptionPane.showMessageDialog(null, "This group has been already created by this user!");
+        return false;
     }
     
     public void deleteGroup(String groupName) throws FileNotFoundException{

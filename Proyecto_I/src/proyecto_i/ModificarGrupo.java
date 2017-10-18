@@ -157,16 +157,15 @@ public class ModificarGrupo extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ModificarGrupo.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
         // TODO add your handling code here:
         ManejadorDeGrupos manejador = new ManejadorDeGrupos();
         try {
-            manejador.editGroup(txtGroupName.getText(), txtDescription.getText());
-            JOptionPane.showMessageDialog(null, "The group has been edited!");
-            this.hide();
+            if (manejador.editGroup(txtGroupName.getText(), txtDescription.getText())) {
+                this.hide();
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ModificarGrupo.class.getName()).log(Level.SEVERE, null, ex);
         }
