@@ -7,8 +7,10 @@ package proyecto_i;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import proyecto_i.Administration.UserMenu;
@@ -21,11 +23,34 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     /**
      * Creates new form PerfilUsuario
+     * @throws java.io.FileNotFoundException
      */
     public PerfilUsuario() throws FileNotFoundException {
         initComponents();
+        
+        
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        txtUsuarioLogueado.setText(manejador.getUserLogin());
+        String loggedUser = manejador.getUserLogin();
+        txtUsuarioLogueado.setText(loggedUser);
+        
+        ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
+        ArrayList requests = manejadorA.getUserRequest(loggedUser);
+        
+        ArrayList confirmed = new ArrayList();
+        for (int i = 0; i < requests.size(); i++) {
+            String [] request = requests.get(i).toString().split(Pattern.quote("|"));
+            int selection = JOptionPane.showConfirmDialog(null, "You have a friend request from: " + request[0] + "\nDo you want to accept it?", "Confirmation", JOptionPane.YES_NO_OPTION);
+            if(selection==JOptionPane.YES_OPTION){
+                request[2]="1";
+                request[5]="1";
+                String updateRequest = request[0]+"|"+request[1] + "|" + request[2] + "|" + request[3] + "|"+request[4]+"|"+request[5]+System.getProperty("line.separator");
+                confirmed.add(updateRequest);
+                
+                ////////////////////////VERIFICAR/////////////////////////////
+                JOptionPane.showMessageDialog(null, "You're now friends with " + request[0]);
+            }            
+        }    
+            
     }
 
     /**

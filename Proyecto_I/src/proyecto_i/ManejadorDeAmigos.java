@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -250,6 +251,51 @@ public class ManejadorDeAmigos {
         } finally {
             try {writer.close();} catch (IOException ex) {/*ignore*/}
         }
+    }
+    
+    public ArrayList getUserRequest(String loggedUser) throws FileNotFoundException{
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+        ArrayList allRequests=new ArrayList();
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if (loggedUser.equals(request[1])) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+                            
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if (loggedUser.equals(request[1])) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        return allRequests;        
+    }
+    
+    public void updateBM(ArrayList accepted){
+        for (int i = 0; i < accepted.size(); i++) 
+        {
+            String [] request = accepted.get(i).toString().split(Pattern.quote("|"));
+            String key = request[0] + "|" + request[1];
+            
+        }
+        
     }
     
 }
