@@ -545,24 +545,24 @@ public class ManejadorDeUsuarios {
         if(versiExiste(newUser,USER_PATH ))
         {
             File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
-        tempFile.createNewFile();
-         File inputFile = new File(USER_PATH);
-        File Master = new File(USER_PATH);
-        Scanner MasterScanner = new Scanner(Master);
-        String currentLine;
-         if (!MasterScanner.hasNextLine()) {
-           currentLine = null;
-         }
-        else{
-        currentLine =MasterScanner.nextLine();
-        }
+            tempFile.createNewFile();
+            File inputFile = new File(USER_PATH);
+            File Master = new File(USER_PATH);
+            Scanner MasterScanner = new Scanner(Master);
+            String currentLine;
+            if (!MasterScanner.hasNextLine()) {
+                currentLine = null;
+            }
+            else{
+                currentLine = MasterScanner.nextLine();
+            }
         while((currentLine) != null) {
             String [] credenciales = currentLine.split(Pattern.quote("|"));
                 if (!newUser.getUsuario().equals(credenciales[0]))
                 {
                     WriteInTEMP_Ca(currentLine);
-            }
-             currentLine = readLine(MasterScanner);
+                }
+            currentLine = readLine(MasterScanner);
         }
         WriteInTEMP(newUser);
         

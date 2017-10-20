@@ -116,17 +116,17 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPassActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-            try {
+        try {
             // TODO add your handling code here:
-            casosDeLogin(); 
-        } catch (FileNotFoundException ex) {
+            casosDeLogin();
+        } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         txtPass.setText("");
         txtUser.setText("");
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
-    private boolean casosDeLogin() throws FileNotFoundException{
+    private boolean casosDeLogin() throws FileNotFoundException, IOException{
         String user = txtUser.getText();
         String pass = txtPass.getText();
         if (user.equals("") && pass.equals("")) return false;

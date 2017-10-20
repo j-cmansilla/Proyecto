@@ -25,7 +25,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
      * Creates new form PerfilUsuario
      * @throws java.io.FileNotFoundException
      */
-    public PerfilUsuario() throws FileNotFoundException {
+    public PerfilUsuario() throws FileNotFoundException, IOException {
         initComponents();
         
         
@@ -45,12 +45,12 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 request[5]="1";
                 String updateRequest = request[0]+"|"+request[1] + "|" + request[2] + "|" + request[3] + "|"+request[4]+"|"+request[5]+System.getProperty("line.separator");
                 confirmed.add(updateRequest);
-                
-                ////////////////////////VERIFICAR/////////////////////////////
-                JOptionPane.showMessageDialog(null, "You're now friends with " + request[0]);
+                if(manejadorA.updateBM(confirmed)){
+                    ////////////////////////VERIFICAR/////////////////////////////
+                    JOptionPane.showMessageDialog(null, "You're now friends with " + request[0]);
+                }
             }            
-        }    
-            
+        }                
     }
 
     /**
@@ -163,6 +163,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenu2.add(jMenuItem1);
 
         jMenuItem2.setText("Friends List");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem2);
 
         jMenuBar2.add(jMenu2);
@@ -323,14 +328,42 @@ public class PerfilUsuario extends javax.swing.JFrame {
         Amigos objAmigos=new Amigos();
         String user= JOptionPane.showInputDialog(null, "Search People");
 //        objAmigos.setUser(user);
-        objAmigos.show();
         try {
-            objAmigos.findUser(user);
+            boolean exists = objAmigos.findUser(user);
+            if (exists) {
+                objAmigos.hORs(false);        
+                objAmigos.show();
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "El usuario no existe.");
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        Amigos objAmigos=new Amigos();
+        ManejadorDeAmigos objManejador = new ManejadorDeAmigos();
+        ManejadorDeUsuarios objManejadorU = new ManejadorDeUsuarios();
+        
+        try {
+            ArrayList amigos = objManejador.getFriendsList(objManejadorU.getUserLogin());
+            if (objAmigos.fillTable(amigos)) {
+                objAmigos.hORs(true);
+                objAmigos.show();
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "You have no friends added.");
+            }
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -364,7 +397,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
             public void run() {
                 try {
                     new PerfilUsuario().setVisible(true);
-                } catch (FileNotFoundException ex) {
+                } catch (IOException ex) {
                     Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }

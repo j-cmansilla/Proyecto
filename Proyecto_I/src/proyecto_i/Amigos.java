@@ -8,6 +8,7 @@ package proyecto_i;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,7 +31,8 @@ public class Amigos extends javax.swing.JFrame {
 
         
     }
-
+    private boolean searchOrList = true;
+    private boolean viewOrDelete = true;
     private final String DEFAULT_DIRECTORY = "C:\\MEIA\\";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
     private final String DEFAULT_USER_DIRECTORY = "Usuario.txt";
@@ -38,14 +40,47 @@ public class Amigos extends javax.swing.JFrame {
 //    public void setUser(String userp) {this.user = userp;}
 //    public String getUser() {return this.user;}
     
-    public void findUser(String user) throws FileNotFoundException
+    public boolean findUser(String user) throws FileNotFoundException
     {
         Usuario result = getSearchData(user);
         if(result!=null)
         {
             DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
             model.addRow(new Object[]{result.getUsuario(),result.getNombre(),result.getApellido()});
+            return true;
         }               
+        else
+        {
+            return false;
+        }
+    }
+    
+    public boolean fillTable(ArrayList friends) throws FileNotFoundException
+    {
+        ManejadorDeUsuarios objUsuarios=new ManejadorDeUsuarios();
+        DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
+        String loggerU=objUsuarios.getUserLogin();
+        boolean flagFriends = false;
+        
+        for (int i = 0; i < friends.size(); i++) {
+            String [] user = friends.get(i).toString().split(Pattern.quote("|"));
+            if(loggerU.equals(user[1])){
+                Usuario result = objUsuarios.getUserData(user[0]);
+                if(result!=null){
+                    model.addRow(new Object[]{result.getUsuario(),result.getNombre(),result.getApellido()});
+                    flagFriends=true;
+                }                
+            }
+            else
+            {
+                Usuario result = objUsuarios.getUserData(user[1]);
+                if(result!=null){
+                    model.addRow(new Object[]{result.getUsuario(),result.getNombre(),result.getApellido()}); 
+                    flagFriends=true;
+                }                
+            }
+        }  
+        return flagFriends;
     }
     
     public Usuario getSearchData(String user) throws FileNotFoundException
@@ -100,6 +135,7 @@ public class Amigos extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jToggleButton1 = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,15 +167,30 @@ public class Amigos extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(2).setResizable(false);
         }
 
+        jToggleButton1.setText("Eliminar");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jToggleButton1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jToggleButton1)
+                .addContainerGap())
         );
 
         pack();
@@ -147,32 +198,71 @@ public class Amigos extends javax.swing.JFrame {
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
+        ManejadorDeUsuarios objUsuarios=new ManejadorDeUsuarios();
+        ManejadorDeAmigos objAmigos=new ManejadorDeAmigos();
+        
         int index = jTable1.getSelectedRow();
         TableModel model=jTable1.getModel();
         String username=model.getValueAt(index, 0).toString();
-        ManejadorDeUsuarios objUsuarios=new ManejadorDeUsuarios();
-        ManejadorDeAmigos objAmigos=new ManejadorDeAmigos();
+        
+        Usuario user=null;
         try {
-            int selection = JOptionPane.showConfirmDialog(null, "Do you want to send a friend request to " + username, "Confirmation", JOptionPane.YES_NO_OPTION);
-            if(selection==JOptionPane.YES_OPTION){
-                Usuario actual=objUsuarios.getUserData(objUsuarios.getUserLogin());
-                Usuario result=getSearchData(username);
-                try {
-                    objAmigos.updateBitacora(actual, result);
-                } catch (IOException ex) {
-                    Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                ////////////////////////VERIFICAR/////////////////////////////
-                JOptionPane.showMessageDialog(null, "The request to " + username + " has been sent.");
-                this.setVisible(false);
-                this.dispose();  
-            }           
-            
+            user = objUsuarios.getUserData(username);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        if(searchOrList){            
+            try {
+                int selection = JOptionPane.showConfirmDialog(null, "Do you want to send a friend request to " + username, "Confirmation", JOptionPane.YES_NO_OPTION);
+                if(selection==JOptionPane.YES_OPTION){
+                    Usuario actual=objUsuarios.getUserData(objUsuarios.getUserLogin());
+                    Usuario result=getSearchData(username);
+                    try {
+                        objAmigos.updateBitacora(actual, result);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ////////////////////////VERIFICAR/////////////////////////////
+                    JOptionPane.showMessageDialog(null, "The request to " + username + " has been sent.");
+                    this.setVisible(false);
+                    this.dispose();  
+                }           
+            
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else
+        {
+            if (jToggleButton1.isSelected()) {
+                
+            }
+            else{
+                PerfilUsuario PU;
+                try {
+                    PU = new PerfilUsuario();
+                    PU.setFlagOptions(false);
+                    PU.setUsuario(user);
+                    PU.SetDATA();
+                    PU.show();
+                } catch (IOException ex) {
+                Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+                }       
+            }                 
+        }        
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
+
+    public void hORs(boolean flag){
+        jToggleButton1.show(flag);
+        searchOrList = !flag;
+        viewOrDelete = !flag;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -211,5 +301,6 @@ public class Amigos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
 }
