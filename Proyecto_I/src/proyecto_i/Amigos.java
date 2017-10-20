@@ -236,7 +236,22 @@ public class Amigos extends javax.swing.JFrame {
         else
         {
             if (jToggleButton1.isSelected()) {
-                
+                try {
+                    String log=objUsuarios.getUserLogin();
+                    ArrayList requests=objAmigos.getUserRequest(log);
+                    String key1=log + "|" + user.getUsuario();
+                    String key2=log + "|" + user.getUsuario();
+                    ArrayList cleaned = objAmigos.cleanRequests(requests, key1);
+                    if (cleaned == null) {
+                        cleaned = objAmigos.cleanRequests(requests, key2);
+                    }
+                    String [] toUpdate = cleaned.get(0).toString().split(Pattern.quote("|"));
+                    
+                     
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+                }             
+
             }
             else{
                 PerfilUsuario PU;

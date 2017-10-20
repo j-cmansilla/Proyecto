@@ -409,6 +409,32 @@ public class ManejadorDeAmigos {
         }
         return allRequests;        
     }
-
     
+    public ArrayList cleanRequests(ArrayList requests, String key){
+        ArrayList cleaned = new ArrayList();
+        for (int i = 0; i < requests.size(); i++) {
+            if (requests.get(i).toString().contains(key)) {
+                cleaned.add(requests.get(i).toString());
+            }        
+        }
+        return cleaned;
+    }
+
+    public boolean areFriends(String user1, String user2) throws FileNotFoundException{
+        ArrayList friends = getFriendsList(user1);
+        String key1 = user1 + "|" + user2;
+        String key2 = user2 + "|" + user1;
+        
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).toString().contains(key1)) {
+                return true;
+            }        
+        }
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).toString().contains(key2)) {
+                return true;
+            }        
+        }
+        return false;        
+    }
 }
