@@ -6,6 +6,7 @@
 package proyecto_i;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -16,23 +17,26 @@ public class Proyecto_I {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // TODO code application logic here
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();
         ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
+        MantenimientoAsociacionAmigosGrupo manAAG = new MantenimientoAsociacionAmigosGrupo();
         if (!directorio.exists()) {
             directorio.mkdirs();
             manejador.CrearArchivos();
             manejadorG.CrearArchivos();
             manejadorA.CrearArchivos();
+            manAAG.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
             manejador.CrearArchivos();
             manejadorG.CrearArchivos();
             manejadorA.CrearArchivos();
+            manAAG.CrearArchivos();
         } 
 
         Login login = new Login();
