@@ -244,6 +244,7 @@ public class MantenimientoAsociacionAmigosGrupo {
                 for (int i = 0; i == Next; i++) {
                     currentLine = readLine(Indexscanner);
                 }
+                Indexscanner = new Scanner(Index);
                 prevDATAindex = DATAindex;
                 DATAindex = currentLine.split(Pattern.quote("|"));
                 currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
@@ -317,6 +318,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         String[] Block=new String[8];
         while(flag)
         {
+            
             for (int i = 0; i == Next; i++) {
                 currentLine = readLine(IndexScanner);
             }
@@ -327,6 +329,7 @@ public class MantenimientoAsociacionAmigosGrupo {
             Block = DATAindex[1].split(Pattern.quote("."));
             if(Key.equals(currentKey))
                 flag =false;
+            IndexScanner = new Scanner(Index);
         }
         IndexScanner.close();
         ChangeOneLineBlocks(Integer.getInteger(Block[0]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.getInteger(Block[1]));
@@ -335,6 +338,8 @@ public class MantenimientoAsociacionAmigosGrupo {
     
     
     //**************************************************
+    //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+    //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
     public void ReoIndex(String MainUser) throws IOException
     {
         File temp = new File(DEFAULT_TEMP);
@@ -343,26 +348,44 @@ public class MantenimientoAsociacionAmigosGrupo {
         Scanner IndexScanner = new Scanner(Index);
         String currentLine = readLine(IndexScanner);
         String [] DATAindex = new String[8];
-        int j =0;
-        int newREg = 1;
-        while( j <= INDEXcount)
+        int newblockcount = 1;
+        int newblockposition = 1;
+        int newIndex = 1;
+        int NEXT = INDEXnumber;
+        boolean flag = true;
+        while(flag)
+        {
+            for(int i = 1; i==NEXT ;i++)
+            {
+                currentLine = readLine(IndexScanner);
+            }
+            IndexScanner = new Scanner(Index);
+            DATAindex = currentLine.split(Pattern.quote("|"));
+            NEXT = Integer.getInteger(DATAindex[5]);
+            if(Integer.getInteger(DATAindex[6])!= 0)
+            {
+                String newLine = newIndex +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
+                Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
+                newIndex++;
+            }   
+        }
+        
+         IndexScanner.close();
+    }
+    /*
+    while( j <= INDEXcount)
         {
             DATAindex = currentLine.split(Pattern.quote("|"));
             if(Integer.getInteger(DATAindex[6])!= 0)
             {
                 String newLine = newREg +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
                 Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
+                newREg++;
             }   
             currentLine = readLine(IndexScanner);
-            j++;
-            newREg++;
+            j++;   
         }
-        
-        
-        
-         IndexScanner.close();
-    }
-    
+    */
 }
    
     
