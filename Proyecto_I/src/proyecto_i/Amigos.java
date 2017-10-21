@@ -240,14 +240,20 @@ public class Amigos extends javax.swing.JFrame {
                     String log=objUsuarios.getUserLogin();
                     ArrayList requests=objAmigos.getUserRequest(log);
                     String key1=log + "|" + user.getUsuario();
-                    String key2=log + "|" + user.getUsuario();
+                    String key2=user.getUsuario() + "|" + log;
                     ArrayList cleaned = objAmigos.cleanRequests(requests, key1);
-                    if (cleaned == null) {
+                    if (cleaned.isEmpty()) {
                         cleaned = objAmigos.cleanRequests(requests, key2);
                     }
                     String [] toUpdate = cleaned.get(0).toString().split(Pattern.quote("|"));
-                    
-                     
+                    String updateRequest = toUpdate[0]+"|"+toUpdate[1] + "|0|" + toUpdate[3] + "|"+toUpdate[4] + "|0" + System.getProperty("line.separator");
+                    ArrayList finalL = new ArrayList();
+                    finalL.add(updateRequest);
+                    try {
+                        objAmigos.updateBM(finalL);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
                 }             

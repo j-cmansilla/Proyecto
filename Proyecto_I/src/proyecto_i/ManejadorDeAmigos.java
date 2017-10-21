@@ -437,4 +437,21 @@ public class ManejadorDeAmigos {
         }
         return false;        
     }
+    
+    public ArrayList allFriends(String usuario) throws FileNotFoundException{
+        ArrayList friends = getFriendsList(usuario);
+        ArrayList result = new ArrayList();
+        
+        for (int i = 0; i < friends.size(); i++) {
+            String [] request = friends.get(i).toString().split(Pattern.quote("|"));
+            if (request[0].equals(usuario)) {
+                result.add(request[1]);
+            }
+            else{
+                result.add(request[0]);
+            }
+        }
+        
+        return result;
+    }
 }
