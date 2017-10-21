@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class MantenimientoAsociacionAmigosGrupo {
     private final String DEFAULT_DESC_INDEXGROUPS = "C:\\MEIA\\Desc_IndiceGrupos.txt";
     private final String DEFAULT_FOLDER_BLOCKS ="C:\\MEIA\\Blocks";
     private final String DEFAULT_DESC_BLOCKS ="C:\\MEIA\\Blocks\\Desc_";
+    private final String DEFAULT_TEMP = "C:\\MEIA\\tempIndex.txt";
     Utilities Utilidades = new Utilities();
     REO reorganize = new REO();
     
@@ -202,6 +204,14 @@ public class MantenimientoAsociacionAmigosGrupo {
         lines.set(lineNumber - 1, newLine);
         Files.write(path, lines, StandardCharsets.UTF_8);
     }
+    private void ChangeOneLineBlocks(int lineNumber, String newLine, int blockNumber) throws FileNotFoundException, IOException
+    {
+       // BufferedReader br = new BufferedReader(new FileReader(DEFAULT_INDEXGROUPS));
+        Path path = Paths.get(DEFAULT_DESC_BLOCKS + "GRUPO" + blockNumber +".txt");
+        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        lines.set(lineNumber - 1, newLine);
+        Files.write(path, lines, StandardCharsets.UTF_8);
+    }
     
     //*************************************************************************************
     //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
@@ -226,8 +236,8 @@ public class MantenimientoAsociacionAmigosGrupo {
             int AIndex;
             int Apointer =0;
             int NEWpointer =0;
-            String [] DATAindex = new String[0];
-            String [] prevDATAindex = new String[0];
+            String [] DATAindex = new String[8];
+            String [] prevDATAindex = new String[8];
             int j=0;
             while(flag)
             {
@@ -302,28 +312,57 @@ public class MantenimientoAsociacionAmigosGrupo {
         int Next = INDEXnumber;
         boolean flag = true;
         String currentLine = readLine(IndexScanner);
-        String [] DATAindex = new String[0];
+        String [] DATAindex = new String[8];
         int AIndex = 0;
+        String[] Block=new String[8];
         while(flag)
         {
-                for (int i = 0; i == Next; i++) {
-                    currentLine = readLine(IndexScanner);
-                }
-                DATAindex = currentLine.split(Pattern.quote("|"));
-                String currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
-                Next = Integer.parseInt(DATAindex[5]);
-                AIndex = Integer.getInteger(DATAindex[0]);
-                
-                if(Key.equals(currentKey))
-                {
-                    flag =false;
-                    
-                }
+            for (int i = 0; i == Next; i++) {
+                currentLine = readLine(IndexScanner);
+            }
+            DATAindex = currentLine.split(Pattern.quote("|"));
+            String currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
+            Next = Integer.parseInt(DATAindex[5]);
+            AIndex = Integer.getInteger(DATAindex[0]);
+            Block = DATAindex[1].split(Pattern.quote("."));
+            if(Key.equals(currentKey))
+                flag =false;
         }
-        
+        IndexScanner.close();
+        ChangeOneLineBlocks(Integer.getInteger(Block[0]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.getInteger(Block[1]));
         ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|0");
     }
+    
+    
+    //**************************************************
+    public void ReoIndex(String MainUser) throws IOException
+    {
+        File temp = new File(DEFAULT_TEMP);
+        temp.createNewFile();
+        File Index = new File(DEFAULT_INDEXGROUPS);
+        Scanner IndexScanner = new Scanner(Index);
+        String currentLine = readLine(IndexScanner);
+        String [] DATAindex = new String[8];
+        int j =0;
+        int newREg = 1;
+        while( j <= INDEXcount)
+        {
+            DATAindex = currentLine.split(Pattern.quote("|"));
+            if(Integer.getInteger(DATAindex[6])!= 0)
+            {
+                String newLine = newREg +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
+                Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
+            }   
+            currentLine = readLine(IndexScanner);
+            j++;
+            newREg++;
+        }
         
+        
+        
+         IndexScanner.close();
+    }
+    
 }
    
     
