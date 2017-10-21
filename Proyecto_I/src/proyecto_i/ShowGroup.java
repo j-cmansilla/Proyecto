@@ -155,6 +155,13 @@ public class ShowGroup extends javax.swing.JFrame {
                 model.addElement(f);}
         if(!model.isEmpty())
             jList1.setModel(model);
+        
+        jLabel3.setText(Group);
+        
+        if(MA.allFriends(MainUser).isEmpty())
+        {
+            //btnADDFriends.disable();
+        }
      }
      
     private void btnDELETEFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDELETEFriendsActionPerformed
@@ -192,7 +199,7 @@ public class ShowGroup extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             
-            String[] choices = { "A", "B", "C", "D", "E", "F" };
+            String[] choices = (String[]) MA.allFriends(MainUser).toArray();
             String input = (String) JOptionPane.showInputDialog(null, "Choose",
                     "Add Friend", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]); // Initial choice
             System.out.println(input);

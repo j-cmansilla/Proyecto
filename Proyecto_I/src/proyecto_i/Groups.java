@@ -296,6 +296,7 @@ public class Groups extends javax.swing.JFrame {
                 Logger.getLogger(Groups.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        setGroupslst(MAINUSER);
     }//GEN-LAST:event_btnCreateActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed

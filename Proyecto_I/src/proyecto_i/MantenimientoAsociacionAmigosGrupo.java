@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -353,6 +354,9 @@ public class MantenimientoAsociacionAmigosGrupo {
         int newIndex = 1;
         int NEXT = INDEXnumber;
         boolean flag = true;
+        getdescBlock(1); //get max per block
+        File blocks = new File(DEFAULT_FOLDER_BLOCKS);
+        FileUtils.cleanDirectory(blocks);
         while(flag)
         {
             for(int i = 1; i==NEXT ;i++)
@@ -367,6 +371,10 @@ public class MantenimientoAsociacionAmigosGrupo {
                 String newLine = newIndex +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
                 Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
                 newIndex++;
+                if(newblockposition<=MaxPerBlock)
+                {
+                    
+                }
             }   
         }
         
