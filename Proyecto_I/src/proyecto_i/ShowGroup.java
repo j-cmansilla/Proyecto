@@ -5,10 +5,15 @@
  */
 package proyecto_i;
 
+import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -136,15 +141,39 @@ public class ShowGroup extends javax.swing.JFrame {
 
     String MainUser;
     String Group;
-    public void SetDATA(String group)
+    MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+    ManejadorDeAmigos MA = new ManejadorDeAmigos();
+    public void SetDATA(String group, String mainUser) throws FileNotFoundException
     {
         String[] s = group.split(Pattern.quote(" Desc: "));
-        MainUser = s[0];
-        Group = s[1];
-        
+        MainUser = mainUser;
+        Group = s[0];
+        GroupsUtilities GU = new GroupsUtilities();
+        List<String> GroupsOfUser = GU.GetMembers(MainUser,Group);
+        DefaultListModel model = new DefaultListModel();
+            for(String f : GroupsOfUser) {
+                model.addElement(f);}
+        if(!model.isEmpty())
+            jList1.setModel(model);
      }
+     
     private void btnDELETEFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDELETEFriendsActionPerformed
+       
         try {
+            String[] choices = { "A", "B", "C", "D", "E", "F" };
+            String input = (String) JOptionPane.showInputDialog(null, "Choose",
+                    "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]); // Initial choice
+            System.out.println(input);
+            
+            MAAG.DeleteFriend(MainUser, Group, input);
+        } catch (IOException ex) {
+            Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDELETEFriendsActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+
+         try {
             // TODO add your handling code here:
             //MODIFICAR enviar datos 
             ModificarGrupo modificar = new ModificarGrupo();
@@ -152,19 +181,26 @@ public class ShowGroup extends javax.swing.JFrame {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }//GEN-LAST:event_btnDELETEFriendsActionPerformed
-
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
         // TODO add your handling code here:
+        this.hide();
     }//GEN-LAST:event_btnexitActionPerformed
 
     private void btnADDFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDFriendsActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            
+            String[] choices = { "A", "B", "C", "D", "E", "F" };
+            String input = (String) JOptionPane.showInputDialog(null, "Choose",
+                    "Add Friend", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]); // Initial choice
+            System.out.println(input);
+            
+            MAAG.AddNewFriend(MainUser, Group, input);
+        } catch (IOException ex) {
+            Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnADDFriendsActionPerformed
 
     /**

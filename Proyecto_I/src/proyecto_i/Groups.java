@@ -5,23 +5,13 @@
  */
 package proyecto_i;
 
-import java.awt.event.MouseEvent;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import static java.nio.file.Files.list;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 
@@ -38,8 +28,10 @@ public class Groups extends javax.swing.JFrame {
         initComponents();
     }
     
+    String MAINUSER ="";
          void setGroupslst(String MainUser)
     {
+        MAINUSER = MainUser;
         List<String> GroupsOfUser = new ArrayList<>();
         GroupsUtilities GU = new GroupsUtilities();
         try {
@@ -54,12 +46,12 @@ public class Groups extends javax.swing.JFrame {
         jList1.setModel(model);
     }
    
-    private void valueChanged(ListSelectionEvent e) {
+    private void valueChanged(ListSelectionEvent e) throws FileNotFoundException {
         if (e.getValueIsAdjusting() == false) {
 
             if (jList1.getSelectedIndex() != -1) {
                 ShowGroup SG = new ShowGroup();
-                SG.SetDATA(jList1.getSelectedValue());
+                SG.SetDATA(jList1.getSelectedValue(),MAINUSER);
                 SG.show();
             }
         }
@@ -333,10 +325,14 @@ public class Groups extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
-        // TODO add your handling code here:
-         ShowGroup SG = new ShowGroup();
-                SG.SetDATA(jList1.getSelectedValue());
-                SG.show();
+        try {
+            // TODO add your handling code here:
+            ShowGroup SG = new ShowGroup();
+            SG.SetDATA(jList1.getSelectedValue(),MAINUSER);
+            SG.show();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Groups.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jList1MouseClicked
 
     /**
