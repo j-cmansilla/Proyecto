@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  */
 public class MantenimientoAsociacionAmigosGrupo {
     private final String DEFAULT_INDEXGROUPS = "C:\\MEIA\\IndiceGrupos.txt";
-    private final String DEFAULT_DESC_INDEXGROUPS = "C:\\MEIA\\Desc_InficeGrupos.txt";
+    private final String DEFAULT_DESC_INDEXGROUPS = "C:\\MEIA\\Desc_IndiceGrupos.txt";
     private final String DEFAULT_FOLDER_BLOCKS ="C:\\MEIA\\Blocks";
     private final String DEFAULT_DESC_BLOCKS ="C:\\MEIA\\Blocks\\Desc_";
     Utilities Utilidades = new Utilities();
