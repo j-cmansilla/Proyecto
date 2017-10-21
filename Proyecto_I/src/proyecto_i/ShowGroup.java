@@ -8,6 +8,7 @@ package proyecto_i;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -43,7 +44,7 @@ public class ShowGroup extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            String[] strings = { "THE GROUP IS EMPTY" };
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
@@ -133,6 +134,15 @@ public class ShowGroup extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    String MainUser;
+    String Group;
+    public void SetDATA(String group)
+    {
+        String[] s = group.split(Pattern.quote(" Desc: "));
+        MainUser = s[0];
+        Group = s[1];
+        
+     }
     private void btnDELETEFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDELETEFriendsActionPerformed
         try {
             // TODO add your handling code here:

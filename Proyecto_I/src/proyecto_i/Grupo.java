@@ -108,9 +108,9 @@ public class Grupo {
         this.estatus = estatus;
     }
     
-    private Usuario usuario;
+    public Usuario usuario;
     private String grupo;
-    private String descripcion; 
+    public String descripcion; 
     private int miembros; 
     private String fechaDeTransaccion;
     private int estatus;

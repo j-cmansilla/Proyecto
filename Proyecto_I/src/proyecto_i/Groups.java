@@ -5,6 +5,7 @@
  */
 package proyecto_i;
 
+import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,10 +13,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import static java.nio.file.Files.list;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
@@ -29,8 +37,33 @@ public class Groups extends javax.swing.JFrame {
     public Groups() {
         initComponents();
     }
-
     
+         void setGroupslst(String MainUser)
+    {
+        List<String> GroupsOfUser = new ArrayList<>();
+        GroupsUtilities GU = new GroupsUtilities();
+        try {
+            GroupsOfUser = GU.GetUserGroupsAdministrate(MainUser);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Groups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        DefaultListModel model = new DefaultListModel();
+            for(String f : GroupsOfUser) {
+                model.addElement(f);}
+        jList1.setModel(model);
+    }
+   
+    private void valueChanged(ListSelectionEvent e) {
+        if (e.getValueIsAdjusting() == false) {
+
+            if (jList1.getSelectedIndex() != -1) {
+                ShowGroup SG = new ShowGroup();
+                SG.SetDATA(jList1.getSelectedValue());
+                SG.show();
+            }
+        }
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -175,6 +208,12 @@ public class Groups extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel5.setText("YOUR GROUPS:");
 
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jList1);
 
         javax.swing.GroupLayout jInternalFrame3Layout = new javax.swing.GroupLayout(jInternalFrame3.getContentPane());
@@ -293,6 +332,13 @@ public class Groups extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        // TODO add your handling code here:
+         ShowGroup SG = new ShowGroup();
+                SG.SetDATA(jList1.getSelectedValue());
+                SG.show();
+    }//GEN-LAST:event_jList1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -321,9 +367,11 @@ public class Groups extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Groups().setVisible(true);
+               
             }
         });
     }
@@ -346,4 +394,5 @@ public class Groups extends javax.swing.JFrame {
     private javax.swing.JTextField txtGroup1;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
+
 }
