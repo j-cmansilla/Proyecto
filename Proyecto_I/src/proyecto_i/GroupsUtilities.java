@@ -50,6 +50,13 @@ public class GroupsUtilities {
         return Groups;
     }
     
+    public List<String> GetMembers(String MainUser, String GroupName)
+    {
+         List<String> Members = new ArrayList<>();
+         
+         
+         return Members;
+    }
     private String readLine(Scanner reader) {
         if (reader.hasNextLine())
             return reader.nextLine();

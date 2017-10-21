@@ -290,10 +290,41 @@ public class MantenimientoAsociacionAmigosGrupo {
         }
     }
     
-    public void DeleteFriend(String MainUser, String Group, String UserFriend)
+    public void DeleteFriend(String MainUser, String Group, String UserFriend) throws IOException
     {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        getINDEXnumber();
+        File Index = new File(DEFAULT_INDEXGROUPS);
+        Scanner IndexScanner = new Scanner(Index);
+        String Key = MainUser+"|"+Group+"|"+UserFriend;
         
+        int Next = INDEXnumber;
+        boolean flag = true;
+        String currentLine = readLine(IndexScanner);
+        String [] DATAindex = new String[0];
+        int AIndex = 0;
+        while(flag)
+        {
+                for (int i = 0; i == Next; i++) {
+                    currentLine = readLine(IndexScanner);
+                }
+                DATAindex = currentLine.split(Pattern.quote("|"));
+                String currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
+                Next = Integer.parseInt(DATAindex[5]);
+                AIndex = Integer.getInteger(DATAindex[0]);
+                
+                if(Key.equals(currentKey))
+                {
+                    flag =false;
+                    
+                }
+        }
+        
+        ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|0");
     }
+        
+}
    
     
-}
+
