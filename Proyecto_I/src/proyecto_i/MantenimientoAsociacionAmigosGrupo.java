@@ -383,50 +383,45 @@ public class MantenimientoAsociacionAmigosGrupo {
     
     
     //************************************************************************************************************
-                //  0          1       2   3   4          5                6
+                //  0          1          2   3   4          5                6
                 //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
                 //  0             1         2               3                   4
                 //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
     public void ReoIndex(String MainUser) throws IOException
     {
-        File temp = new File(DEFAULT_TEMP);
-        temp.createNewFile();
-        File Index = new File(DEFAULT_INDEXGROUPS);
-        Scanner IndexScanner = new Scanner(Index);
-        String currentLine = readLine(IndexScanner);
-        String [] DATAindex = new String[8];
-        int newblockcount = 1;
-        int newblockposition = 1;
-        int newIndex = 1;
-        int NEXT = INDEXnumber;
-        boolean flag = true;
+        getINDEXnumber();
         getdescBlock(1); //get max per block
-        File blocks = new File(DEFAULT_FOLDER_BLOCKS);
-        FileUtils.cleanDirectory(blocks);
+        File source = new File(DEFAULT_INDEXGROUPS);
+        File dest = new File(DEFAULT_TEMP);
+        FileUtils.copyDirectory(source, dest);
+        source.delete();
+        source.createNewFile();
+        File folder = new File(DEFAULT_FOLDER_BLOCKS);
+        FileUtils.cleanDirectory(folder); 
+        setDescINDEX(MainUser,1,false);
+        //****
+        Scanner Temp = new Scanner(dest);
+        String currentLine ="";
+        boolean flag = true;
+        int Next = INDEXnumber;
+        String [] DATAindex = new String[8];
         while(flag)
         {
-            for(int i = 1; i==NEXT ;i++)
+            for(int i =0; i<Next;i++)
             {
-                currentLine = readLine(IndexScanner);
+                currentLine = readLine(Temp);
             }
-            IndexScanner = new Scanner(Index);
             DATAindex = currentLine.split(Pattern.quote("|"));
-            NEXT = Integer.parseInt(DATAindex[5]);
-            if(Integer.parseInt(DATAindex[6])!= 0)
+            Next =Integer.parseInt(DATAindex[5]);
+            if(Integer.parseInt(DATAindex[6])!=0)
             {
-                String newLine = newIndex +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
-                Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
-                newIndex++;
-                if(newblockposition<=MaxPerBlock)
-                {
-                    
-                }
-            }   
+                AddNewFriend(DATAindex[2], DATAindex[3], DATAindex[4]);
+            }
+            if(Next == 0)
+                flag = false;
         }
-        
-         IndexScanner.close();
+        Temp.close();
     }
-    
 }
    
     
