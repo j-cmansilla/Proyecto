@@ -28,6 +28,7 @@ import proyecto_i.Administration.ChangeProfile;
  */
 public class CrearUsuario extends javax.swing.JFrame {
     JFileChooser fc = new JFileChooser();
+    Utilities Util = new Utilities();
     /**
      * Creates new form CrearUsuario
      */
@@ -155,6 +156,11 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel11.setText("PHONE:");
 
         txtPhone.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtPhone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPhoneActionPerformed(evt);
+            }
+        });
 
         txtPass1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         txtPass1.addActionListener(new java.awt.event.ActionListener() {
@@ -303,15 +309,23 @@ public class CrearUsuario extends javax.swing.JFrame {
 
         try{                                                
             // TODO add your handling code here:
+            
             String date;
             try{
                 date = txtDate.getDate().toString();
             }catch(Exception e){
                 date = "";
             }
+            if(!Util.isInteger(txtPhone.getText()))
+            {
+                JOptionPane.showMessageDialog(null, "The phonenumber isnt a number!");
+                txtPhone.setText("");
+            }
+            else
             if (txtUser.getText().equals("") || txtName.getText().equals("") || txtPass.getText().equals("") || txtSecondName.getText().equals("") || date.equals("") || txtEmail.getText().equals("")|| txtPhone.getText().equals("") || lblPicture.getText().equals("") || txtDescription.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Fill all the fields!");
-            }else{
+            }
+            else{
                 //VALIDATE PASSWORD
                 ChangeProfile CP = new ChangeProfile();
                 jTextField1.setText(CP.PASSVER(txtPass.getText(), txtPass1.getText()));
@@ -379,6 +393,10 @@ public class CrearUsuario extends javax.swing.JFrame {
     private void txtPass1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPass1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPass1ActionPerformed
+
+    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPhoneActionPerformed
 
     
     

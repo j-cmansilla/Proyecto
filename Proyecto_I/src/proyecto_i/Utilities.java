@@ -19,7 +19,6 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -206,4 +205,19 @@ public class Utilities {
         }
         
     }
-}
+    public  boolean isInteger(String s) {
+        return isInteger(s,10);
+    }
+
+    public  boolean isInteger(String s, int radix) {
+         if(s.isEmpty()) return false;
+         for(int i = 0; i < s.length(); i++) {
+            if(i == 0 && s.charAt(i) == '-') {
+                if(s.length() == 1) return false;
+                else continue;
+            }
+            if(Character.digit(s.charAt(i),radix) < 0) return false;
+        }
+        return true;
+    }
+    }

@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -29,7 +28,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -98,7 +96,7 @@ public class ManejadorDeUsuarios {
         }
     }
     
-    public int validarUsuario(String user, String password) throws FileNotFoundException{
+    public int validarUsuario(String user, String password) throws FileNotFoundException{ //FIX THIS *********************************************************
         File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
         File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
         //Buscarlo en la bitacora

@@ -318,10 +318,10 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
         // TODO add your handling code here:
         REO reorganize = new REO();        
-        MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+        
         try {
             reorganize.CheckForREO(MainUser.getUsuario());
-            MAAG.ReoIndex(MainUser.getUsuario());
+            
         } catch (IOException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }

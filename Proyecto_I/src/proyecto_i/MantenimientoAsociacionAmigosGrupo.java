@@ -14,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -380,8 +379,6 @@ public class MantenimientoAsociacionAmigosGrupo {
         }
         IndexScanner.close();
     }
-    
-    
     //************************************************************************************************************
                 //  0          1          2   3   4          5                6
                 //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX

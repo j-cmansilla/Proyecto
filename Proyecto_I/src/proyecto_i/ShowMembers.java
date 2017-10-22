@@ -7,7 +7,6 @@ package proyecto_i;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 
 /**

@@ -5,8 +5,6 @@
  */
 package proyecto_i;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 /**
  *
