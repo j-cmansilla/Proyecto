@@ -64,8 +64,8 @@ public class GroupsUtilities {
         while( currentLine != null)
         {
             DATAindex = currentLine.split(Pattern.quote("|"));
-            if(key.equals(DATAindex[1] + DATAindex[2]))
-                Members.add(DATAindex[3]);
+            if(key.equals(DATAindex[2] + DATAindex[3]))
+                Members.add(DATAindex[4]);
             currentLine = readLine(IndexScanner);
         }
          return Members;

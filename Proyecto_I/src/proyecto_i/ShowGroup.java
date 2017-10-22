@@ -8,6 +8,7 @@ package proyecto_i;
 import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,7 @@ public class ShowGroup extends javax.swing.JFrame {
         btnEdit = new javax.swing.JButton();
         btnexit = new javax.swing.JButton();
         btnADDFriends = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -100,19 +102,19 @@ public class ShowGroup extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnDELETEFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnexit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnADDFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 12, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(btnDELETEFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnexit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnADDFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -121,7 +123,9 @@ public class ShowGroup extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -143,12 +147,12 @@ public class ShowGroup extends javax.swing.JFrame {
     String Group;
     MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
     ManejadorDeAmigos MA = new ManejadorDeAmigos();
+    GroupsUtilities GU = new GroupsUtilities();
     public void SetDATA(String group, String mainUser) throws FileNotFoundException
     {
         String[] s = group.split(Pattern.quote(" Desc: "));
         MainUser = mainUser;
         Group = s[0];
-        GroupsUtilities GU = new GroupsUtilities();
         List<String> GroupsOfUser = GU.GetMembers(MainUser,Group);
         DefaultListModel model = new DefaultListModel();
             for(String f : GroupsOfUser) {
@@ -160,22 +164,27 @@ public class ShowGroup extends javax.swing.JFrame {
         
         if(MA.allFriends(MainUser).isEmpty())
         {
-            //btnADDFriends.disable();
+            btnADDFriends.disable();
+            jLabel2.setText("You dont have friends...");
         }
      }
      
     private void btnDELETEFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDELETEFriendsActionPerformed
-       
         try {
-            String[] choices = { "A", "B", "C", "D", "E", "F" };
+            // TODO add your handling code here:
+            List<String> stockList = GU.GetMembers(MainUser, Group);
+            String[] stockArr = new String[stockList.size()];
+            stockArr = stockList.toArray(stockArr);
+
             String input = (String) JOptionPane.showInputDialog(null, "Choose",
-                    "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]); // Initial choice
+                    "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
             System.out.println(input);
             
             MAAG.DeleteFriend(MainUser, Group, input);
         } catch (IOException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
+       
     }//GEN-LAST:event_btnDELETEFriendsActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -198,13 +207,16 @@ public class ShowGroup extends javax.swing.JFrame {
     private void btnADDFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDFriendsActionPerformed
         try {
             // TODO add your handling code here:
-            
-            String[] choices = (String[]) MA.allFriends(MainUser).toArray();
+            List<String> stockList = MA.allFriends(MainUser);
+            String[] stockArr = new String[stockList.size()];
+            stockArr = stockList.toArray(stockArr);
+
             String input = (String) JOptionPane.showInputDialog(null, "Choose",
-                    "Add Friend", JOptionPane.QUESTION_MESSAGE, null, choices,choices[0]); // Initial choice
+                    "Add Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
             System.out.println(input);
             
             MAAG.AddNewFriend(MainUser, Group, input);
+            SetDATA(Group, MainUser);
         } catch (IOException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -251,6 +263,7 @@ public class ShowGroup extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnexit;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;

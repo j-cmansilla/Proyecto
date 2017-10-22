@@ -36,6 +36,11 @@ public class MantenimientoAsociacionAmigosGrupo {
     private final String DEFAULT_TEMP = "C:\\MEIA\\tempIndex.txt";
     Utilities Utilidades = new Utilities();
     REO reorganize = new REO();
+    private int MaxPerBlock = 3; // max lines in a sigle block
+    private int INDEXnumber;// first item in the index
+    private int INDEXcount; //number of elements
+    private int NumberOfBlocks; 
+    private int NumberOFUsers;
     
     public void CrearArchivos() throws IOException{
             File indexGroups = new File(DEFAULT_INDEXGROUPS);
@@ -56,9 +61,9 @@ public class MantenimientoAsociacionAmigosGrupo {
             writer.write(Friendline +String.format("%n"));
             writer.close();
         }
-        setDescBlock(MainUser, blockNumber);
+        setDescBlock(MainUser, blockNumber,true);
     }
-    private void setDescBlock(String MainUser, int blockNumber) throws FileNotFoundException, IOException
+    private void setDescBlock(String MainUser, int blockNumber, boolean isNEW) throws FileNotFoundException, IOException
     {
         /*autor
          *fecha de creacio
@@ -82,7 +87,10 @@ public class MantenimientoAsociacionAmigosGrupo {
             IndexDescScanner.close();
         }
         lines.add(MainUser);
-        lines.add(currentLine);
+        if(isNEW)
+            lines.add(dateFormat.format(date) + "[America/Guatemala]");
+        else
+            lines.add(currentLine);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");
         int a = reorganize.countLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + blockNumber +".txt");
         lines.add(String.valueOf(a));
@@ -118,15 +126,11 @@ public class MantenimientoAsociacionAmigosGrupo {
         lines.add(currentLine);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");
         int a = new File(DEFAULT_FOLDER_BLOCKS).listFiles().length;
-        lines.add(String.valueOf(a));
+        lines.add(String.valueOf(a/2));
         lines.add(String.valueOf(IndexNumber));
         Utilidades.LlenarArchivo(DEFAULT_DESC_INDEXGROUPS, lines);
     }
-    private int MaxPerBlock = 3; // max lines in a sigle block
-    private int INDEXnumber;// first item in the index
-    private int INDEXcount; //number of elements
-    private int NumberOfBlocks; 
-    private int NumberOFUsers;
+
     private void getINDEXnumber() throws FileNotFoundException, IOException
     {   /* username
          * creation date
@@ -185,6 +189,7 @@ public class MantenimientoAsociacionAmigosGrupo {
                 writer.append(MainUser+"|"+Group+"|"+UserFriend+"|"+dateFormat.format(date) + "[America/Guatemala]|1");
                 writer.close();
             }
+            setDescBlock(MainUser, NumberOfBlocks, false);
             return String.valueOf(NumberOfBlocks)+"."+String.valueOf(position+1);
         }
         NumberOfBlocks ++;
@@ -223,9 +228,9 @@ public class MantenimientoAsociacionAmigosGrupo {
         File block = new File(DEFAULT_FOLDER_BLOCKS+"\\GRUPO1.txt");
         if(block.exists())
         {
+            getINDEXnumber();
             int indextochange =0;
             int newIndexNumber = INDEXnumber;
-            getINDEXnumber(); 
             int Next = INDEXnumber;
             int RegCount = INDEXcount + 1;
             File Index = new File(DEFAULT_INDEXGROUPS);
@@ -242,19 +247,19 @@ public class MantenimientoAsociacionAmigosGrupo {
             int j=0;
             while(flag)
             {
-                for (int i = 0; i == Next; i++) {
+                for (int i = 0; i < Next; i++) {
                     currentLine = readLine(Indexscanner);
                 }
                 Indexscanner = new Scanner(Index);
-                prevDATAindex = DATAindex;
                 DATAindex = currentLine.split(Pattern.quote("|"));
+                prevDATAindex = DATAindex;
                 currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
                 Next = Integer.parseInt(DATAindex[5]);
-                AIndex = Integer.getInteger(DATAindex[0]);
+                AIndex = Integer.parseInt(DATAindex[0]);
                 if(currentKey.compareTo(MainUser+Group+UserFriend) > 0 &&j==0) //(because current > new) 
                 {  // at the RegCount
-                    indextochange = Integer.getInteger(DATAindex[0]);
-                    Apointer = Integer.getInteger(DATAindex[5]); //same position
+                    indextochange = Integer.parseInt(DATAindex[0]);
+                    Apointer = Integer.parseInt(DATAindex[5]); //same position
                     NEWpointer = AIndex; 
                     newIndexNumber = RegCount;
                     flag = false;
@@ -263,12 +268,12 @@ public class MantenimientoAsociacionAmigosGrupo {
                 { //when is in the middle
                     Apointer = RegCount;
                     NEWpointer = AIndex;
-                    indextochange = Integer.getInteger(prevDATAindex[0]);
+                    indextochange = Integer.parseInt(prevDATAindex[0]);
                     flag = false;
                 }
                 if(Next == 0) //checked
                 {   // is the last one
-                    indextochange = Integer.getInteger(DATAindex[0]);
+                    indextochange = Integer.parseInt(DATAindex[0]);
                     Apointer = RegCount;
                     NEWpointer = 0;
                     newIndexNumber = INDEXnumber;
@@ -277,19 +282,16 @@ public class MantenimientoAsociacionAmigosGrupo {
                 j++;
             }
             String a = DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+ String.valueOf(Apointer) +"|"+DATAindex[6];
-                    String b =String.valueOf(RegCount)+"|"+ String.valueOf(NEWpointer) +"|"+MainUser+"|"+Group+"|"+UserFriend+"|"+Next+"|1";
                     ChangeOneLine(indextochange, a);
+                    
+            
+            String Position = AddToBlock(MainUser, Group, UserFriend);
+            String b =String.valueOf(RegCount)+"|"+ Position +"|"+MainUser+"|"+Group+"|"+UserFriend+"|"+Next+"|1";
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(DEFAULT_INDEXGROUPS, true))) {
                         writer.append(b);
                         writer.close();
                     }
-            //****************
-            String Position = AddToBlock(MainUser, Group, UserFriend);
-            FileWriter writer = new FileWriter(DEFAULT_INDEXGROUPS); 
-            writer.write(String.valueOf(RegCount)+"|"+ Position +"|"+MainUser+"|"+Group+"|"+UserFriend+"|"+Next+"|1");
-            
             Indexscanner.close();
-            writer.close();
             setDescINDEX(MainUser,newIndexNumber);
         }
         else
@@ -320,7 +322,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         while(flag)
         {
             
-            for (int i = 0; i == Next; i++) {
+            for (int i = 0; i < Next; i++) {
                 currentLine = readLine(IndexScanner);
             }
             DATAindex = currentLine.split(Pattern.quote("|"));

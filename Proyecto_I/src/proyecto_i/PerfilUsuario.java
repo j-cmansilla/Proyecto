@@ -331,8 +331,10 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     private void btnGroups2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroups2ActionPerformed
         // TODO add your handling code here:
+       
         Groups groups = new Groups();
         groups.setGroupslst(MainUser.getUsuario());
+        //groups.setGroupslst("usuario1");
         groups.show();
     }//GEN-LAST:event_btnGroups2ActionPerformed
 
