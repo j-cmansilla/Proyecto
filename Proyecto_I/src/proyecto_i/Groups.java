@@ -198,7 +198,7 @@ public class Groups extends javax.swing.JFrame {
         jInternalFrame3.setVisible(true);
 
         jLabel5.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
-        jLabel5.setText("YOUR GROUPS:");
+        jLabel5.setText("GROUPS YOU ADMIN:");
 
         jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.addMouseListener(new java.awt.event.MouseAdapter() {

@@ -36,6 +36,7 @@ public class MantenimientoAsociacionAmigosGrupo {
     private final String DEFAULT_TEMP = "C:\\MEIA\\tempIndex.txt";
     Utilities Utilidades = new Utilities();
     REO reorganize = new REO();
+    GroupsUtilities GUtilities = new GroupsUtilities();
     private int MaxPerBlock = 3; // max lines in a sigle block
     private int INDEXnumber;// first item in the index
     private int INDEXcount; //number of elements
@@ -92,7 +93,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         else
             lines.add(currentLine);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");
-        int a = reorganize.countLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + blockNumber +".txt");
+        int a = GUtilities.GetNumberofLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + blockNumber +".txt");
         lines.add(String.valueOf(a));
         lines.add(String.valueOf(MaxPerBlock));
         Utilidades.LlenarArchivo(DEFAULT_DESC_BLOCKS + "GRUPO" + blockNumber +".txt", lines);
@@ -151,7 +152,7 @@ public class MantenimientoAsociacionAmigosGrupo {
             }
             IndexDescScanner.close();
         }      
-        INDEXcount = reorganize.countLines(DEFAULT_INDEXGROUPS);
+        INDEXcount = GUtilities.GetNumberofLines(DEFAULT_INDEXGROUPS);
     }
     
     private void getdescBlock(int blockNumber) throws FileNotFoundException
@@ -182,14 +183,17 @@ public class MantenimientoAsociacionAmigosGrupo {
         getdescBlock(NumberOfBlocks);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-        if(NumberOFUsers<MaxPerBlock)
+        if(NumberOFUsers<=MaxPerBlock)
         {
-            int position = reorganize.countLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt");
+            int position = GUtilities.GetNumberofLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt");
+            String b = MainUser+"|"+Group+"|"+UserFriend+"|"+dateFormat.format(date) + "[America/Guatemala]|1";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt", true))) {
-                writer.append(MainUser+"|"+Group+"|"+UserFriend+"|"+dateFormat.format(date) + "[America/Guatemala]|1");
+                writer.newLine();
+                writer.append(b);
                 writer.close();
             }
             setDescBlock(MainUser, NumberOfBlocks, false);
+            GUtilities.CleanEmptySpace(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt");
             return String.valueOf(NumberOfBlocks)+"."+String.valueOf(position+1);
         }
         NumberOfBlocks ++;
@@ -251,27 +255,27 @@ public class MantenimientoAsociacionAmigosGrupo {
                     currentLine = readLine(Indexscanner);
                 }
                 Indexscanner = new Scanner(Index);
-                DATAindex = currentLine.split(Pattern.quote("|"));
                 prevDATAindex = DATAindex;
+                DATAindex = currentLine.split(Pattern.quote("|"));
                 currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
                 Next = Integer.parseInt(DATAindex[5]);
                 AIndex = Integer.parseInt(DATAindex[0]);
                 if(currentKey.compareTo(MainUser+Group+UserFriend) > 0 &&j==0) //(because current > new) 
-                {  // at the RegCount
+                {  // at the beginning
                     indextochange = Integer.parseInt(DATAindex[0]);
                     Apointer = Integer.parseInt(DATAindex[5]); //same position
                     NEWpointer = AIndex; 
                     newIndexNumber = RegCount;
                     flag = false;
                 }
-                 if(currentKey.compareTo(MainUser+Group+UserFriend) > 0) //(because current > new) 
+                else if(currentKey.compareTo(MainUser+Group+UserFriend) > 0) //(because current > new) 
                 { //when is in the middle
                     Apointer = RegCount;
                     NEWpointer = AIndex;
                     indextochange = Integer.parseInt(prevDATAindex[0]);
                     flag = false;
                 }
-                if(Next == 0) //checked
+                else if(Next == 0) //checked
                 {   // is the last one
                     indextochange = Integer.parseInt(DATAindex[0]);
                     Apointer = RegCount;
@@ -281,12 +285,15 @@ public class MantenimientoAsociacionAmigosGrupo {
                 }
                 j++;
             }
+            String c = prevDATAindex[0] +"|"+prevDATAindex[1]+"|"+prevDATAindex[2]+"|"+prevDATAindex[3]+"|"+prevDATAindex[4]+"|"+ String.valueOf(Apointer) +"|"+prevDATAindex[6];    
             String a = DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+ String.valueOf(Apointer) +"|"+DATAindex[6];
-                    ChangeOneLine(indextochange, a);
-                    
+            if(indextochange==Integer.parseInt(DATAindex[0]))        
+                ChangeOneLine(indextochange, a);
+            else
+                ChangeOneLine(indextochange, c);
             
             String Position = AddToBlock(MainUser, Group, UserFriend);
-            String b =String.valueOf(RegCount)+"|"+ Position +"|"+MainUser+"|"+Group+"|"+UserFriend+"|"+Next+"|1";
+            String b =String.valueOf(RegCount)+"|"+ Position +"|"+MainUser+"|"+Group+"|"+UserFriend+"|"+NEWpointer+"|1";
                     try (BufferedWriter writer = new BufferedWriter(new FileWriter(DEFAULT_INDEXGROUPS, true))) {
                         writer.append(b);
                         writer.close();
@@ -303,7 +310,6 @@ public class MantenimientoAsociacionAmigosGrupo {
             setDescINDEX(MainUser,1);
         }
     }
-    
     public void DeleteFriend(String MainUser, String Group, String UserFriend) throws IOException
     {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -328,19 +334,19 @@ public class MantenimientoAsociacionAmigosGrupo {
             DATAindex = currentLine.split(Pattern.quote("|"));
             String currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
             Next = Integer.parseInt(DATAindex[5]);
-            AIndex = Integer.getInteger(DATAindex[0]);
+            AIndex = Integer.parseInt(DATAindex[0]);
             Block = DATAindex[1].split(Pattern.quote("."));
             if(Key.equals(currentKey))
                 flag =false;
             IndexScanner = new Scanner(Index);
         }
         IndexScanner.close();
-        ChangeOneLineBlocks(Integer.getInteger(Block[0]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.getInteger(Block[1]));
+        ChangeOneLineBlocks(Integer.parseInt(Block[0]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.parseInt(Block[1]));
         ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|0");
     }
     
     
-    //**************************************************
+    //************************************************************************************************************
     //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
     //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
     public void ReoIndex(String MainUser) throws IOException
@@ -367,8 +373,8 @@ public class MantenimientoAsociacionAmigosGrupo {
             }
             IndexScanner = new Scanner(Index);
             DATAindex = currentLine.split(Pattern.quote("|"));
-            NEXT = Integer.getInteger(DATAindex[5]);
-            if(Integer.getInteger(DATAindex[6])!= 0)
+            NEXT = Integer.parseInt(DATAindex[5]);
+            if(Integer.parseInt(DATAindex[6])!= 0)
             {
                 String newLine = newIndex +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
                 Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);

@@ -7,6 +7,10 @@ package proyecto_i;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -22,6 +26,7 @@ import java.util.regex.Pattern;
 public class GroupsUtilities {
     private final String DEFAULT_GROUPMASTER_DIRECTORY = "C:\\MEIA\\Grupos.txt";
     private final String DEFAULT_BITACORA_GROUP_DIRECTORY = "C:\\MEIA\\BitacoraGrupos.txt";
+    private final String DEFAULT_TEMP = "C:\\MEIA\\tempBlock.txt";
     
     //Usuario | grupo | descripcion | miembros | Fecha_transaccion | estatus -> GROUPS
     public List<String> GetUserGroupsAdministrate(String MainUser) throws FileNotFoundException
@@ -76,5 +81,55 @@ public class GroupsUtilities {
         else
             return null;
     }
+    public int GetNumberofLines(String Path) throws FileNotFoundException, IOException
+    {
+        File file =new File(Path);
+        int linenumber = 0;
+    	if(file.exists()){
+            FileReader fr = new FileReader(file);
+            LineNumberReader lnr = new LineNumberReader(fr);
+            while (lnr.readLine() != null){
+                linenumber++;
+            }
+            lnr.close();
+        }
+        return linenumber;
+    }
     
+    public ArrayList GetUniq(ArrayList A, ArrayList B)
+    {
+        List<String> RES= new ArrayList();
+        for(int j =0; j< A.size();j++)
+            {
+                if(!B.contains(A.get(j)))
+                {
+                    RES.add((String) A.get(j));
+                }
+            }
+        return (ArrayList) RES;
+    }
+    
+    public void CleanEmptySpace(String path) throws FileNotFoundException, IOException
+    {
+         Scanner file;
+         File temp = new File(DEFAULT_TEMP);
+         temp.createNewFile();
+         PrintWriter writer;
+            file = new Scanner(new File(path));
+            
+            writer = new PrintWriter(DEFAULT_TEMP);
+
+            while (file.hasNext()) {
+                String line = file.nextLine();
+                if (!line.isEmpty()) {
+                    writer.write(line+System.lineSeparator());
+                    
+                }
+            }
+            file.close();
+            writer.close();
+            File b = new File(path);
+            b.delete();
+            new File(DEFAULT_TEMP).renameTo(new File(path));
+    }
 }

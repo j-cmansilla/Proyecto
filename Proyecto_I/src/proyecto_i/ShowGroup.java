@@ -143,9 +143,9 @@ public class ShowGroup extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
     String MainUser;
     String Group;
-    MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
     ManejadorDeAmigos MA = new ManejadorDeAmigos();
     GroupsUtilities GU = new GroupsUtilities();
     public void SetDATA(String group, String mainUser) throws FileNotFoundException
@@ -179,8 +179,8 @@ public class ShowGroup extends javax.swing.JFrame {
             String input = (String) JOptionPane.showInputDialog(null, "Choose",
                     "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
             System.out.println(input);
-            
-            MAAG.DeleteFriend(MainUser, Group, input);
+            if(input !=null)
+                MAAG.DeleteFriend(MainUser, Group, input);
         } catch (IOException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -207,15 +207,16 @@ public class ShowGroup extends javax.swing.JFrame {
     private void btnADDFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDFriendsActionPerformed
         try {
             // TODO add your handling code here:
-            List<String> stockList = MA.allFriends(MainUser);
+            List<String> stockList = GU.GetUniq(MA.allFriends(MainUser), (ArrayList) GU.GetMembers(MainUser, Group)) ;
+            
             String[] stockArr = new String[stockList.size()];
             stockArr = stockList.toArray(stockArr);
 
             String input = (String) JOptionPane.showInputDialog(null, "Choose",
                     "Add Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
             System.out.println(input);
-            
-            MAAG.AddNewFriend(MainUser, Group, input);
+            if(input!=null)
+                MAAG.AddNewFriend(MainUser, Group, input);
             SetDATA(Group, MainUser);
         } catch (IOException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
