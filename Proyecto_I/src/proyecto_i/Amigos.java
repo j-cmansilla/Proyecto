@@ -42,11 +42,14 @@ public class Amigos extends javax.swing.JFrame {
     
     public boolean findUser(String user) throws FileNotFoundException
     {
-        Usuario result = getSearchData(user);
-        if(result!=null)
+        ArrayList result = getSearchData(user);
+        if(!result.isEmpty())
         {
             DefaultTableModel model=(DefaultTableModel) jTable1.getModel();
-            model.addRow(new Object[]{result.getUsuario(),result.getNombre(),result.getApellido()});
+            for (int i = 0; i < result.size(); i++) {                
+                String [] data = result.get(i).toString().split(Pattern.quote("|"));
+                model.addRow(new Object[]{data[0],data[1],data[2]});                
+            }
             return true;
         }               
         else
@@ -83,10 +86,12 @@ public class Amigos extends javax.swing.JFrame {
         return flagFriends;
     }
     
-    public Usuario getSearchData(String user) throws FileNotFoundException
+    public ArrayList getSearchData(String user) throws FileNotFoundException
     {
+        ArrayList search = new ArrayList();
         File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
-        Usuario result;
+        String result;
+        ManejadorDeUsuarios objManejadorDeUsuarios = new ManejadorDeUsuarios();
                     
         if (usuarios.exists()) {
             Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_DIRECTORY);
@@ -95,10 +100,9 @@ public class Amigos extends javax.swing.JFrame {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
-                if ((credenciales[0].equals(user) || credenciales[1].equals(user) || credenciales[2].equals(user)) && credenciales[10].equals("1")) {
-                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
-                    scanner.close();
-                    return result;
+                if ((credenciales[0].equals(user) || credenciales[1].equals(user) || credenciales[2].equals(user)) && credenciales[10].equals("1") && !credenciales[0].equals(objManejadorDeUsuarios.getUserLogin())) {
+                    result = credenciales[0] + "|" + credenciales[1] + "|" + credenciales[2];
+                    search.add(result);
                 }
             }
             scanner.close();
@@ -112,15 +116,14 @@ public class Amigos extends javax.swing.JFrame {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] credenciales = line.split(Pattern.quote("|"));
-                if ((credenciales[0].equals(user) || credenciales[1].equals(user) || credenciales[2].equals(user)) && credenciales[10].equals("1")) {
-                    result = new Usuario(credenciales[0], credenciales[1], credenciales[2], credenciales[3], Integer.parseInt(credenciales[4]), credenciales[5], credenciales[6], credenciales[7], credenciales[8], credenciales[9], Integer.parseInt(credenciales[10]));
-                    scanner.close();
-                    return result;
+                if ((credenciales[0].equals(user) || credenciales[1].equals(user) || credenciales[2].equals(user)) && credenciales[10].equals("1") && !credenciales[0].equals(objManejadorDeUsuarios.getUserLogin())) {
+                    result = credenciales[0] + "|" + credenciales[1] + "|" + credenciales[2];
+                    search.add(result);
                 }
             }
             scanner.close();
         }
-        return null;     
+        return search;     
     }
    
     
@@ -202,7 +205,7 @@ public class Amigos extends javax.swing.JFrame {
         ManejadorDeAmigos objAmigos=new ManejadorDeAmigos();
         
         int index = jTable1.getSelectedRow();
-        TableModel model=jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
         String username=model.getValueAt(index, 0).toString();
         
         Usuario user=null;
@@ -214,20 +217,34 @@ public class Amigos extends javax.swing.JFrame {
         
         if(searchOrList){            
             try {
-                int selection = JOptionPane.showConfirmDialog(null, "Do you want to send a friend request to " + username, "Confirmation", JOptionPane.YES_NO_OPTION);
-                if(selection==JOptionPane.YES_OPTION){
-                    Usuario actual=objUsuarios.getUserData(objUsuarios.getUserLogin());
-                    Usuario result=getSearchData(username);
-                    try {
-                        objAmigos.updateBitacora(actual, result);
-                    } catch (IOException ex) {
-                        Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    ////////////////////////VERIFICAR/////////////////////////////
-                    JOptionPane.showMessageDialog(null, "The request to " + username + " has been sent.");
+                if(objAmigos.areFriends(objUsuarios.getUserLogin(), username)){
+                    JOptionPane.showMessageDialog(null, "You're already friends with " + username);
                     this.setVisible(false);
                     this.dispose();  
-                }           
+                }
+                else if (objAmigos.doesRequestExists(objUsuarios.getUserLogin(), username)) 
+                {
+                    JOptionPane.showMessageDialog(null, "The request has already been sent.");
+                    this.setVisible(false);
+                    this.dispose();
+                }
+                else
+                {
+                    int selection = JOptionPane.showConfirmDialog(null, "Do you want to send a friend request to " + username, "Confirmation", JOptionPane.YES_NO_OPTION);
+                    if(selection==JOptionPane.YES_OPTION){
+                        Usuario actual=objUsuarios.getUserData(objUsuarios.getUserLogin());
+                        Usuario result=objUsuarios.getUserData(username);
+                        try {
+                            objAmigos.updateBitacora(actual, result);
+                        } catch (IOException ex) {
+                            Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        ////////////////////////VERIFICAR/////////////////////////////
+                        JOptionPane.showMessageDialog(null, "The request to " + username + " has been sent.");
+                        this.setVisible(false);
+                        this.dispose();  
+                    } 
+                }                         
             
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
@@ -238,7 +255,7 @@ public class Amigos extends javax.swing.JFrame {
             if (jToggleButton1.isSelected()) {
                 try {
                     String log=objUsuarios.getUserLogin();
-                    ArrayList requests=objAmigos.getUserRequest(log);
+                    ArrayList requests=objAmigos.getFriendsList(log);
                     String key1=log + "|" + user.getUsuario();
                     String key2=user.getUsuario() + "|" + log;
                     ArrayList cleaned = objAmigos.cleanRequests(requests, key1);
@@ -246,11 +263,27 @@ public class Amigos extends javax.swing.JFrame {
                         cleaned = objAmigos.cleanRequests(requests, key2);
                     }
                     String [] toUpdate = cleaned.get(0).toString().split(Pattern.quote("|"));
-                    String updateRequest = toUpdate[0]+"|"+toUpdate[1] + "|0|" + toUpdate[3] + "|"+toUpdate[4] + "|0" + System.getProperty("line.separator");
+                    String updateRequest = toUpdate[0]+"|"+toUpdate[1] + "|0|" + toUpdate[3] + "|"+toUpdate[4] + "|0*" + System.getProperty("line.separator");
                     ArrayList finalL = new ArrayList();
                     finalL.add(updateRequest);
                     try {
-                        objAmigos.updateBM(finalL);
+                        if(objAmigos.updateBM(finalL)){
+                            JOptionPane.showMessageDialog(null, "You're no longer friends with " + user.getUsuario());
+                            model.setRowCount(0);        
+
+                            ArrayList amigos = objAmigos.getFriendsList(objUsuarios.getUserLogin());
+                            if(!amigos.isEmpty()){
+                                fillTable(amigos);
+                            }
+                            else{
+                                this.show(false);
+                                this.dispose();
+                            }                            
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(null, "Error.");
+                        }
+                        
                     } catch (IOException ex) {
                         Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
                     }

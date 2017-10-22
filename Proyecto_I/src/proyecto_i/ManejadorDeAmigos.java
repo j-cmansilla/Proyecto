@@ -78,7 +78,7 @@ public class ManejadorDeAmigos {
                     lista.add(scanner.nextLine());
                 }
                 scanner.close();
-                if(Integer.parseInt(lista.get(4).toString())+1 < objREO.countLines(DEFAULT_DIRECTORY+DEFAULT_BITACORA_LISTA_DIRECTORY))
+                if(Integer.parseInt(lista.get(4).toString()) <= objREO.countLines(DEFAULT_DIRECTORY+DEFAULT_BITACORA_LISTA_DIRECTORY))
                 {
                     isFull = true;
                     for (int i = 0; i < lista.size(); i++) {
@@ -198,7 +198,11 @@ public class ManejadorDeAmigos {
 
         while(!ordenado){
             for(int i=0;i<lista.size()-1;i++){
-                if (lista.get(i).toString().split("\\|")[0].compareTo(lista.get(i+1).toString().split("\\|")[0])>0){
+                String[] toCompare=lista.get(i).toString().split("\\|");
+                String[] toCompare2=lista.get(i+1).toString().split("\\|");
+                String no1 = toCompare[0]+"|"+toCompare[1];
+                String no2 = toCompare2[0]+"|"+toCompare2[1];
+                if (no1.compareTo(no2)>0){
 
                     String aux=lista.get(i).toString();
                     lista.set(i, lista.get(i+1).toString());
@@ -226,7 +230,9 @@ public class ManejadorDeAmigos {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                listaARetornar.add(line);
+                if(!line.contains("*")){
+                    listaARetornar.add(line);
+                }                
             }
             scanner.close();
         }
@@ -236,7 +242,9 @@ public class ManejadorDeAmigos {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                listaARetornar.add(line);
+                if(!line.contains("*")){
+                    listaARetornar.add(line);
+                }
             }
             scanner.close();
         }
@@ -271,7 +279,7 @@ public class ManejadorDeAmigos {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] request = line.split(Pattern.quote("|"));
-                if (loggedUser.equals(request[1]) && request[2].equals("0")) {
+                if (loggedUser.equals(request[1]) && request[2].equals("0") && !request[5].equals("0*")) {
                     allRequests.add(line);
                 }
             }
@@ -286,7 +294,7 @@ public class ManejadorDeAmigos {
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
                 String [] request = line.split(Pattern.quote("|"));
-                if (loggedUser.equals(request[1]) && request[2].equals("0")) {
+                if (loggedUser.equals(request[1]) && request[2].equals("0") && !request[5].equals("0*")) {
                     allRequests.add(line);
                 }
             }
@@ -453,5 +461,58 @@ public class ManejadorDeAmigos {
         }
         
         return result;
+    }
+    
+    public ArrayList getAllRequests(String loggedUser) throws FileNotFoundException{
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+        ArrayList allRequests=new ArrayList();
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if ((loggedUser.equals(request[0]) || loggedUser.equals(request[1])) && !request[5].equals("0*")) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+                            
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if ((loggedUser.equals(request[0]) || loggedUser.equals(request[1])) && !request[5].equals("0*")) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        return allRequests;        
+    }
+    
+    public boolean doesRequestExists(String user1, String user2) throws FileNotFoundException{
+        ArrayList friends = getAllRequests(user1);
+        String key1 = user1 + "|" + user2;
+        String key2 = user2 + "|" + user1;
+        
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).toString().contains(key1)) {
+                return true;
+            }        
+        }
+        for (int i = 0; i < friends.size(); i++) {
+            if (friends.get(i).toString().contains(key2)) {
+                return true;
+            }        
+        }
+        return false;        
     }
 }

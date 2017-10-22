@@ -49,6 +49,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
                     ////////////////////////VERIFICAR/////////////////////////////
                     JOptionPane.showMessageDialog(null, "You're now friends with " + request[0]);
                 }
+            }
+            else if(selection==JOptionPane.NO_OPTION){
+                String updateRequest = requests.get(i).toString() + "*" + System.getProperty("line.separator");
+                confirmed.add(updateRequest);
+                if(manejadorA.updateBM(confirmed)){
+                    ////////////////////////VERIFICAR/////////////////////////////
+                    JOptionPane.showMessageDialog(null, "Request from " + request[0] + " declined.");
+                }
             }            
         }                
     }
