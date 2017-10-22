@@ -99,7 +99,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         Utilidades.LlenarArchivo(DEFAULT_DESC_BLOCKS + "GRUPO" + blockNumber +".txt", lines);
     }
     
-    private void setDescINDEX(String MainUser, int IndexNumber) throws FileNotFoundException
+    private void setDescINDEX(String MainUser, int IndexNumber, boolean isNEW) throws FileNotFoundException
     {   /*
             * username
             * creation date
@@ -124,7 +124,10 @@ public class MantenimientoAsociacionAmigosGrupo {
             IndexDescScanner.close();
         }
         lines.add(MainUser);
-        lines.add(currentLine);
+        if(isNEW)
+            lines.add(dateFormat.format(date) + "[America/Guatemala]");
+        else
+            lines.add(currentLine);
         lines.add(dateFormat.format(date) + "[America/Guatemala]");
         int a = new File(DEFAULT_FOLDER_BLOCKS).listFiles().length;
         lines.add(String.valueOf(a/2));
@@ -192,8 +195,8 @@ public class MantenimientoAsociacionAmigosGrupo {
                 writer.append(b);
                 writer.close();
             }
-            setDescBlock(MainUser, NumberOfBlocks, false);
             GUtilities.CleanEmptySpace(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt");
+            setDescBlock(MainUser, NumberOfBlocks, false); 
             return String.valueOf(NumberOfBlocks)+"."+String.valueOf(position+1);
         }
         NumberOfBlocks ++;
@@ -208,7 +211,6 @@ public class MantenimientoAsociacionAmigosGrupo {
     }
     private void ChangeOneLine(int lineNumber, String newLine) throws FileNotFoundException, IOException
     {
-       // BufferedReader br = new BufferedReader(new FileReader(DEFAULT_INDEXGROUPS));
         Path path = Paths.get(DEFAULT_INDEXGROUPS);
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         lines.set(lineNumber - 1, newLine);
@@ -216,8 +218,7 @@ public class MantenimientoAsociacionAmigosGrupo {
     }
     private void ChangeOneLineBlocks(int lineNumber, String newLine, int blockNumber) throws FileNotFoundException, IOException
     {
-       // BufferedReader br = new BufferedReader(new FileReader(DEFAULT_INDEXGROUPS));
-        Path path = Paths.get(DEFAULT_DESC_BLOCKS + "GRUPO" + blockNumber +".txt");
+        Path path = Paths.get(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + blockNumber +".txt");
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         lines.set(lineNumber - 1, newLine);
         Files.write(path, lines, StandardCharsets.UTF_8);
@@ -299,7 +300,7 @@ public class MantenimientoAsociacionAmigosGrupo {
                         writer.close();
                     }
             Indexscanner.close();
-            setDescINDEX(MainUser,newIndexNumber);
+            setDescINDEX(MainUser,newIndexNumber,false);
         }
         else
         {
@@ -307,7 +308,7 @@ public class MantenimientoAsociacionAmigosGrupo {
             writer.write("1|1.1|"+MainUser+"|"+Group+"|"+UserFriend+"|0|1");
             writer.close();
             NewBlock(1, MainUser+"|"+Group+"|"+UserFriend+"|"+dateFormat.format(date) + "[America/Guatemala]|1", MainUser);
-            setDescINDEX(MainUser,1);
+            setDescINDEX(MainUser,1,true);
         }
     }
     public void DeleteFriend(String MainUser, String Group, String UserFriend) throws IOException
@@ -317,38 +318,75 @@ public class MantenimientoAsociacionAmigosGrupo {
         getINDEXnumber();
         File Index = new File(DEFAULT_INDEXGROUPS);
         Scanner IndexScanner = new Scanner(Index);
-        String Key = MainUser+"|"+Group+"|"+UserFriend;
+        String Key = MainUser+Group+UserFriend;
         
         int Next = INDEXnumber;
         boolean flag = true;
-        String currentLine = readLine(IndexScanner);
+        String currentLine = "";
         String [] DATAindex = new String[8];
+        String [] prevDATAindex = new String[8];
         int AIndex = 0;
+        int prevIndex =0;
+        int prevNext =0;
         String[] Block=new String[8];
+        int j =0;
         while(flag)
         {
             
             for (int i = 0; i < Next; i++) {
                 currentLine = readLine(IndexScanner);
             }
+            prevDATAindex = DATAindex;
             DATAindex = currentLine.split(Pattern.quote("|"));
             String currentKey = DATAindex[2]+DATAindex[3]+DATAindex[4];
             Next = Integer.parseInt(DATAindex[5]);
             AIndex = Integer.parseInt(DATAindex[0]);
             Block = DATAindex[1].split(Pattern.quote("."));
             if(Key.equals(currentKey))
+            {    
+                if(j==0)//At the beginning
+                {
+                    int a =0;
+                    boolean flag2 = true;
+                    while(flag2)
+                    {
+                        IndexScanner = new Scanner(Index);
+                        for (int i = 0; i < Next; i++) {
+                            currentLine = readLine(IndexScanner);
+                        }
+                        prevDATAindex = currentLine.split(Pattern.quote("|")); //Next line
+                        if(Integer.parseInt(prevDATAindex[6])!=0)
+                        {
+                            a = Integer.parseInt(prevDATAindex[0]);
+                            flag2 =false;
+                        }
+                        else if(currentLine == null)
+                            flag2 = false;
+                    }
+                    setDescINDEX(MainUser, a,false);
+                }
+                else//At the end or In the middle
+                {
+                    prevIndex = Integer.parseInt(prevDATAindex[0]);
+                    ChangeOneLine(prevIndex, prevDATAindex[0] +"|"+prevDATAindex[1]+"|"+prevDATAindex[2]+"|"+prevDATAindex[3]+"|"+prevDATAindex[4]+"|"+prevNext+"|"+prevDATAindex[6]);
+                }
+                
+                ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[5] +"|0");
+                ChangeOneLineBlocks(Integer.parseInt(Block[1]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.parseInt(Block[0]));
                 flag =false;
+            }
             IndexScanner = new Scanner(Index);
+            j++;
         }
         IndexScanner.close();
-        ChangeOneLineBlocks(Integer.parseInt(Block[0]),DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+dateFormat.format(date) + "[America/Guatemala]|0", Integer.parseInt(Block[1]));
-        ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|0");
     }
     
     
     //************************************************************************************************************
-    //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
-    //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
+                //  0          1       2   3   4          5                6
+                //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+                //  0             1         2               3                   4
+                //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
     public void ReoIndex(String MainUser) throws IOException
     {
         File temp = new File(DEFAULT_TEMP);
@@ -388,20 +426,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         
          IndexScanner.close();
     }
-    /*
-    while( j <= INDEXcount)
-        {
-            DATAindex = currentLine.split(Pattern.quote("|"));
-            if(Integer.getInteger(DATAindex[6])!= 0)
-            {
-                String newLine = newREg +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[6] +"|1";
-                Files.write(Paths.get(DEFAULT_TEMP), newLine.getBytes(), StandardOpenOption.APPEND);
-                newREg++;
-            }   
-            currentLine = readLine(IndexScanner);
-            j++;   
-        }
-    */
+    
 }
    
     

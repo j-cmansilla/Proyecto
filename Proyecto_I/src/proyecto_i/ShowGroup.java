@@ -181,6 +181,7 @@ public class ShowGroup extends javax.swing.JFrame {
             System.out.println(input);
             if(input !=null)
                 MAAG.DeleteFriend(MainUser, Group, input);
+            SetDATA(Group, MainUser);
         } catch (IOException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }

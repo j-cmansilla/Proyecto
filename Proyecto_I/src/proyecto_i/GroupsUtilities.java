@@ -58,6 +58,7 @@ public class GroupsUtilities {
         return Groups;
     }
      private final String DEFAULT_INDEXGROUPS = "C:\\MEIA\\IndiceGrupos.txt";
+    //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
     public List<String> GetMembers(String MainUser, String GroupName) throws FileNotFoundException
     {
         List<String> Members = new ArrayList<>();
@@ -69,7 +70,7 @@ public class GroupsUtilities {
         while( currentLine != null)
         {
             DATAindex = currentLine.split(Pattern.quote("|"));
-            if(key.equals(DATAindex[2] + DATAindex[3]))
+            if(key.equals(DATAindex[2] + DATAindex[3]) && Integer.parseInt(DATAindex[6])==1)
                 Members.add(DATAindex[4]);
             currentLine = readLine(IndexScanner);
         }
