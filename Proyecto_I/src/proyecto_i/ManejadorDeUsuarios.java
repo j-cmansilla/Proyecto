@@ -718,6 +718,38 @@ public class ManejadorDeUsuarios {
         return 0;
     }
     
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    
+    public ArrayList usersList() throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+        File master = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String[] credenciales = line.split(Pattern.quote("|"));
+                listaARetornar.add(credenciales[0]);
+            }
+            scanner.close();
+        }
+        if (master.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String[] credenciales = line.split(Pattern.quote("|"));
+                listaARetornar.add(credenciales[0]);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
 }
 
 

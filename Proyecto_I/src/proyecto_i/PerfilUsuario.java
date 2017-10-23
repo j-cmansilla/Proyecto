@@ -61,7 +61,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Request from " + request[0] + " declined.");
                 }
             }            
-        }                
+        }    
+        
+        Usuario loggedUserA = manejador.getUserData(manejador.getUserLogin());
+        if(loggedUserA.Rol() == 1){
+            jMenuItem3.show();
+        }else{
+            jMenuItem3.show(false);
+        }
     }
 
     /**
@@ -97,6 +104,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -197,6 +205,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem2);
+
+        jMenuItem3.setText("Friends & Requests");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
 
         jMenuBar2.add(jMenu2);
 
@@ -392,12 +408,12 @@ public class PerfilUsuario extends javax.swing.JFrame {
         try {
             boolean exists = objAmigos.findUser(user);
             if (exists) {
-                objAmigos.hORs(false);        
+                objAmigos.hORs(1);        
                 objAmigos.show();
             }
             else
             {
-                JOptionPane.showMessageDialog(null, "El usuario no existe.");
+                JOptionPane.showMessageDialog(null, "The user doesn't exist.");
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -414,7 +430,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         try {
             ArrayList amigos = objManejador.getFriendsList(objManejadorU.getUserLogin());
             if (objAmigos.fillTable(amigos)) {
-                objAmigos.hORs(true);
+                objAmigos.hORs(2);
                 objAmigos.show();
             }
             else{
@@ -436,6 +452,24 @@ public class PerfilUsuario extends javax.swing.JFrame {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jList1MouseClicked
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        Amigos objAmigos = new Amigos();
+        ManejadorDeAmigos objMAmigos = new ManejadorDeAmigos();
+        
+        try {
+            ArrayList allRequests = objMAmigos.getAllRequestsAdmin();
+            objAmigos.fillTableAdmin(allRequests);
+            objAmigos.setColumnNames();
+            objAmigos.hORs(3);
+            objAmigos.show();
+            
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -493,6 +527,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

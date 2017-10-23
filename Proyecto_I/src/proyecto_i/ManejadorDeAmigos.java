@@ -515,4 +515,39 @@ public class ManejadorDeAmigos {
         }
         return false;        
     }
+    
+    public ArrayList getAllRequestsAdmin() throws FileNotFoundException{
+        File usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+        ArrayList allRequests=new ArrayList();
+                    
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_BITACORA_LISTA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if (!request[5].equals("0*")) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        usuarios = new File(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+                            
+        if (usuarios.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY + DEFAULT_LISTA_AMIGOS_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String [] request = line.split(Pattern.quote("|"));
+                if (!request[5].equals("0*")) {
+                    allRequests.add(line);
+                }
+            }
+            scanner.close();
+        }
+        return allRequests;        
+    }
 }
