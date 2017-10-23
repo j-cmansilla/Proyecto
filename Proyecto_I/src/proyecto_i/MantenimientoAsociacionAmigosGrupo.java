@@ -342,7 +342,8 @@ public class MantenimientoAsociacionAmigosGrupo {
             AIndex = Integer.parseInt(DATAindex[0]);
             Block = DATAindex[1].split(Pattern.quote("."));
             if(Key.equals(currentKey))
-            {    
+            {       //  0          1          2   3   4          5                6
+                    //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
                 if(j==0)//At the beginning
                 {
                     int a =0;
