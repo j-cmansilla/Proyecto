@@ -47,8 +47,6 @@ public class ShowGroup extends javax.swing.JFrame {
         btnADDFriends = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "THE GROUP IS EMPTY" };
             public int getSize() { return strings.length; }
@@ -158,7 +156,11 @@ public class ShowGroup extends javax.swing.JFrame {
                 model.addElement(f);}
         if(!model.isEmpty())
             jList1.setModel(model);
-        
+        if(model.isEmpty())
+        {
+            model.addElement("THE GROUP IS EMPTY");
+             jList1.setModel(model);
+        }
         jLabel3.setText(Group);
         
         if(MA.allFriends(MainUser).isEmpty())
@@ -170,21 +172,31 @@ public class ShowGroup extends javax.swing.JFrame {
      
     private void btnDELETEFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDELETEFriendsActionPerformed
         try {
-            // TODO add your handling code here:
-            List<String> stockList = GU.GetMembers(MainUser, Group);
-            String[] stockArr = new String[stockList.size()];
-            stockArr = stockList.toArray(stockArr);
-
-            String input = (String) JOptionPane.showInputDialog(null, "Choose",
-                    "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
-            System.out.println(input);
-            if(input !=null)
-                MAAG.DeleteFriend(MainUser, Group, input);
-            SetDATA(Group, MainUser);
-        } catch (IOException ex) {
+            List<String> GroupsOfUser = GU.GetMembers(MainUser,Group);
+            if(!GroupsOfUser.isEmpty())
+            {
+                try {
+                    // TODO add your handling code here:
+                    List<String> stockList = GU.GetMembers(MainUser, Group);
+                     if(!stockList.isEmpty())
+                    {
+                    String[] stockArr = new String[stockList.size()];
+                    stockArr = stockList.toArray(stockArr);
+                   
+                    String input = (String) JOptionPane.showInputDialog(null, "Choose",
+                            "Delete Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
+                    System.out.println(input);
+                    if(input !=null)
+                        MAAG.DeleteFriend(MainUser, Group, input);
+                    }
+                    SetDATA(Group, MainUser);
+                } catch (IOException ex) {
+                    Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
-       
     }//GEN-LAST:event_btnDELETEFriendsActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
@@ -206,19 +218,26 @@ public class ShowGroup extends javax.swing.JFrame {
 
     private void btnADDFriendsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnADDFriendsActionPerformed
         try {
-            // TODO add your handling code here:
-            List<String> stockList = GU.GetUniq(MA.allFriends(MainUser), (ArrayList) GU.GetMembers(MainUser, Group)) ;
-            
-            String[] stockArr = new String[stockList.size()];
-            stockArr = stockList.toArray(stockArr);
-
-            String input = (String) JOptionPane.showInputDialog(null, "Choose",
-                    "Add Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
-            System.out.println(input);
-            if(input!=null)
-                MAAG.AddNewFriend(MainUser, Group, input);
-            SetDATA(Group, MainUser);
-        } catch (IOException ex) {
+            if(!MA.allFriends(MainUser).isEmpty())
+            { try {
+                // TODO add your handling code here:
+                
+                List<String> stockList = GU.GetUniq(MA.allFriends(MainUser), (ArrayList) GU.GetMembers(MainUser, Group)) ;
+                
+                String[] stockArr = new String[stockList.size()];
+                stockArr = stockList.toArray(stockArr);
+                
+                String input = (String) JOptionPane.showInputDialog(null, "Choose",
+                        "Add Friend", JOptionPane.QUESTION_MESSAGE, null, stockArr,stockArr[0]); // Initial choice
+                System.out.println(input);
+                if(input!=null)
+                    MAAG.AddNewFriend(MainUser, Group, input);
+                SetDATA(Group, MainUser);
+            } catch (IOException ex) {
+                Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnADDFriendsActionPerformed

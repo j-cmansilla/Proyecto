@@ -128,7 +128,7 @@ public class ManejadorDeUsuarios {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                String [] credenciales = line.split("|");
+                String [] credenciales = line.split("\\|");
                 if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 1) {
                     scanner.close();
                     return 1;

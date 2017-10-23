@@ -343,10 +343,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
         // TODO add your handling code here:
-        REO reorganize = new REO();        
-        
+        REO reorganize = new REO();
         try {
-            reorganize.CheckForREO(MainUser.getUsuario());
+            reorganize.Reorganize(MainUser.getUsuario());
+            MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+            MAAG.ReoIndex(MainUser.getUsuario());
             
         } catch (IOException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
@@ -366,7 +367,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         try {
             if(UM.Main())
             {
-                this.hide();
+                //this.hide();
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);

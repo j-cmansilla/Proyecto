@@ -59,7 +59,6 @@ public class ChangeProfile extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Modify Profile");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N

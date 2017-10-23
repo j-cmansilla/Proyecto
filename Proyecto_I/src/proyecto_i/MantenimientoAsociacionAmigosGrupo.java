@@ -185,7 +185,7 @@ public class MantenimientoAsociacionAmigosGrupo {
         getdescBlock(NumberOfBlocks);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-        if(NumberOFUsers<=MaxPerBlock)
+        if(NumberOFUsers<MaxPerBlock)
         {
             int position = GUtilities.GetNumberofLines(DEFAULT_FOLDER_BLOCKS + "\\GRUPO" + NumberOfBlocks +".txt");
             String b = MainUser+"|"+Group+"|"+UserFriend+"|"+dateFormat.format(date) + "[America/Guatemala]|1";
@@ -367,8 +367,8 @@ public class MantenimientoAsociacionAmigosGrupo {
                 }
                 else//At the end or In the middle
                 {
-                    prevIndex = Integer.parseInt(prevDATAindex[0]);
-                    ChangeOneLine(prevIndex, prevDATAindex[0] +"|"+prevDATAindex[1]+"|"+prevDATAindex[2]+"|"+prevDATAindex[3]+"|"+prevDATAindex[4]+"|"+prevNext+"|"+prevDATAindex[6]);
+                    prevNext = Integer.parseInt(DATAindex[5]);
+                    ChangeOneLine(Integer.parseInt(prevDATAindex[0]), prevDATAindex[0] +"|"+prevDATAindex[1]+"|"+prevDATAindex[2]+"|"+prevDATAindex[3]+"|"+prevDATAindex[4]+"|"+prevNext+"|"+prevDATAindex[6]);
                 }
                 
                 ChangeOneLine(AIndex, DATAindex[0] +"|"+DATAindex[1]+"|"+DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]+"|"+DATAindex[5] +"|0");
@@ -377,6 +377,8 @@ public class MantenimientoAsociacionAmigosGrupo {
             }
             IndexScanner = new Scanner(Index);
             j++;
+            if(currentLine == null)
+                flag = false;
         }
         IndexScanner.close();
     }
@@ -387,14 +389,17 @@ public class MantenimientoAsociacionAmigosGrupo {
                 //Usuario  | grupo    | Usuario_amigo | Fecha_transaccion | estatus -> BLOCK
     public void ReoIndex(String MainUser) throws IOException
     {
+        File folder = new File(DEFAULT_FOLDER_BLOCKS);
+        if(folder.isDirectory() && folder.list().length != 0)
+        {
         getINDEXnumber();
         getdescBlock(1); //get max per block
         File source = new File(DEFAULT_INDEXGROUPS);
         File dest = new File(DEFAULT_TEMP);
-        FileUtils.copyDirectory(source, dest);
+        dest.createNewFile();
+        FileUtils.copyFile(source, dest);
         source.delete();
         source.createNewFile();
-        File folder = new File(DEFAULT_FOLDER_BLOCKS);
         FileUtils.cleanDirectory(folder); 
         setDescINDEX(MainUser,1,false);
         //****
@@ -417,8 +422,11 @@ public class MantenimientoAsociacionAmigosGrupo {
             }
             if(Next == 0)
                 flag = false;
+            Temp = new Scanner(dest);
         }
         Temp.close();
+        dest.delete();
+        }
     }
 }
    

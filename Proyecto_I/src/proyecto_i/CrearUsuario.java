@@ -72,7 +72,6 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Create User");
         setResizable(false);
 
@@ -377,6 +376,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(flagForADMIN)
         {
+            this.hide();
             Login regresar=new Login();
             regresar.show();
             

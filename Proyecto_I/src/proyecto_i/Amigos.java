@@ -177,8 +177,6 @@ public class Amigos extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 

@@ -52,8 +52,6 @@ public class REO {
             Reorganize(MainUser);
             return true;
         }
-        MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
-        MAAG.ReoIndex(MainUser);
         return false;
     }
     
