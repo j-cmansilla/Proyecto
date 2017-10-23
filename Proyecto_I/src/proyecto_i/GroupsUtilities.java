@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -130,4 +132,57 @@ public class GroupsUtilities {
             b.delete();
             new File(DEFAULT_TEMP).renameTo(new File(path));
     }
+     public List<String> GetGroups(String MainUser) throws FileNotFoundException
+     {
+        List<String> Groupslst = new ArrayList<>();
+        List<String> GroupslstAdmin = new ArrayList<>();
+        File Index = new File(DEFAULT_INDEXGROUPS);
+        Scanner IndexScanner = new Scanner(Index);
+        String currentLine = readLine(IndexScanner);
+        String [] DATAindex = new String[8];
+        while(currentLine!=null)
+        {
+            DATAindex = currentLine.split(Pattern.quote("|"));
+            if(Integer.parseInt(DATAindex[6]) == 1 && DATAindex[4].equals(MainUser))
+            {
+                Groupslst.add(DATAindex[3]);
+            }
+            if(Integer.parseInt(DATAindex[6]) == 1 && DATAindex[2].equals(MainUser))
+            {
+                GroupslstAdmin.add(DATAindex[3]);
+            }
+            currentLine = readLine(IndexScanner);
+        }
+        Set<String> hs = new HashSet<>();
+        hs.addAll(GroupslstAdmin);
+        GroupslstAdmin.clear();
+        GroupslstAdmin.addAll(hs);
+        for(int i =0; i<GroupslstAdmin.size();i++)
+        {
+            Groupslst.add(GroupslstAdmin.get(i));
+        }
+        IndexScanner.close();
+        return  Groupslst;
+     }
+     
+     public int GetMembersCount(String MainUser, String Group) throws FileNotFoundException
+     {
+        int k=0;
+        File Index = new File(DEFAULT_INDEXGROUPS);
+        Scanner IndexScanner = new Scanner(Index);
+        String currentLine = readLine(IndexScanner);
+        String [] DATAindex = new String[8];
+        while(currentLine!=null)
+        {        //  0          1          2   3   4          5                6
+                //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+            DATAindex = currentLine.split(Pattern.quote("|"));
+            if(Integer.parseInt(DATAindex[6]) == 1 && (DATAindex[2]+DATAindex[3]).equals(MainUser+Group))
+            {
+                k++;
+            }
+            currentLine = readLine(IndexScanner);
+        }
+        IndexScanner.close(); 
+        return k;
+     }
 }

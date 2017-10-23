@@ -156,6 +156,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jList1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jList1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jList1);
 
         txtUsuarioLogueado.setText("File");
@@ -286,7 +291,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     public void setFlagOptions(boolean fg) {
         this.FlagOptions = fg;   
     }
-    public void SetDATA()
+    public void SetDATA() throws FileNotFoundException
     {              //"C:\\MEIA\\FOTOS"
         if(!FlagOptions){
             //jButton2.enable(false);
@@ -302,8 +307,13 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jTextField4.setText(MainUser.getTelefono());
         jTextField5.setText(MainUser.getCorreo());
         jTextArea1.setText(MainUser.getDescripcion());
-                                   /// CAMBIAR ESTO ***********************************************
-        List<String> GroupsOfUser = new ArrayList<>(); // GET USER GROUPS *********************
+                                
+        setGroupslst();
+    }
+    public void setGroupslst() throws FileNotFoundException
+    {
+        GroupsUtilities GU = new GroupsUtilities();
+        List<String> GroupsOfUser = GU.GetGroups(MainUser.getUsuario());
         DefaultListModel model = new DefaultListModel();
             for(String f : GroupsOfUser) {
                 model.addElement(f);}
@@ -362,12 +372,16 @@ public class PerfilUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void btnGroups2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGroups2ActionPerformed
-        // TODO add your handling code here:
-       
-        Groups groups = new Groups();
-        groups.setGroupslst(MainUser.getUsuario());
-        //groups.setGroupslst("usuario1");
-        groups.show();
+        try {
+            // TODO add your handling code here:
+            
+            Groups groups = new Groups();
+            groups.setGroupslst(MainUser.getUsuario());
+            groups.show();
+            setGroupslst();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGroups2ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -412,6 +426,17 @@ public class PerfilUsuario extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jList1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jList1MouseClicked
+        try {
+            // TODO add your handling code here:
+            ShowMembers SM = new ShowMembers();
+            SM.SetDATA(jList1.getSelectedValue(),MainUser.getUsuario());
+            SM.show();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jList1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -450,16 +475,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         });
     }
-     private void valueChanged(ListSelectionEvent e) throws FileNotFoundException {
-        if (e.getValueIsAdjusting() == false) {
-
-            if ( jList1.getSelectedIndex() != -1) {
-                ShowMembers SM = new ShowMembers();
-                SM.SetDATA(jList1.getSelectedValue(),MainUser.getUsuario());
-                SM.show();
-            }
-        }
-    }
+     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGroups;
