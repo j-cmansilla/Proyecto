@@ -20,6 +20,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import org.apache.commons.io.FileUtils;
 
@@ -51,7 +53,7 @@ public class ManejadorDeAmigos {
         }
     }
     
-    public boolean updateBitacora(Usuario usuario, Usuario usuario_amigo) throws FileNotFoundException, IOException{
+    public boolean updateBitacora(Usuario usuario, Usuario usuario_amigo, int typeCase) throws FileNotFoundException, IOException{
         File desBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_LISTA_DIRECTORY);
         boolean isFull = false;
         REO objREO=new REO();
@@ -65,9 +67,15 @@ public class ManejadorDeAmigos {
         scanner = new Scanner(archivo);
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
-        String newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "0" + "|" + zdt.toString() + "|"+"usuario_transaccion"+"|"+"0"+System.getProperty("line.separator");
+        String newRequest = "";
+        if(typeCase == 0){
+            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "0" + "|" + zdt.toString() + "|"+"usuario_transaccion"+"|"+"0"+System.getProperty("line.separator");
+        }else if (typeCase == 1) {
+            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "1" + "|" + zdt.toString() + "|"+"usuario_transaccion"+"|"+"1"+System.getProperty("line.separator");
+        }
+        
         String update="";
-
+        int count = 0;
         if (!scanner.hasNextLine()) {
             update = usuario.getUsuario()+System.getProperty("line.separator")+usuario_amigo.getUsuario() + 
                     System.getProperty("line.separator") + zdt.toString() + System.getProperty("line.separator")+
@@ -108,6 +116,7 @@ public class ManejadorDeAmigos {
                         }                        
                     }  
                 }
+                count = Integer.parseInt(lista.get(3).toString()) + 1;
         }
         Writer writer = null;
             try {
@@ -119,17 +128,17 @@ public class ManejadorDeAmigos {
             } finally {
                 try {writer.close();} catch (IOException ex) {/*ignore*/}
             }
-            agregarEnApilo(isFull, newRequest);
+            agregarEnApilo(isFull, newRequest, count);
         return true;
     }
     
-    public void agregarEnApilo(boolean isFull, String request) throws IOException{
+    public void agregarEnApilo(boolean isFull, String request, int count) throws IOException{
         ArchivoSecuencial.crearArchivoBitacora(new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_LISTA_DIRECTORY));
       
         if (isFull) {
             ordenarMaster();
             Writer writer = null;
-            pasarDatosAlMaster(request.split("\\|")[0], request.split("\\|")[1], request.split("\\|")[3]);
+            pasarDatosAlMaster(request.split("\\|")[0], request.split("\\|")[1], count);
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(
                         new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BITACORA_LISTA_DIRECTORY), "utf-8"));
@@ -145,7 +154,7 @@ public class ManejadorDeAmigos {
         ArchivoSecuencial.cerrar();
     }
     
-    private boolean pasarDatosAlMaster(String userName, String friend_userName, String count) throws FileNotFoundException, IOException{
+    private boolean pasarDatosAlMaster(String userName, String friend_userName, int count) throws FileNotFoundException, IOException{
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
         
@@ -549,5 +558,30 @@ public class ManejadorDeAmigos {
             scanner.close();
         }
         return allRequests;        
+    }
+    
+    public void update(){
+        try {
+            ordenarMaster();
+            File requestsB = new File("C:\\MEIA\\BitacoraLista_Amigos.txt");
+            File tempFile = new File("C:\\MEIA\\TempBA.txt");
+            try {
+                tempFile.createNewFile();
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            String newFilePath = requestsB.getAbsolutePath();
+            Path path = Paths.get(requestsB.getAbsolutePath());
+            try {
+                Files.delete(path);
+                File newFile = new File(newFilePath);
+                FileUtils.moveFile(tempFile, newFile);
+            } catch (IOException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }                
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

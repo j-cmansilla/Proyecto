@@ -354,6 +354,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
         }
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         manejador.CloseSession();
+        ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+        objManejadorDeAmigos.update();
         this.hide();
         Login login = new Login();
         login.show();

@@ -220,7 +220,6 @@ public class Amigos extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 18)); // NOI18N
-        jLabel1.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -229,8 +228,8 @@ public class Amigos extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jToggleButton1)
@@ -291,7 +290,7 @@ public class Amigos extends javax.swing.JFrame {
                             Usuario actual=objUsuarios.getUserData(objUsuarios.getUserLogin());
                             Usuario result=objUsuarios.getUserData(username);
                             try {
-                                objAmigos.updateBitacora(actual, result);
+                                objAmigos.updateBitacora(actual, result, 0);
                             } catch (IOException ex) {
                                 Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -407,14 +406,23 @@ public class Amigos extends javax.swing.JFrame {
                 try {
                     jLabel1.setText(username + " - ");
                     ArrayList allUsers = objUsuarios.usersList();
-                    ArrayList restUsers = null;
+                    ArrayList restUsers = new ArrayList();
                     for (int i = 0; i < allUsers.size(); i++) {
                         if(!allUsers.get(i).toString().contains(username) && !objAmigos.areFriends(allUsers.get(i).toString(), username) && !objAmigos.doesRequestExists(allUsers.get(i).toString(), username)){
                             restUsers.add(allUsers.get(i));
                         }                  
                     }
-                    user1 = username;
-                    options = 5;
+                    if(restUsers.isEmpty()){
+                        JOptionPane.showMessageDialog(null, "There no possible matches for friends.");
+                    }else{
+                        model.setRowCount(0);
+                        for (int i = 0; i < restUsers.size(); i++) {
+                            model.addRow(new Object[]{restUsers.get(i).toString()});                
+                        }
+                        user1 = username;
+                        options = 5;
+                    }
+                    
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
                 }       
@@ -422,24 +430,31 @@ public class Amigos extends javax.swing.JFrame {
                 break;
             case 5:
                 user2 = username;
+                String text = jLabel1.getText();
+                text = text + user2;
+                jLabel1.setText(text);
                 int selection = JOptionPane.showConfirmDialog(null, "Do you want to make this two users friends? \n" + user1 + " - " + user2, "Confirmation", JOptionPane.YES_NO_OPTION);
                         if(selection==JOptionPane.YES_OPTION){
                             try {
-                                Usuario actual = objUsuarios.getUserData(objUsuarios.getUserLogin());
-                                Usuario result=objUsuarios.getUserData(username);
+                                Usuario actual = objUsuarios.getUserData(user1);
+                                Usuario result=objUsuarios.getUserData(user2);
                                 try {
-                                    objAmigos.updateBitacora(actual, result);
+                                    if(objAmigos.updateBitacora(actual, result, 1)){
+                                        ////////////////////////VERIFICAR/////////////////////////////
+                                        JOptionPane.showMessageDialog(null, text + " are now friends.");
+                                        this.setVisible(false);
+                                        this.dispose();
+                                    }
                                 } catch (IOException ex) {
                                     Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } catch (FileNotFoundException ex) {
                                 Logger.getLogger(Amigos.class.getName()).log(Level.SEVERE, null, ex);
-                            }                           
-
-                            ////////////////////////VERIFICAR/////////////////////////////
-                            JOptionPane.showMessageDialog(null, "The request to " + username + " has been sent.");
+                            }                        
+                                                        
+                        }else{
                             this.setVisible(false);
-                            this.dispose();                            
+                            this.dispose();
                         }
                 break;
 

@@ -5,11 +5,17 @@
  */
 package proyecto_i;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -43,6 +49,11 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel1.setText("USER:");
@@ -125,6 +136,12 @@ public class Login extends javax.swing.JFrame {
         txtPass.setText("");
         txtUser.setText("");
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+        objManejadorDeAmigos.update();
+    }//GEN-LAST:event_formWindowClosing
 
     private boolean casosDeLogin() throws FileNotFoundException, IOException{
         String user = txtUser.getText();
