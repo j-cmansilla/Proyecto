@@ -37,7 +37,6 @@ public class GroupsUtilities {
         Scanner LoogbookScanner = new Scanner(Loogbook);
         String[]DATA;
         String currentline = readLine(MasterScanner);
-        ManejadorDeUsuarios MU = new ManejadorDeUsuarios();
         while(currentline!= null)
         {
             DATA = currentline.split(Pattern.quote("|"));
@@ -107,6 +106,25 @@ public class GroupsUtilities {
                 }
             }
         return (ArrayList) RES;
+    }
+    public List<String> GetUnique(List<String> A, List<String> B)
+    {
+        List<String> Temp = new ArrayList<String>();
+        String [] DATAindex = new String[8];
+
+        for(int i =0; i< B.size(); i++)
+        {
+             DATAindex = B.get(i).split(Pattern.quote(" Desc: "));
+             Temp.add(DATAindex[0]);
+        }
+        
+            for(int j =0; j< Temp.size(); j++)
+            {
+                if(!A.contains(Temp.get(j)))
+                    A.add(Temp.get(j));
+            }
+        
+        return A;
     }
     
     public void CleanEmptySpace(String path) throws FileNotFoundException, IOException

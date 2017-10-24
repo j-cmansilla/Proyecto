@@ -329,7 +329,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     public void setGroupslst() throws FileNotFoundException
     {                          
         GroupsUtilities GU = new GroupsUtilities(); //AGREGAR GRUPOS VACIOS *****************************************
-        List<String> GroupsOfUser = GU.GetGroups(MainUser.getUsuario());
+        List<String> GroupsOfUser = GU.GetUnique(GU.GetGroups(MainUser.getUsuario()),GU.GetUserGroupsAdministrate(MainUser.getUsuario()));
         DefaultListModel model = new DefaultListModel();
             for(String f : GroupsOfUser) {
                 model.addElement(f);}
