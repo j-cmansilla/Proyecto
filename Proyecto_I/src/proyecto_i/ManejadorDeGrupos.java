@@ -416,13 +416,20 @@ public class ManejadorDeGrupos {
          // Cuando sean archivos, no es necesario que el master tenga el 
          // tamaño de la bitacora 
         //Usamos un bucle anidado, saldra cuando este ordenado el array
+        ArrayList<String> newList = new ArrayList<String>();
+        for (int i = 0; i < lista.size(); i++) {
+            String [] separador = lista.get(i).toString().split("\\|");
+            if (separador[6].equals("1")) {
+                newList.add(lista.get(i).toString());
+            }
+        }
         while(!ordenado){
-            for(int i=0;i<lista.size()-1;i++){
-                if (lista.get(i).toString().split("\\|")[0].compareTo(lista.get(i+1).toString().split("\\|")[0])>0){
+            for(int i=0;i<newList.size()-1;i++){
+                if (newList.get(i).toString().split("\\|")[0].compareTo(newList.get(i+1).toString().split("\\|")[0])>0){
                     //Intercambiamos valores
-                    String aux=lista.get(i).toString();
-                    lista.set(i, lista.get(i+1).toString());
-                    lista.set(i+1, aux);
+                    String aux=newList.get(i).toString();
+                    newList.set(i, newList.get(i+1).toString());
+                    newList.set(i+1, aux);
                     //indicamos que hay un cambio
                     cuentaIntercambios++;
                 }
@@ -434,7 +441,7 @@ public class ManejadorDeGrupos {
             //Inicializamos la variable de nuevo para que empiece a contar de nuevo
             cuentaIntercambios=0;
         }
-        llenarMaster(lista);
+        llenarMaster(newList);
     }
     
     private void llenarMaster(ArrayList lista){
