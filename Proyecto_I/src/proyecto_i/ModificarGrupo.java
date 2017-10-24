@@ -6,6 +6,7 @@
 package proyecto_i;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -150,13 +151,19 @@ public class ModificarGrupo extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         ManejadorDeGrupos manejador = new ManejadorDeGrupos();
+        ManejadorDeUsuarios manejadorU = new ManejadorDeUsuarios();
         try {
-            manejador.deleteGroup(editedGroup);
+            //manejador.deleteGroup(editedGroup);
+            String user = manejadorU.getUserLogin(); 
+            String group = manejador.getGroupEdited().split("\\|")[0];
             JOptionPane.showMessageDialog(null, "Group deleted!");
             GroupsUtilities GU = new GroupsUtilities();
+            GU.DeleteGroup(user, group);
             //GU.( <MainUser> ,<Group> ); // LLENAR ESTO PLS
             this.hide();
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(ModificarGrupo.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(ModificarGrupo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
