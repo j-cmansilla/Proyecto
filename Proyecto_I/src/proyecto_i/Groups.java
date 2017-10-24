@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -331,6 +332,10 @@ public class Groups extends javax.swing.JFrame {
             // TODO add your handling code here:
             ShowGroup SG = new ShowGroup();
             SG.SetDATA(jList1.getSelectedValue(),MAINUSER);
+            ManejadorDeGrupos manejador = new ManejadorDeGrupos();
+            String[] s = jList1.getSelectedValue().split(Pattern.quote(" Desc: "));
+            manejador.setGroupToEdit(s[0], MAINUSER);
+            manejador.updateMembers();
             SG.show();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Groups.class.getName()).log(Level.SEVERE, null, ex);

@@ -66,6 +66,18 @@ public class ManejadorDeGrupos {
         }
     }
     
+    public void updateMembers() throws FileNotFoundException{
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        String user = manejador.getUserLogin();
+        String group = getGroupEdited();
+        String [] datos = group.split("\\|");
+        GroupsUtilities utilidades = new GroupsUtilities();
+        int miembros = utilidades.GetMembersCount(user, datos[0]);
+        miembros++;
+        
+        //String newGroup = user+"|"+group+"|"
+    }
+    
     private void updateGroupDescriptor(String userName) throws FileNotFoundException{
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
