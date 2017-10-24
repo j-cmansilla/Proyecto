@@ -101,6 +101,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         txtUsuarioLogueado = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -185,6 +186,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         });
         txtUsuarioLogueado.add(jMenu6);
+
+        jMenuItem4.setText("Refresh");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        txtUsuarioLogueado.add(jMenuItem4);
 
         jMenuBar2.add(txtUsuarioLogueado);
 
@@ -474,6 +483,24 @@ public class PerfilUsuario extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+         try {
+            // TODO add your handling code here:
+            this.hide();
+            ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+            Usuario usuario = manejador.getUserData(MainUser.getUsuario());
+            PerfilUsuario perfil = new PerfilUsuario();
+            perfil.setUsuario(usuario);
+            perfil.SetDATA();
+            perfil.show();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -531,6 +558,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
