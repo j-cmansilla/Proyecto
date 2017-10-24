@@ -66,6 +66,49 @@ public class ManejadorDeGrupos {
         }
     }
     
+    private void updateGroupDescriptor(String userName) throws FileNotFoundException{
+        ZoneId zonedId = ZoneId.of( "America/Guatemala" );
+        ZonedDateTime zdt = ZonedDateTime.now( zonedId );
+        File descriptorDelMaster = new File(DEFAULT_DES_DIR+DEFAULT_GROUP_DIRECTORY);
+        if (!descriptorDelMaster.exists()) return;
+        Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_GROUP_DIRECTORY);
+        File archivo = new File(scanner.nextLine());
+        scanner = new Scanner(archivo);
+        String newDescriptor = "";
+        if (!scanner.hasNextLine()){
+            newDescriptor = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"Sin modificacion"+System.getProperty("line.separator")+"|"+System.getProperty("line.separator")+"userName-group"+System.getProperty("line.separator")+"Ascendente"+System.getProperty("line.separator")+"1"+System.getProperty("line.separator")+"0";
+        }else{
+            ArrayList lista = new ArrayList();
+            while(scanner.hasNextLine()){
+                lista.add(scanner.nextLine());
+            }
+            scanner.close();
+            lista.set(0, userName);
+            lista.set(2, zdt.toString());
+            int count = Integer.parseInt(lista.get(7).toString());
+            int previousCount = Integer.parseInt(lista.get(6).toString());
+            previousCount--;
+            count++;
+            lista.set(7, count);
+            lista.set(6, previousCount);
+            for (int i = 0; i < lista.size(); i++) {
+                newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
+            }
+            //reorganizarMaster();
+        } 
+        Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_GROUP_DIRECTORY), "utf-8"));
+                writer.write(newDescriptor);
+                return;
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+    }
+    
     private void reWriteMaster(ArrayList master){
         String newMaster = "";
         for (int i = 0; i < master.size(); i++) {
@@ -184,6 +227,7 @@ public class ManejadorDeGrupos {
             if (key.equals(grupoSplited[0]+grupoSplited[1])) {
                 listaMaster.set(i, newGroup);
                 reWriteMaster(listaMaster);
+                updateGroupDescriptor(manejador.getUserLogin());
                 return;
             }
         }
@@ -319,7 +363,8 @@ public class ManejadorDeGrupos {
         scanner = new Scanner(archivo);
         String newDescriptor = "";
         if (!scanner.hasNextLine()){
-            newDescriptor = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"Sin modificacion"+System.getProperty("line.separator")+"|"+System.getProperty("line.separator")+"userName-group"+System.getProperty("line.separator")+"Ascendente"+System.getProperty("line.separator")+"1"+System.getProperty("line.separator")+"0";
+            ArrayList listaGrupos = retornarListaMaster();
+            newDescriptor = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"Sin modificacion"+System.getProperty("line.separator")+"|"+System.getProperty("line.separator")+"userName-group"+System.getProperty("line.separator")+"Ascendente"+System.getProperty("line.separator")+listaGrupos.size()+System.getProperty("line.separator")+"0";
         }else{
             ArrayList lista = new ArrayList();
             while(scanner.hasNextLine()){
@@ -330,6 +375,7 @@ public class ManejadorDeGrupos {
             lista.set(2, zdt.toString());
             ArrayList listaGrupos = retornarListaMaster();
             lista.set(6, listaGrupos.size());
+            lista.set(7, "0");
             for (int i = 0; i < lista.size(); i++) {
                 newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
             }
