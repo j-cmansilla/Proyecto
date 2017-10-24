@@ -42,7 +42,6 @@ public class ShowGroup extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         btnDELETEFriends = new javax.swing.JButton();
-        btnEdit = new javax.swing.JButton();
         btnexit = new javax.swing.JButton();
         btnADDFriends = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -65,14 +64,6 @@ public class ShowGroup extends javax.swing.JFrame {
         btnDELETEFriends.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDELETEFriendsActionPerformed(evt);
-            }
-        });
-
-        btnEdit.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btnEdit.setText("Edit");
-        btnEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEditActionPerformed(evt);
             }
         });
 
@@ -106,7 +97,6 @@ public class ShowGroup extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(btnDELETEFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnexit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnADDFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(18, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -127,11 +117,9 @@ public class ShowGroup extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnADDFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
+                        .addGap(38, 38, 38)
                         .addComponent(btnDELETEFriends, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
+                        .addGap(35, 35, 35)
                         .addComponent(btnexit, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1))
                 .addContainerGap(26, Short.MAX_VALUE))
@@ -198,18 +186,6 @@ public class ShowGroup extends javax.swing.JFrame {
             Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnDELETEFriendsActionPerformed
-
-    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-
-         try {
-            // TODO add your handling code here:
-            //MODIFICAR enviar datos 
-            ModificarGrupo modificar = new ModificarGrupo();
-            modificar.show();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnexitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexitActionPerformed
         // TODO add your handling code here:
@@ -280,7 +256,6 @@ public class ShowGroup extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnADDFriends;
     private javax.swing.JButton btnDELETEFriends;
-    private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnexit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
