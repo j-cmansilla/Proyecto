@@ -31,6 +31,8 @@ public class UserMenu {
         this.User = user;
     }
     public boolean FLAGDEactive = true;
+    
+    public boolean  flagHideProfile = false;
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver funcion en la ultima version ********************************************** 
     public boolean Main() throws FileNotFoundException, IOException
@@ -52,6 +54,7 @@ public class UserMenu {
             if(input.equals(choices[0])){
                 ChangeProfile CP2 = new ChangeProfile();
                 CP2.show();
+                flagHideProfile = true;
                 return true;
             }
             else if (input.equals(choices[1]))

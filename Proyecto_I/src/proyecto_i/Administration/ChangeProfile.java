@@ -14,6 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto_i.CrearUsuario;
+import static proyecto_i.MD5.crypt;
 import proyecto_i.ManejadorDeUsuarios;
 import proyecto_i.PerfilUsuario;
 import proyecto_i.Usuario;
@@ -59,6 +60,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Modify Profile");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
@@ -328,7 +330,7 @@ public class ChangeProfile extends javax.swing.JFrame {
         }
         
         jTextField1.setText(Result(CheckPass(jPasswordField1.getText())) + "\nPuntuación: " +CheckPass(jPasswordField1.getText()));
-        Password = jPasswordField1.getText();
+        Password = crypt(jPasswordField1.getText());
         jProgressBar1.setValue(pBar);
         return  true;
      }

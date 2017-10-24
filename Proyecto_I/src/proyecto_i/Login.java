@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import org.apache.commons.io.FileUtils;
+import static proyecto_i.MD5.crypt;
 
 /**
  *
@@ -145,7 +146,7 @@ public class Login extends javax.swing.JFrame {
 
     private boolean casosDeLogin() throws FileNotFoundException, IOException{
         String user = txtUser.getText();
-        String pass = txtPass.getText();
+        String pass = crypt(txtPass.getText());
         if (user.equals("") && pass.equals("")) return false;
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         Usuario usuario;
