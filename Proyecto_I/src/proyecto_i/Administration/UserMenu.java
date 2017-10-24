@@ -12,8 +12,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import proyecto_i.CrearUsuario;
 import proyecto_i.Login;
+import proyecto_i.ManejadorDeAmigos;
 import proyecto_i.ManejadorDeUsuarios;
+import proyecto_i.MantenimientoAsociacionAmigosGrupo;
 import proyecto_i.PerfilUsuario;
+import proyecto_i.REO;
 import proyecto_i.Usuario;
 import proyecto_i.Utilities;
 
@@ -36,7 +39,7 @@ public class UserMenu {
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
         Usuario MainUser = MDU.getUserData(User);
         Utilities Utilidades = new Utilities();
-        String[] chAdmin = { "Modify Profile", "Deactivate Account", "Sign in New User", "Search User", "Deactivate a User", "Modify Max. Number to Re-organize", "Back-Up" };
+        String[] chAdmin = { "Modify Profile", "Deactivate Account", "Sign in New User", "Search User", "Deactivate a User", "Modify Max. Number to Re-organize", "Back-Up" ,"Reorganize"};
         String[] choices = { "Modify Profile", "Deactivate Account", };
         
         if(MainUser.Rol()==1)
@@ -139,6 +142,17 @@ public class UserMenu {
 
                Utilidades.createBackUp((String) result, User);
             }
+            else if(input.equals(choices[7]))
+            {
+                REO reorganize = new REO();
+                reorganize.Reorganize(MainUser.getUsuario());
+                MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+                MAAG.ReoIndex(MainUser.getUsuario());
+                ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+                objManejadorDeAmigos.update();
+       
+            }
+            
             return  false;
     }
  }

@@ -470,8 +470,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         fc.setFileFilter(filtro);
         int respuesta = fc.showOpenDialog(this);
         File archivoElegido = fc.getSelectedFile();
-        if (archivoElegido == null) {
-            
+        if (archivoElegido == null) { 
         }else{
             lblPicture.setText(archivoElegido.getPath());
             JOptionPane.showMessageDialog(null, "Picture selected!");
