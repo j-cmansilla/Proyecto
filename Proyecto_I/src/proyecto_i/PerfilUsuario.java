@@ -380,6 +380,10 @@ public class PerfilUsuario extends javax.swing.JFrame {
             {
                 //this.hide();
             }
+            if(UM.flagHideProfile)
+            {
+                this.hide();
+            }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

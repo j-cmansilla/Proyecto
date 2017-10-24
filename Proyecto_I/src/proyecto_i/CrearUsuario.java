@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto_i.Administration.ChangeProfile;
+import static proyecto_i.MD5.crypt;
 //import org.apache.commons.io.FileUtils;
 
 /**
@@ -405,7 +406,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
         
-        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), txtPass.getText(),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
+        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), crypt(txtPass.getText()),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
         manejador.llenarBitacora(txtUser.getText(), zdt, usuario);
         //String user = txtUser.getText()+"|"+txtName.getText()+"|"+txtSecondName.getText()+"|"+txtPass.getText()+"|"+"-1"+"|"+txtDate.getDate().toString()+"|"+txtEmail.getText()+"|"+txtPhone.getText()+"|"+SaveImageMEIA(lblPicture.getText())+"|"+txtDescription.getText()+"|"+"1";
         //manejador.llenarBitacora(usuario,zdt);
@@ -470,8 +471,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         fc.setFileFilter(filtro);
         int respuesta = fc.showOpenDialog(this);
         File archivoElegido = fc.getSelectedFile();
-        if (archivoElegido == null) {
-            
+        if (archivoElegido == null) { 
         }else{
             lblPicture.setText(archivoElegido.getPath());
             JOptionPane.showMessageDialog(null, "Picture selected!");
