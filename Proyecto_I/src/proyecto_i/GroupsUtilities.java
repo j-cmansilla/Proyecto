@@ -55,7 +55,6 @@ public class GroupsUtilities {
         }
         return Groups;
     }
-     private final String DEFAULT_INDEXGROUPS = "C:\\MEIA\\IndiceGrupos.txt";
     //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
     public List<String> GetMembers(String MainUser, String GroupName) throws FileNotFoundException
     {
@@ -202,5 +201,38 @@ public class GroupsUtilities {
         }
         IndexScanner.close(); 
         return k;
+     }
+     //***************************************************
+     private final String DEFAULT_INDEXGROUPS = "C:\\MEIA\\IndiceGrupos.txt";
+     
+     public void DeleteGroup(String MainUser, String Group) throws FileNotFoundException, IOException
+     {
+         MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+         List<String> Temp = new ArrayList<>();
+         File source = new File(DEFAULT_INDEXGROUPS);
+         String[] DATAindex;
+        try (Scanner IndexsScanner = new Scanner(source)) {
+            String currentLine = readLine(IndexsScanner);
+            DATAindex = new String[8];
+            //  0          1          2   3   4          5                6
+            //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+            while(currentLine!= null)
+            {
+                DATAindex = currentLine.split(Pattern.quote("|"));
+                
+                if((DATAindex[2]+DATAindex[3]).equals(MainUser+Group))
+                {
+                    Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
+                }
+            }
+            IndexsScanner.close();
+        }
+        
+         for(int i =0; i<Temp.size();i++)
+         {
+           DATAindex = Temp.get(i).split(Pattern.quote("|"));
+           MAAG.DeleteFriend(DATAindex[0], DATAindex[1], DATAindex[2]);
+         }
+         
      }
 }
