@@ -204,27 +204,29 @@ public class GroupsUtilities {
      }
      //***************************************************
      private final String DEFAULT_INDEXGROUPS = "C:\\MEIA\\IndiceGrupos.txt";
-     private MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
      
      public void DeleteGroup(String MainUser, String Group) throws FileNotFoundException, IOException
      {
-         List<String> Temp = new ArrayList<String>();
+         MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+         List<String> Temp = new ArrayList<>();
          File source = new File(DEFAULT_INDEXGROUPS);
-         Scanner IndexsScanner = new Scanner(source);
-         String currentLine = readLine(IndexsScanner);
-         String [] DATAindex = new String[8];
-                 //  0          1          2   3   4          5                6
-                //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
-         while(currentLine!= null)
-         {
-             DATAindex = currentLine.split(Pattern.quote("|"));
-             
-             if((DATAindex[2]+DATAindex[3]).equals(MainUser+Group))
-             {
-                 Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
-             }
-         }
-         IndexsScanner.close();
+         String[] DATAindex;
+        try (Scanner IndexsScanner = new Scanner(source)) {
+            String currentLine = readLine(IndexsScanner);
+            DATAindex = new String[8];
+            //  0          1          2   3   4          5                6
+            //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+            while(currentLine!= null)
+            {
+                DATAindex = currentLine.split(Pattern.quote("|"));
+                
+                if((DATAindex[2]+DATAindex[3]).equals(MainUser+Group))
+                {
+                    Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
+                }
+            }
+            IndexsScanner.close();
+        }
         
          for(int i =0; i<Temp.size();i++)
          {
