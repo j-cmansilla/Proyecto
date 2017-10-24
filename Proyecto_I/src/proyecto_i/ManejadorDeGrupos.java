@@ -328,6 +328,8 @@ public class ManejadorDeGrupos {
             scanner.close();
             lista.set(0, userName);
             lista.set(2, zdt.toString());
+            ArrayList listaGrupos = retornarListaMaster();
+            lista.set(6, listaGrupos.size());
             for (int i = 0; i < lista.size(); i++) {
                 newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
             }
@@ -419,7 +421,7 @@ public class ManejadorDeGrupos {
         ArrayList<String> newList = new ArrayList<String>();
         for (int i = 0; i < lista.size(); i++) {
             String [] separador = lista.get(i).toString().split("\\|");
-            if (separador[6].equals("1")) {
+            if (separador[5].equals("1")) {
                 newList.add(lista.get(i).toString());
             }
         }
