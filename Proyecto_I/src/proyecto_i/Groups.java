@@ -335,7 +335,6 @@ public class Groups extends javax.swing.JFrame {
             ManejadorDeGrupos manejador = new ManejadorDeGrupos();
             String[] s = jList1.getSelectedValue().split(Pattern.quote(" Desc: "));
             manejador.setGroupToEdit(s[0], MAINUSER);
-            manejador.updateMembers();
             SG.show();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Groups.class.getName()).log(Level.SEVERE, null, ex);

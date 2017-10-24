@@ -178,6 +178,8 @@ public class ShowGroup extends javax.swing.JFrame {
                         MAAG.DeleteFriend(MainUser, Group, input);
                     }
                     SetDATA(Group, MainUser);
+                    ManejadorDeGrupos manejador = new ManejadorDeGrupos();
+                    manejador.quitMembers();
                 } catch (IOException ex) {
                     Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -209,6 +211,8 @@ public class ShowGroup extends javax.swing.JFrame {
                 if(input!=null)
                     MAAG.AddNewFriend(MainUser, Group, input);
                 SetDATA(Group, MainUser);
+                ManejadorDeGrupos manejador = new ManejadorDeGrupos();
+                manejador.updateMembers();
             } catch (IOException ex) {
                 Logger.getLogger(ShowGroup.class.getName()).log(Level.SEVERE, null, ex);
             }

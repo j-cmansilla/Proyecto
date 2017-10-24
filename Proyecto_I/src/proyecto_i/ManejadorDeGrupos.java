@@ -69,11 +69,78 @@ public class ManejadorDeGrupos {
     public void updateMembers() throws FileNotFoundException{
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         String user = manejador.getUserLogin();
-        String group = getGroupEdited();
+        String group = getGroupEdited().split("\\|")[0];
         String [] datos = group.split("\\|");
         GroupsUtilities utilidades = new GroupsUtilities();
         int miembros = utilidades.GetMembersCount(user, datos[0]);
-        miembros++;
+        ArrayList listaMaster = retornarListaMaster();
+        ArrayList listaBitacora = retornarListaBitacora();
+        for (int i = 0; i < listaMaster.size(); i++) {
+            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
+            if (grupoSplited[0].equals(user) && grupoSplited[1].equals(group)) {
+                grupoSplited[3] = Integer.toString(miembros);
+                String newGroup = "";
+                for (int j = 0; j < grupoSplited.length; j++) {
+                    newGroup = newGroup+grupoSplited[j]+"|";
+                }
+                listaMaster.set(i, newGroup);
+                reWriteMaster(listaMaster);
+                return;
+            }
+        }
+        for (int i = 0; i < listaBitacora.size(); i++) {
+            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
+            if (grupoSplited[0].equals(user) && grupoSplited[1].equals(group)) {
+                grupoSplited[3] = Integer.toString(miembros);
+                String newGroup = "";
+                for (int j = 0; j < grupoSplited.length; j++) {
+                    newGroup = newGroup+grupoSplited[j]+"|";
+                }
+                listaBitacora.set(i, newGroup);
+                reWriteBitacora(listaBitacora);
+                return;
+            }
+        }
+        
+        //String newGroup = user+"|"+group+"|"
+    }
+    
+    public void quitMembers() throws FileNotFoundException{
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        String user = manejador.getUserLogin();
+        String group = getGroupEdited().split("\\|")[0];
+        String [] datos = group.split("\\|");
+        GroupsUtilities utilidades = new GroupsUtilities();
+        int miembros = utilidades.GetMembersCount(user, datos[0]);
+        miembros--;
+        ArrayList listaMaster = retornarListaMaster();
+        ArrayList listaBitacora = retornarListaBitacora();
+        for (int i = 0; i < listaMaster.size(); i++) {
+            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
+            if (grupoSplited[0].equals(user) && grupoSplited[1].equals(group)) {
+                grupoSplited[3] = Integer.toString(miembros);
+                String newGroup = "";
+                for (int j = 0; j < grupoSplited.length; j++) {
+                    newGroup = newGroup+grupoSplited[j]+"|";
+                }
+                listaMaster.set(i, newGroup);
+                reWriteMaster(listaMaster);
+                return;
+            }
+        }
+        for (int i = 0; i < listaBitacora.size(); i++) {
+            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
+            if (grupoSplited[0].equals(user) && grupoSplited[1].equals(group)) {
+                grupoSplited[3] = Integer.toString(miembros);
+                String newGroup = "";
+                for (int j = 0; j < grupoSplited.length; j++) {
+                    newGroup = newGroup+grupoSplited[j]+"|";
+                }
+                listaBitacora.set(i, newGroup);
+                reWriteBitacora(listaBitacora);
+                return;
+            }
+        }
         
         //String newGroup = user+"|"+group+"|"
     }
