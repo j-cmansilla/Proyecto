@@ -12,8 +12,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -43,6 +45,32 @@ public class REO {
     private int MaxforReorganize = 1;
     private String CreationDate;
     private int ActiveAccounts = 0;
+    
+    public void ReoGhost() throws FileNotFoundException, IOException
+    {
+        File usuarios = new File(USER_PATH);
+        List<String> Temp = new ArrayList<>();
+        Scanner UsuarioScanner = new Scanner(usuarios);
+        String currentLine = readLine(UsuarioScanner);
+        while (currentLine != null) {            
+            String [] credenciales = currentLine.split(Pattern.quote("|"));
+            if(Integer.parseInt(credenciales[10])!= 0)
+            {
+                Temp.add(currentLine);
+            }
+        }
+        UsuarioScanner.close();
+        FileWriter WFW = new FileWriter(USER_PATH, true);
+        PrintWriter writer = new PrintWriter(USER_PATH);
+        writer.print("");
+        writer.close();
+        for (int i = 0; i < Temp.size(); i++) {
+            Files.write(Paths.get(USER_PATH), Temp.get(i).getBytes(), StandardOpenOption.APPEND);
+        }
+        
+        
+        
+    }
     
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
     {
