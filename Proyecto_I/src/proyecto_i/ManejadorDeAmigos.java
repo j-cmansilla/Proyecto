@@ -69,9 +69,9 @@ public class ManejadorDeAmigos {
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
         String newRequest = "";
         if(typeCase == 0){
-            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "0" + "|" + zdt.toString() + "|"+"usuario_transaccion"+"|"+"0"+System.getProperty("line.separator");
+            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "0" + "|" + zdt.toString() + "|"+usuario.getUsuario()+"|"+"0"+System.getProperty("line.separator");
         }else if (typeCase == 1) {
-            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "1" + "|" + zdt.toString() + "|"+"usuario_transaccion"+"|"+"1"+System.getProperty("line.separator");
+            newRequest = usuario.getUsuario()+"|"+usuario_amigo.getUsuario() + "|" + "1" + "|" + zdt.toString() + "|"+usuario.getUsuario()+"|"+"1"+System.getProperty("line.separator");
         }
         
         String update="";
