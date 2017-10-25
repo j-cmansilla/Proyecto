@@ -214,7 +214,7 @@ public class GroupsUtilities {
          File source = new File(DEFAULT_INDEXGROUPS);
          String[] DATAindex = new String[8];
          Scanner IndexScanner = new Scanner(source);
-//            String currentLine = readLine(IndexScanner);
+            //String currentLine = readLine(IndexScanner);
             //  0          1          2   3   4          5                6
             //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
             while(IndexScanner.hasNextLine())
@@ -224,7 +224,7 @@ public class GroupsUtilities {
                 {
                     Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
                 }
-//                currentLine = readLine(IndexScanner);
+                //currentLine = readLine(IndexScanner);
             }
             IndexScanner.close();
         
