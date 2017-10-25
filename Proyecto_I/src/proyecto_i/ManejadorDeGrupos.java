@@ -293,7 +293,7 @@ public class ManejadorDeGrupos {
         //Buscar en bitacora
         for (int i = 0; i < listaBitacora.size(); i++) {
             String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+            if (key.equals(grupoSplited[0]+grupoSplited[1]) && grupoSplited[5].equals("1")) {
                 listaBitacora.set(i, newGroup);
                 reWriteBitacora(listaBitacora);
                 updateBitacora();
@@ -302,7 +302,7 @@ public class ManejadorDeGrupos {
         }
         for (int i = 0; i < listaMaster.size(); i++) {
             String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1])) {
+            if (key.equals(grupoSplited[0]+grupoSplited[1]) && grupoSplited[5].equals("1")) {
                 listaMaster.set(i, newGroup);
                 reWriteMaster(listaMaster);
                 updateGroupDescriptor(manejador.getUserLogin());
