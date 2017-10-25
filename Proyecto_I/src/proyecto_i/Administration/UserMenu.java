@@ -167,6 +167,7 @@ public class UserMenu {
                 MAAG.ReoIndex(MainUser.getUsuario());
                 ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
                 objManejadorDeAmigos.update();
+                reorganize.ReoGhost();
        
             }
             
