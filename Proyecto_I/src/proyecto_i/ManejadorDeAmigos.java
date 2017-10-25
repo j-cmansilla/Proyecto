@@ -560,10 +560,22 @@ public class ManejadorDeAmigos {
         return allRequests;        
     }
     
-    public void update(){
+    public void update() throws IOException{
         try {
             ordenarMaster();
-            File requestsB = new File("C:\\MEIA\\BitacoraLista_Amigos.txt");
+            
+            File requestsB = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_LISTA_DIRECTORY);            
+            Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BITACORA_LISTA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            ArrayList lista = new ArrayList();
+            while(scanner.hasNextLine()){
+                lista.add(scanner.nextLine());
+            }
+            scanner.close();
+            int count=Integer.parseInt(lista.get(3).toString());
+            pasarDatosAlMaster(lista.get(0).toString(), lista.get(1).toString(), count);
+            
             File tempFile = new File("C:\\MEIA\\TempBA.txt");
             try {
                 tempFile.createNewFile();
