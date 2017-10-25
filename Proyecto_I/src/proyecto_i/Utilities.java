@@ -41,7 +41,17 @@ public class Utilities {
     private final String DEFAULT_DES_DIR = "C:\\MEIA\\Desc_";
     private final String DEFAULT_BITACORA_DIRECTORY = "Bitacora.txt";
 
-    
+    public void DoAllREO(String MainUser) throws IOException {
+        REO reorganize = new REO();
+        reorganize.CheckForREO(MainUser); 
+        reorganize.Reorganize(MainUser);
+        MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+        MAAG.ReoIndex(MainUser);
+        reorganize.ReoGhost();  
+        ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+        objManejadorDeAmigos.update();
+
+    }
     public void createBackUp(String newdirectory, String user){
         try 
         {

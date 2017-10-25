@@ -573,7 +573,7 @@ public class ManejadorDeAmigos {
                 lista.add(scanner.nextLine());
             }
             scanner.close();
-            int count=Integer.parseInt(lista.get(3).toString());
+            int count=Integer.parseInt(lista.get(3).toString()); //FIX this **********
             pasarDatosAlMaster(lista.get(0).toString(), lista.get(1).toString(), count);
             
             File tempFile = new File("C:\\MEIA\\TempBA.txt");

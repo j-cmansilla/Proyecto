@@ -353,27 +353,32 @@ public class PerfilUsuario extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu6ActionPerformed
 
     private void jMenu6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu6MouseClicked
-        // TODO add your handling code here:
-        REO reorganize = new REO();
         try {
+            // TODO add your handling code here:
+            REO reorganize = new REO();
+            
             reorganize.Reorganize(MainUser.getUsuario());
             MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
             MAAG.ReoIndex(MainUser.getUsuario());
             
-        } catch (IOException ex) {
-            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        manejador.CloseSession();
-        ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
-        try {
+            
+            ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+            manejador.CloseSession();
+            ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+            reorganize.ReoGhost();
+            
+            
+            this.hide();
+            Login login = new Login();
+            login.show();
+            
             objManejadorDeAmigos.update();
+            
+            
         } catch (IOException ex) {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.hide();
-        Login login = new Login();
-        login.show();
+        
         
     }//GEN-LAST:event_jMenu6MouseClicked
 

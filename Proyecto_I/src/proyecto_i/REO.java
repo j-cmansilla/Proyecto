@@ -56,11 +56,11 @@ public class REO {
             String [] credenciales = currentLine.split(Pattern.quote("|"));
             if(Integer.parseInt(credenciales[10])!= 0)
             {
-                Temp.add(currentLine);
+                Temp.add(System.lineSeparator()+ currentLine);
             }
+            currentLine = readLine(UsuarioScanner);
         }
         UsuarioScanner.close();
-        FileWriter WFW = new FileWriter(USER_PATH, true);
         PrintWriter writer = new PrintWriter(USER_PATH);
         writer.print("");
         writer.close();
@@ -68,8 +68,10 @@ public class REO {
             Files.write(Paths.get(USER_PATH), Temp.get(i).getBytes(), StandardOpenOption.APPEND);
         }
         
-        
-        
+        GroupsUtilities GU = new GroupsUtilities();
+        GU.CleanEmptySpace(USER_PATH);
+        ChangeDESCBIT();
+
     }
     
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
