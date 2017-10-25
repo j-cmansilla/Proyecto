@@ -235,5 +235,63 @@ public class GroupsUtilities {
            MAAG.DeleteFriend(DATAindex[0], DATAindex[1], DATAindex[2]);
          }
      }
+     public void DeleteUser(String User) throws FileNotFoundException, IOException
+     {
+         MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+         List<String> Temp = new ArrayList<>();
+         File source = new File(DEFAULT_INDEXGROUPS);
+         String[] DATAindex = new String[8];
+         Scanner IndexScanner = new Scanner(source);
+            //String currentLine = readLine(IndexScanner);
+            //  0          1          2   3   4          5                6
+            //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+            while(IndexScanner.hasNextLine())
+            {
+                DATAindex = IndexScanner.nextLine().split(Pattern.quote("|"));
+                if((DATAindex[4]).equals(User))
+                {
+                    Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
+                }
+                //currentLine = readLine(IndexScanner);
+            }
+            IndexScanner.close();
+        
+        
+         for(int i =0; i<Temp.size();i++)
+         {
+           DATAindex = Temp.get(i).split(Pattern.quote("|"));
+           MAAG.DeleteFriend(DATAindex[0], DATAindex[1], DATAindex[2]);
+         }
+     }
+     
+     public void deleteMainUser(String User) throws IOException
+     {
+         MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+         List<String> Temp = new ArrayList<>();
+         File source = new File(DEFAULT_INDEXGROUPS);
+         String[] DATAindex = new String[8];
+         Scanner IndexScanner = new Scanner(source);
+            //String currentLine = readLine(IndexScanner);
+            //  0          1          2   3   4          5                6
+            //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
+            while(IndexScanner.hasNextLine())
+            {
+                DATAindex = IndexScanner.nextLine().split(Pattern.quote("|"));
+                if((DATAindex[2]).equals(User))
+                {
+                    Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
+                }
+                //currentLine = readLine(IndexScanner);
+            }
+            IndexScanner.close();
+        
+        
+         for(int i =0; i<Temp.size();i++)
+         {
+           DATAindex = Temp.get(i).split(Pattern.quote("|"));
+           MAAG.DeleteFriend(DATAindex[0], DATAindex[1], DATAindex[2]);
+         }
+     }
+     
      
 }

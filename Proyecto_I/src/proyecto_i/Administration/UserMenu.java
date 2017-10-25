@@ -21,6 +21,7 @@ import proyecto_i.Usuario;
 import proyecto_i.Utilities;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import proyecto_i.GroupsUtilities;
 
 
 /**
@@ -70,6 +71,9 @@ public class UserMenu {
                     MDUU.ActualizarDEs(MainUser);
                     JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
                     flagHideProfile = true;
+                    GroupsUtilities GU = new GroupsUtilities();
+                    GU.DeleteUser(MainUser.getUsuario());
+                    GU.deleteMainUser(MainUser.getUsuario());
                 } 
    
                 MDU.SetUserData(MainUser);
