@@ -212,23 +212,22 @@ public class GroupsUtilities {
          MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
          List<String> Temp = new ArrayList<>();
          File source = new File(DEFAULT_INDEXGROUPS);
-         String[] DATAindex;
-        try (Scanner IndexsScanner = new Scanner(source)) {
-            String currentLine = readLine(IndexsScanner);
-            DATAindex = new String[8];
+         String[] DATAindex = new String[8];
+         Scanner IndexScanner = new Scanner(source);
+//            String currentLine = readLine(IndexScanner);
             //  0          1          2   3   4          5                6
             //Registro | Posicion |  Llave 1,2,3  |  Siguiente        | estatus -> INDEX
-            while(currentLine!= null)
+            while(IndexScanner.hasNextLine())
             {
-                DATAindex = currentLine.split(Pattern.quote("|"));
-                
+                DATAindex = IndexScanner.nextLine().split(Pattern.quote("|"));
                 if((DATAindex[2]+DATAindex[3]).equals(MainUser+Group))
                 {
                     Temp.add(DATAindex[2]+"|"+DATAindex[3]+"|"+DATAindex[4]);
                 }
+//                currentLine = readLine(IndexScanner);
             }
-            IndexsScanner.close();
-        }
+            IndexScanner.close();
+        
         
          for(int i =0; i<Temp.size();i++)
          {

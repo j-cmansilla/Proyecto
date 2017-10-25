@@ -153,13 +153,12 @@ public class ModificarGrupo extends javax.swing.JFrame {
         ManejadorDeGrupos manejador = new ManejadorDeGrupos();
         ManejadorDeUsuarios manejadorU = new ManejadorDeUsuarios();
         try {
-            manejador.deleteGroup(editedGroup);
             String user = manejadorU.getUserLogin(); 
             String group = manejador.getGroupEdited().split("\\|")[0];
             GroupsUtilities GU = new GroupsUtilities();
             GU.DeleteGroup(user, group);
+            manejador.deleteGroup(editedGroup);
             JOptionPane.showMessageDialog(null, "Group deleted!");
-            //GU.( <MainUser> ,<Group> ); // LLENAR ESTO PLS
             this.hide();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ModificarGrupo.class.getName()).log(Level.SEVERE, null, ex);
