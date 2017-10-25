@@ -112,7 +112,6 @@ public class ManejadorDeGrupos {
         String [] datos = group.split("\\|");
         GroupsUtilities utilidades = new GroupsUtilities();
         int miembros = utilidades.GetMembersCount(user, datos[0]);
-        miembros--;
         ArrayList listaMaster = retornarListaMaster();
         ArrayList listaBitacora = retornarListaBitacora();
         for (int i = 0; i < listaMaster.size(); i++) {
