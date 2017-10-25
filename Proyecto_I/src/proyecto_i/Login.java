@@ -141,7 +141,11 @@ public class Login extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
-        objManejadorDeAmigos.update();
+        try {
+            objManejadorDeAmigos.update();
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private boolean casosDeLogin() throws FileNotFoundException, IOException{

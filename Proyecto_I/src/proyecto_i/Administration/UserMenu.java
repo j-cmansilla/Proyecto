@@ -19,6 +19,8 @@ import proyecto_i.PerfilUsuario;
 import proyecto_i.REO;
 import proyecto_i.Usuario;
 import proyecto_i.Utilities;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 
 /**
@@ -31,7 +33,6 @@ public class UserMenu {
         this.User = user;
     }
     public boolean FLAGDEactive = true;
-    
     public boolean  flagHideProfile = false;
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver funcion en la ultima version ********************************************** 
@@ -58,7 +59,8 @@ public class UserMenu {
                 return true;
             }
             else if (input.equals(choices[1]))
-            {
+            {   if(MainUser.Rol()!=1)
+                {
                 JDialog.setDefaultLookAndFeelDecorated(true);
                 int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to deactivate the account?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -67,12 +69,24 @@ public class UserMenu {
                     ManejadorDeUsuarios MDUU = new ManejadorDeUsuarios();
                     MDUU.ActualizarDEs(MainUser);
                     JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
+                    flagHideProfile = true;
                 } 
    
                 MDU.SetUserData(MainUser);
                 Login regresar=new Login();
                 regresar.show();
+                ManejadorDeAmigos objAmigos = new ManejadorDeAmigos(); 
+                ArrayList requestsToDelete = objAmigos.getUserRequestToDelete(MainUser.getUsuario());
+                ArrayList finalDel = new ArrayList();
+                    for (int i = 0; i < requestsToDelete.size(); i++) {
+                        String [] request = requestsToDelete.get(i).toString().split(Pattern.quote("|"));
+                        String updateRequest = request[0]+"|"+request[1] + "|0|" + request[3] + "|"+request[4] + "|0*" + System.getProperty("line.separator");
+                        finalDel.add(updateRequest);
+                    }
+                objAmigos.updateBM(finalDel);
                 return true;
+                 }
+                 JOptionPane.showMessageDialog(null, "You can't deactivate your account.");
                 
             }
             else if (input.equals(choices[2]))
