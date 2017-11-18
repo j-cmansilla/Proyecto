@@ -7,6 +7,7 @@ package proyecto_i;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  *
@@ -17,8 +18,9 @@ public class Proyecto_I {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         // TODO code application logic here
+        Singleton.getInstancia().conexion();
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();

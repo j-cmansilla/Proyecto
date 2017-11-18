@@ -56,13 +56,14 @@ public class Listener extends Thread {
                             grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1];                           
                             boolean existe = false;
                             
-                            if(grupoReceptor.equals("1")){
+                            if(grupoReceptor.equals("7")){
                                 //si es para mi enviar el update con la respuesta
                                 Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " te ha enviado un mensaje." );
                                 not = new Notificacion();
                                 not.setVisible(true);
                              
                                 //si es para mi enviar el update con la respuesta de que el usuario existe
+                                //Agregar funcion enviar mensaje
                                 
                                 if(existe){
                                     Singleton.getInstancia().Update(id, existe);
@@ -79,7 +80,7 @@ public class Listener extends Thread {
                             grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1];
                             grupoReceptor = parameter.split("\\{")[2].replace("}","").split(",")[2].split(":")[1];
                             
-                            if(grupoEmisor.equals("1")){
+                            if(grupoEmisor.equals("7")){
                                  String respuesta = parameter.split("\\{")[2].replace("}","").split(",")[7].split(":")[1];
                                  //Comprobar cual fue la respuesta
                                  if(respuesta.equals("false")){
