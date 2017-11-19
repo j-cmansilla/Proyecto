@@ -21,7 +21,7 @@ public class Singleton {
         
     //Conexión a la  base de datos jdbc:postgresql://localhost:0000/midatabase
     private static Connection con; 
-    private static Connection con2;
+    //private static Connection con2;
     private static Statement stmt;
     private static String mensaje;
     
