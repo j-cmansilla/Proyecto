@@ -147,4 +147,17 @@ public class ManejadorDeImagenes {
         File newFile = new File(newFilePath);
         FileUtils.moveFile(tempFile, newFile);
     }
+    
+    public ArrayList getPaths(String user) throws FileNotFoundException{
+        ArrayList BTree = ReadBinaryTree();
+        ArrayList paths = new ArrayList();
+        for (int i = 0; i < BTree.size(); i++) {
+            String line = BTree.get(i).toString();
+            String[] contents = line.split("\\|");
+            if (contents[2].equals(user)) {
+                paths.add(contents[3]);
+            }
+        }
+        return paths;
+    }
 }

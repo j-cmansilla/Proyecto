@@ -113,6 +113,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -257,6 +258,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         });
         jMenu4.add(jMenuItem5);
+
+        jMenuItem6.setText("Show");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem6);
 
         jMenuBar2.add(jMenu4);
 
@@ -580,8 +589,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
         JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image","PNG");
-        fileChooser.setFileFilter(filtro);
+        fileChooser.setMultiSelectionEnabled(false);
+        //FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image","PNG");
+        fileChooser.setFileFilter(new FileNameExtensionFilter(".jpg", "JPG"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter(".jpeg", "JPEG"));
+        fileChooser.setFileFilter(new FileNameExtensionFilter(".png", "PNG"));
         fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
         int result = fileChooser.showOpenDialog(this);
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
@@ -593,7 +605,20 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        JOptionPane.showMessageDialog(null, "Image Uploaded");
+        
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+        Imagenes objImages = null;
+        try {
+            objImages = new Imagenes();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        objImages.show();
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
 
     /**
@@ -658,6 +683,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
