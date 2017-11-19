@@ -11,7 +11,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
@@ -31,9 +34,32 @@ public class Middleware {
         Usuario user = MDU.getUserData(usuario);
         return (user!=null) ? true : false;
     }
+    
+    public void ReceiveMessage(String message,String emitter ) throws IOException
+    {
+        saveMessage(CreateMessage(message,Integer.parseInt(emitter)));
+    }
+    
+    public boolean SendMessage(int group,String Message)
+    {
+        //Singleton
+        return true;
+    }
+    
+    
+    
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    private final String DEFAULT_MESSAGEGROUPS ="C:\\MEIA\\MessageGroups.txt";
-    public void saveMessage(Message newmessage) throws IOException
+    
+   public Message CreateMessage(String message, int emitter)
+   {
+       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+       Date date = new Date();
+       Message m = new Message(emitter, message, message, dateFormat.format(date), message);
+       return m;
+   }
+   
+   public void saveMessage(Message newmessage) throws IOException
     {    // #grupo, usuario_emisor, usuario_receptor, fecha, mensaje.
         File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
         MessageGroupsfile.createNewFile();
@@ -64,7 +90,6 @@ public class Middleware {
             }
             IndexDescScanner.close();
         }  
-        
         return  resultMessage;
     }
     

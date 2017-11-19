@@ -5,6 +5,8 @@
  */
 package proyecto_i;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -59,15 +61,25 @@ public class Listener extends Thread {
                             
                             if(grupoReceptor.equals("7")){
                                 //si es para mi enviar el update con la respuesta
-                                Singleton.getInstancia().setMensaje("El grupo " + grupoEmisor + " te ha enviado un mensaje." );
+                                Singleton.getInstancia().setMensaje("El grupo " + grupoEmisor + " te ha enviado un mensaje.");
                                 not = new Notificacion();
                                 not.setVisible(true);
-                             
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 //si es para mi enviar el update con la respuesta de que el usuario existe
-                                //Agregar funcion enviar mensaje
-                                
+                                try {   if(middleware.checkUserExist(id)) {
+                                        existe = true;}
+                                } catch (FileNotFoundException ex) { Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);}
+                             
+                                 //Agregar funcion enviar mensaje
                                 if(existe){
                                     Singleton.getInstancia().Update(id, existe);
+                                    
+                                    try {
+                                        middleware.ReceiveMessage(Singleton.getInstancia().getMensaje(),grupoEmisor);
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////                                   
                                 }else{
                                     Singleton.getInstancia().Update(id, existe);
                                 }                                        
