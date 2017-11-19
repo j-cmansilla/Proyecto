@@ -23,7 +23,8 @@ public class Listener extends Thread {
     private String grupoReceptor;
     private String grupoEmisor;
     private Notificacion not;  
-
+    
+    Middleware middleware = new Middleware();
     Listener(Connection conn) throws SQLException {
             this.conn = conn;
             this.pgconn = (org.postgresql.PGConnection)conn;
@@ -58,7 +59,7 @@ public class Listener extends Thread {
                             
                             if(grupoReceptor.equals("7")){
                                 //si es para mi enviar el update con la respuesta
-                                Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " te ha enviado un mensaje." );
+                                Singleton.getInstancia().setMensaje("El grupo " + grupoEmisor + " te ha enviado un mensaje." );
                                 not = new Notificacion();
                                 not.setVisible(true);
                              
