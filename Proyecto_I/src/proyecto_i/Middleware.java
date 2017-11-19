@@ -22,7 +22,5 @@ public class Middleware {
     {
         Usuario user = MDU.getUserData(usuario);
         return (user!=null) ? true : false;
-        
     }
-    
 }
