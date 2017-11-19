@@ -114,7 +114,7 @@ public class MessagetoGroups extends javax.swing.JFrame {
         {
             Middleware M = new Middleware();
             M.GroupNumber = (Integer) Groupnumber.getValue();
-            M.Message = jTextArea1.getText();
+            M.messagestr = jTextArea1.getText();
             Error.setText("Message sent successfully");
             jTextArea1.setText("");
         }else{
