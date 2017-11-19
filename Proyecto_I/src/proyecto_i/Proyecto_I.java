@@ -26,12 +26,14 @@ public class Proyecto_I {
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();
         ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
         MantenimientoAsociacionAmigosGrupo manAAG = new MantenimientoAsociacionAmigosGrupo();
+        ManejadorDeImagenes manejadorI = new ManejadorDeImagenes();
         if (!directorio.exists()) {
             directorio.mkdirs();
             manejador.CrearArchivos();
             manejadorG.CrearArchivos();
             manejadorA.CrearArchivos();
             manAAG.CrearArchivos();
+            manejadorI.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
@@ -39,6 +41,7 @@ public class Proyecto_I {
             manejadorG.CrearArchivos();
             manejadorA.CrearArchivos();
             manAAG.CrearArchivos();
+            manejadorI.CrearArchivos();
         } 
 
         Login login = new Login();
