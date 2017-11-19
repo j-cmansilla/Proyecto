@@ -564,7 +564,6 @@ public class PerfilUsuario extends javax.swing.JFrame {
         MG.show();
     }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
 
-<<<<<<< HEAD
     private void btnSendMessagetoGroups1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroups1ActionPerformed
         try {
             // TODO add your handling code here:
@@ -576,7 +575,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
             Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSendMessagetoGroups1ActionPerformed
-=======
+
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
@@ -595,7 +594,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
->>>>>>> 845cb53adc44304fc6b0b3362db11c967fdb4ef1
+
 
     /**
      * @param args the command line arguments

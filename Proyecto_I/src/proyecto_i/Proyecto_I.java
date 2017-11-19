@@ -20,13 +20,14 @@ public class Proyecto_I {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         // TODO code application logic here
-        Singleton.getInstancia().conexion();
+       // Singleton.getInstancia().conexion();
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();
         ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
         MantenimientoAsociacionAmigosGrupo manAAG = new MantenimientoAsociacionAmigosGrupo();
         ManejadorDeImagenes manejadorI = new ManejadorDeImagenes();
+        Middleware m = new Middleware();
         if (!directorio.exists()) {
             directorio.mkdirs();
             manejador.CrearArchivos();
@@ -34,6 +35,7 @@ public class Proyecto_I {
             manejadorA.CrearArchivos();
             manAAG.CrearArchivos();
             manejadorI.CrearArchivos();
+            m.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
@@ -42,6 +44,7 @@ public class Proyecto_I {
             manejadorA.CrearArchivos();
             manAAG.CrearArchivos();
             manejadorI.CrearArchivos();
+            m.CrearArchivos();
         } 
 
         Login login = new Login();

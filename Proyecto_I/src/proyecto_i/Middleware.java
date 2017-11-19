@@ -48,7 +48,10 @@ public class Middleware {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    private final String DEFAULT_MESSAGEGROUPS ="C:\\MEIA\\MessageGroups.txt";
-    
+    public void CrearArchivos() throws IOException{
+            File mess = new File(DEFAULT_MESSAGEGROUPS);
+            mess.createNewFile();
+    }
    public Message CreateMessage(String message, int emitter)
    {
        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -59,6 +62,7 @@ public class Middleware {
    
    public void saveMessage(Message newmessage) throws IOException
     {    // #grupo, usuario_emisor, usuario_receptor, fecha, mensaje.
+        CrearArchivos();
         File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
         MessageGroupsfile.createNewFile();
         String b = newmessage.getGroupNumber()+"|"+newmessage.getEmitter()+"|"+newmessage.getReceptor()+"|"+newmessage.getDate()+ "|" + newmessage.getMessage();
