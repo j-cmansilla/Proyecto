@@ -5,6 +5,7 @@
  */
 package proyecto_i;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +15,10 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto_i.Administration.UserMenu;
 
 /**
@@ -107,6 +110,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -233,6 +238,18 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jMenu2.add(jMenuItem3);
 
         jMenuBar2.add(jMenu2);
+
+        jMenu4.setText("Photos");
+
+        jMenuItem5.setText("Upload");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem5);
+
+        jMenuBar2.add(jMenu4);
 
         setJMenuBar(jMenuBar2);
 
@@ -534,6 +551,25 @@ public class PerfilUsuario extends javax.swing.JFrame {
         MG.show();
     }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image","PNG");
+        fileChooser.setFileFilter(filtro);
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                objImagenes.SaveImage(selectedFile.getAbsolutePath(), manejador.getUserLogin());
+            } catch (IOException ex) {
+                Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -587,12 +623,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
