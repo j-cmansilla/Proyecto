@@ -73,12 +73,7 @@ public class Listener extends Thread {
                                  //Agregar funcion enviar mensaje
                                 if(existe){
                                     Singleton.getInstancia().Update(id, existe);
-                                    
-                                    try {
-                                        middleware.ReceiveMessage(Singleton.getInstancia().getMensaje(),grupoEmisor);
-                                    } catch (IOException ex) {
-                                        Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////                                   
                                 }else{
                                     Singleton.getInstancia().Update(id, existe);

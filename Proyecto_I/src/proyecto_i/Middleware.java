@@ -28,6 +28,7 @@ public class Middleware {
     //Message message = new Message();
     public int GroupNumber =0;
     public String messagestr = "";
+    public String Receptor="";
     
     public boolean checkUserExist(String usuario) throws FileNotFoundException
     {
@@ -45,9 +46,6 @@ public class Middleware {
         //Singleton
         return true;
     }
-    
-    
-    
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    private final String DEFAULT_MESSAGEGROUPS ="C:\\MEIA\\MessageGroups.txt";
     
@@ -93,4 +91,13 @@ public class Middleware {
         return  resultMessage;
     }
     
+    public List<String> GetMessage(List<Message> mss)
+    {
+        List<String> resultMessage = new ArrayList<String>();
+        for (int i = 0; i < mss.size(); i++) {
+            resultMessage.add("Group"+ mss.get(i).getGroupNumber() + " From: "+mss.get(i).getEmitter() 
+                    + " " + mss.get(i).getMessage()+" Date: "+mss.get(i).getDate());
+        }
+        return resultMessage;
+    }
 }
