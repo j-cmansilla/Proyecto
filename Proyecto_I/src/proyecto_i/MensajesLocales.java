@@ -196,8 +196,8 @@ public class MensajesLocales extends javax.swing.JFrame {
 
     private void jFriendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jFriendListValueChanged
         // TODO add your handling code here:
+            btnSendMessage.setEnabled(false);
             llenarMensajes();
-        
     }//GEN-LAST:event_jFriendListValueChanged
 
     private void llenarMensajes(){
@@ -286,14 +286,18 @@ public class MensajesLocales extends javax.swing.JFrame {
     private void listaMensajesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaMensajesValueChanged
         // TODO add your handling code here:
         //JOptionPane.showMessageDialog(null, listaMensajes.getSelectedIndex()+"...."+listaDeMensajesPrivados.size());
+        btnDeleteMessage.setEnabled(false);
         if (listaDeMensajesPrivados.isEmpty()) return;
         //JOptionPane.showMessageDialog(null, listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1]);
         try{
-            if (!listaMensajes.getSelectedValue().equals("Public chat") && listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
-                btnDeleteMessage.setEnabled(true);
-            }else{
-                btnDeleteMessage.setEnabled(false);
-            } 
+            if (!listaMensajes.getSelectedValue().equals("Public chat")) {
+                if (listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
+                    btnDeleteMessage.setEnabled(true);
+                    JOptionPane.showMessageDialog(null, "HOLI");
+                    return;
+                }
+            }
+            btnDeleteMessage.setEnabled(false); 
         }catch(NullPointerException e){
             
         }
