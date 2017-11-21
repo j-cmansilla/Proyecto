@@ -196,7 +196,8 @@ public class MensajesLocales extends javax.swing.JFrame {
 
     private void jFriendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jFriendListValueChanged
         // TODO add your handling code here:
-        llenarMensajes();
+            llenarMensajes();
+        
     }//GEN-LAST:event_jFriendListValueChanged
 
     private void llenarMensajes(){
@@ -231,8 +232,9 @@ public class MensajesLocales extends javax.swing.JFrame {
             }
             for (int i = 0; i < listaMensajes.size(); i++) {
                 if (userExistsInList(listaMensajes.get(i).toString().split("\\|")[1])) {
-                    modeloMensajes.addElement(messageToShow);
+                    
                     messageToShow = listaMensajes.get(i).toString().split("\\|")[0]+" => "+listaMensajes.get(i).toString().split("\\|")[1]+": "+listaMensajes.get(i).toString().split("\\|")[3];
+                    modeloMensajes.addElement(messageToShow);
                     //txtMessageArea.setText(txtMessageArea.getText()+System.getProperty("line.separator")+messageToShow); 
                 }
             }
