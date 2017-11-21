@@ -286,10 +286,14 @@ public class MensajesLocales extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null, listaMensajes.getSelectedIndex()+"...."+listaDeMensajesPrivados.size());
         if (listaDeMensajesPrivados.isEmpty()) return;
         //JOptionPane.showMessageDialog(null, listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1]);
-        if (!listaMensajes.getSelectedValue().equals("Public chat") && listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
-            btnDeleteMessage.setEnabled(true);
-        }else{
-            btnDeleteMessage.setEnabled(false);
+        try{
+            if (!listaMensajes.getSelectedValue().equals("Public chat") && listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
+                btnDeleteMessage.setEnabled(true);
+            }else{
+                btnDeleteMessage.setEnabled(false);
+            } 
+        }catch(NullPointerException e){
+            
         }
     }//GEN-LAST:event_listaMensajesValueChanged
 
