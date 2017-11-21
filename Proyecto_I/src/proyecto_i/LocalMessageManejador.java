@@ -164,6 +164,9 @@ public class LocalMessageManejador {
             scanner.close();
             lista.set(0, userName);
             lista.set(2, zdt.toString());
+            ArrayList listaGrupos = retornarMaster();
+            lista.set(6, listaGrupos.size());
+            lista.set(7, "0");
             for (int i = 0; i < lista.size(); i++) {
                 newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
             }
@@ -329,7 +332,7 @@ public class LocalMessageManejador {
         return listaARetornar;
     }
     
-    /*public Grupo returnMessage(String message) throws FileNotFoundException{
+    /*public LocalMessage returnMessage(String message) throws FileNotFoundException{
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         String key = manejador.getUserLogin() + groupName;
         Grupo grupoARetornar = null;
@@ -343,36 +346,174 @@ public class LocalMessageManejador {
             }
         }
         return grupoARetornar;
+    }*/
+    
+    private String returnMessage(String message){
+        String [] messageSplited;
+        messageSplited = message.split("\\|");
+        messageSplited[5] = "0";
+        String messageToReturn = "";
+        for (int i = 0; i < 6; i++) {
+            if (i == 5) {
+                messageToReturn = messageToReturn+messageSplited[i];
+            }else{ 
+                messageToReturn = messageToReturn+messageSplited[i]+"|";
+            }
+        }
+        return messageToReturn;
     }
     
-    public void deleteMessage(String groupName) throws FileNotFoundException{
-        Grupo grupo = returnGroup(groupName);
+    private void reWriteBitacora(ArrayList bitacora){
+        String newBitacora = "";
+        for (int i = 0; i < bitacora.size(); i++) {
+            newBitacora = newBitacora+bitacora.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_BITACORA_MENSAJES_DIRECTORY), "utf-8"));
+            writer.write(newBitacora);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    private void reWriteMaster(ArrayList master){
+        String newMaster = "";
+        for (int i = 0; i < master.size(); i++) {
+            newMaster = newMaster+master.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DIRECTORY+DEFAULT_MENSAJES_DIRECTORY), "utf-8"));
+            writer.write(newMaster);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    private void updateMessage(String userName) throws FileNotFoundException{
+        ZoneId zonedId = ZoneId.of( "America/Guatemala" );
+        ZonedDateTime zdt = ZonedDateTime.now( zonedId );
+        File descriptorDelMaster = new File(DEFAULT_DES_DIR+DEFAULT_MENSAJES_DIRECTORY);
+        if (!descriptorDelMaster.exists()) return;
+        Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_MENSAJES_DIRECTORY);
+        File archivo = new File(scanner.nextLine());
+        scanner = new Scanner(archivo);
+        String newDescriptor = "";
+        if (!scanner.hasNextLine()){
+            newDescriptor = userName+System.getProperty("line.separator")+zdt.toString()+System.getProperty("line.separator")+"Sin modificacion"+System.getProperty("line.separator")+"|"+System.getProperty("line.separator")+"userName-userFriend-message"+System.getProperty("line.separator")+"Ascendente"+System.getProperty("line.separator")+"1"+System.getProperty("line.separator")+"0";
+        }else{
+            ArrayList lista = new ArrayList();
+            while(scanner.hasNextLine()){
+                lista.add(scanner.nextLine());
+            }
+            scanner.close();
+            lista.set(0, userName);
+            lista.set(2, zdt.toString());
+            int count = Integer.parseInt(lista.get(7).toString());
+            int previousCount = Integer.parseInt(lista.get(6).toString());
+            previousCount--;
+            count++;
+            lista.set(7, count);
+            lista.set(6, previousCount);
+            for (int i = 0; i < lista.size(); i++) {
+                newDescriptor = newDescriptor + lista.get(i)+System.getProperty("line.separator");
+            }
+            //reorganizarMaster();
+        } 
+        Writer writer = null;
+            try {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_MENSAJES_DIRECTORY), "utf-8"));
+                writer.write(newDescriptor);
+                return;
+            } catch (IOException ex) {
+                // report
+            } finally {
+                try {writer.close();} catch (IOException ex) {/*ignore*/}
+            }
+    }
+    
+    public ArrayList getListDesBitacora() throws FileNotFoundException{
+        File Desbitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_MENSAJES_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (Desbitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DES_DIR+DEFAULT_BITACORA_MENSAJES_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
+    private void reWriteDesBitacora(ArrayList desBitacora){
+        String newDesBitacora = "";
+        for (int i = 0; i < desBitacora.size(); i++) {
+            newDesBitacora = newDesBitacora+desBitacora.get(i).toString()+System.getProperty("line.separator");
+        }
+        Writer writer = null;
+        try {
+            writer = new BufferedWriter(new OutputStreamWriter(
+            new FileOutputStream(DEFAULT_DES_DIR+DEFAULT_BITACORA_MENSAJES_DIRECTORY), "utf-8"));
+            writer.write(newDesBitacora);
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (IOException ex) {/*ignore*/}
+        }
+    }
+    
+    public void updateBitacora() throws FileNotFoundException{
+        ArrayList listaDesBitacora = getListDesBitacora();
+        int count = Integer.parseInt(listaDesBitacora.get(4).toString());
+        count++;
+        int count2 = Integer.parseInt(listaDesBitacora.get(3).toString());
+        count2--;
+        listaDesBitacora.set(4, count);
+        listaDesBitacora.set(3, count2);
+        reWriteDesBitacora(listaDesBitacora);
+    }
+    
+    public void deleteMessage(String message) throws FileNotFoundException{
+        //Grupo grupo = returnGroup(groupName);
+        String messageToDelete = returnMessage(message);
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-        grupo.setEstatus(0);
-        ArrayList listaBitacora = retornarListaBitacora();
-        ArrayList listaMaster = retornarListaMaster();
-        String newGroup = grupo.getUsuario().getUsuario()+"|"+grupo.getGrupo()+"|"+grupo.getDescripcion()+"|"+grupo.getMiembros()+"|"+grupo.getFechaDeTransaccion()+"|"+grupo.getEstatus();
-        String key = manejador.getUserLogin()+getGroupEdited().split("\\|")[0];
+        ArrayList listaBitacora = retornarBitacora();
+        ArrayList listaMaster = retornarMaster();
+        String [] messageSplited = messageToDelete.split("\\|");
+        String key = messageSplited[0]+messageSplited[1]+messageSplited[2];
         //Buscar en bitacora
         for (int i = 0; i < listaBitacora.size(); i++) {
-            String [] grupoSplited = listaBitacora.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1]) && grupoSplited[5].equals("1")) {
-                listaBitacora.set(i, newGroup);
+            String [] messageToDel = listaBitacora.get(i).toString().split("\\|");
+            if (key.equals(messageToDel[0]+messageToDel[1]+messageToDel[2])){
+                listaBitacora.set(i, messageToDelete);
                 reWriteBitacora(listaBitacora);
                 updateBitacora();
                 return;
             }
         }
+        //Buscar en Master
         for (int i = 0; i < listaMaster.size(); i++) {
-            String [] grupoSplited = listaMaster.get(i).toString().split("\\|");
-            if (key.equals(grupoSplited[0]+grupoSplited[1]) && grupoSplited[5].equals("1")) {
-                listaMaster.set(i, newGroup);
+            String [] messageToDel = listaMaster.get(i).toString().split("\\|");
+            if (key.equals(messageToDel[0]+messageToDel[1]+messageToDel[2])){
+                listaMaster.set(i, messageToDelete);
                 reWriteMaster(listaMaster);
-                updateGroupDescriptor(manejador.getUserLogin());
+                updateMessage(manejador.getUserLogin());
                 return;
             }
         }
-    }*/
+    }
     
     private ArrayList retornarListaMasterPublic() throws FileNotFoundException{
         File master = new File(DEFAULT_DIRECTORY+DEFAULT_MENSAJES_DIRECTORY);
@@ -421,6 +562,40 @@ public class LocalMessageManejador {
         llenarMaster(lista);
     }
 
+    private ArrayList retornarBitacora() throws FileNotFoundException{
+       File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_MENSAJES_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_MENSAJES_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        } 
+        return listaARetornar;
+    }
+    
+    private ArrayList retornarMaster() throws FileNotFoundException{
+       File master = new File(DEFAULT_DIRECTORY+DEFAULT_MENSAJES_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (master.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_MENSAJES_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                listaARetornar.add(line);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
+    }
+    
     private ArrayList retornarLista() throws FileNotFoundException{
         File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_MENSAJES_DIRECTORY);
         File master = new File(DEFAULT_DIRECTORY+DEFAULT_MENSAJES_DIRECTORY);

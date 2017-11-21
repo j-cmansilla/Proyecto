@@ -269,7 +269,14 @@ public class MensajesLocales extends javax.swing.JFrame {
     private void btnDeleteMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteMessageActionPerformed
         // TODO add your handling code here:
         LocalMessageManejador manejador = new LocalMessageManejador();
-        //manejador.deleteMessage(listaDeMensajesPrivados.get(listaMensajes.getSelectedValue()));
+        //JOptionPane.showMessageDialog(null, listaMensajes.getSelectedIndex());
+        String messageToDelete = listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString();
+        try {
+            manejador.deleteMessage(messageToDelete);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MensajesLocales.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        llenarMensajes();
     }//GEN-LAST:event_btnDeleteMessageActionPerformed
 
     
@@ -278,7 +285,7 @@ public class MensajesLocales extends javax.swing.JFrame {
         // TODO add your handling code here:
         //JOptionPane.showMessageDialog(null, listaMensajes.getSelectedIndex()+"...."+listaDeMensajesPrivados.size());
         if (listaDeMensajesPrivados.isEmpty()) return;
-        JOptionPane.showMessageDialog(null, listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1]);
+        //JOptionPane.showMessageDialog(null, listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1]);
         if (!listaMensajes.getSelectedValue().equals("Public chat") && listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
             btnDeleteMessage.setEnabled(true);
         }else{
