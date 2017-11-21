@@ -5,11 +5,18 @@
  */
 package proyecto_i;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import org.apache.commons.io.FileUtils;
+import static proyecto_i.MD5.crypt;
 
 /**
  *
@@ -43,6 +50,11 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jLabel1.setText("USER:");
@@ -116,19 +128,29 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPassActionPerformed
 
     private void btnIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIniciarSesionActionPerformed
-            try {
+        try {
             // TODO add your handling code here:
-            casosDeLogin(); 
-        } catch (FileNotFoundException ex) {
+            casosDeLogin();
+        } catch (IOException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
         txtPass.setText("");
         txtUser.setText("");
     }//GEN-LAST:event_btnIniciarSesionActionPerformed
 
-    private boolean casosDeLogin() throws FileNotFoundException{
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+        try {
+            objManejadorDeAmigos.update();
+        } catch (IOException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowClosing
+
+    private boolean casosDeLogin() throws FileNotFoundException, IOException{
         String user = txtUser.getText();
-        String pass = txtPass.getText();
+        String pass = crypt(txtPass.getText());
         if (user.equals("") && pass.equals("")) return false;
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         Usuario usuario;

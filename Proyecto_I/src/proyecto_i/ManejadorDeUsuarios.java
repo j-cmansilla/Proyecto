@@ -8,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -29,7 +28,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -84,19 +82,21 @@ public class ManejadorDeUsuarios {
             File archivoBitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
             File descriptorBitacora = new File(DEFAULT_DES_DIR+DEFAULT_BITACORA_DIRECTORY);
             File bitacoraBackup = new File(DEFAULT_DIRECTORY+DEFAULT_BACKUP_BITACORA_DIRECTORY);
+            File descriptorBackup = new File(DEFAULT_DES_DIR+DEFAULT_BACKUP_BITACORA_DIRECTORY);
             File CarpetaFotos = new File(DEFAULT_DIRECTORY + DEFAULT_PROFILE_PICTURES);
             archivoUsuarios.createNewFile();
             descriptorUsuarios.createNewFile();
             archivoBitacora.createNewFile();
             descriptorBitacora.createNewFile();
             bitacoraBackup.createNewFile();
+            descriptorBackup.createNewFile();
             CarpetaFotos.mkdirs();
         }catch(IOException e){
             
         }
     }
     
-    public int validarUsuario(String user, String password) throws FileNotFoundException{
+    public int validarUsuario(String user, String password) throws FileNotFoundException{ //FIX THIS *********************************************************
         File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
         File usuarios = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
         //Buscarlo en la bitacora
@@ -128,7 +128,7 @@ public class ManejadorDeUsuarios {
             scanner = new Scanner(archivo);
             while(scanner.hasNextLine()){
                 String line = scanner.nextLine();
-                String [] credenciales = line.split("|");
+                String [] credenciales = line.split("\\|");
                 if (user.equals(credenciales[0]) && password.equals(credenciales[3]) && Integer.parseInt(credenciales[10]) == 1) {
                     scanner.close();
                     return 1;
@@ -543,24 +543,24 @@ public class ManejadorDeUsuarios {
         if(versiExiste(newUser,USER_PATH ))
         {
             File tempFile = new File(DEFAULT_TEMP_DIRECTORYC);
-        tempFile.createNewFile();
-         File inputFile = new File(USER_PATH);
-        File Master = new File(USER_PATH);
-        Scanner MasterScanner = new Scanner(Master);
-        String currentLine;
-         if (!MasterScanner.hasNextLine()) {
-           currentLine = null;
-         }
-        else{
-        currentLine =MasterScanner.nextLine();
-        }
+            tempFile.createNewFile();
+            File inputFile = new File(USER_PATH);
+            File Master = new File(USER_PATH);
+            Scanner MasterScanner = new Scanner(Master);
+            String currentLine;
+            if (!MasterScanner.hasNextLine()) {
+                currentLine = null;
+            }
+            else{
+                currentLine = MasterScanner.nextLine();
+            }
         while((currentLine) != null) {
             String [] credenciales = currentLine.split(Pattern.quote("|"));
                 if (!newUser.getUsuario().equals(credenciales[0]))
                 {
                     WriteInTEMP_Ca(currentLine);
-            }
-             currentLine = readLine(MasterScanner);
+                }
+            currentLine = readLine(MasterScanner);
         }
         WriteInTEMP(newUser);
         
@@ -716,6 +716,38 @@ public class ManejadorDeUsuarios {
             scanner.close();  
         }
         return 0;
+    }
+    
+    //-------------------------------------------------------------------------------------------------------------------------------------------
+    
+    public ArrayList usersList() throws FileNotFoundException{
+        File bitacora = new File(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+        File master = new File(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+        ArrayList listaARetornar = new ArrayList();
+        //Buscarlo en la bitacora
+        if (bitacora.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_BITACORA_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String[] credenciales = line.split(Pattern.quote("|"));
+                listaARetornar.add(credenciales[0]);
+            }
+            scanner.close();
+        }
+        if (master.exists()) {
+            Scanner scanner = new Scanner(DEFAULT_DIRECTORY+DEFAULT_USER_DIRECTORY);
+            File archivo = new File(scanner.nextLine());
+            scanner = new Scanner(archivo);
+            while(scanner.hasNextLine()){
+                String line = scanner.nextLine();
+                String[] credenciales = line.split(Pattern.quote("|"));
+                listaARetornar.add(credenciales[0]);
+            }
+            scanner.close();
+        }
+        return listaARetornar;
     }
     
 }

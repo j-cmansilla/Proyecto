@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import proyecto_i.Administration.ChangeProfile;
+import static proyecto_i.MD5.crypt;
 //import org.apache.commons.io.FileUtils;
 
 /**
@@ -28,6 +29,7 @@ import proyecto_i.Administration.ChangeProfile;
  */
 public class CrearUsuario extends javax.swing.JFrame {
     JFileChooser fc = new JFileChooser();
+    Utilities Util = new Utilities();
     /**
      * Creates new form CrearUsuario
      */
@@ -71,7 +73,6 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Create User");
         setResizable(false);
 
@@ -155,6 +156,11 @@ public class CrearUsuario extends javax.swing.JFrame {
         jLabel11.setText("PHONE:");
 
         txtPhone.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtPhone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPhoneActionPerformed(evt);
+            }
+        });
 
         txtPass1.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         txtPass1.addActionListener(new java.awt.event.ActionListener() {
@@ -303,15 +309,23 @@ public class CrearUsuario extends javax.swing.JFrame {
 
         try{                                                
             // TODO add your handling code here:
+            
             String date;
             try{
                 date = txtDate.getDate().toString();
             }catch(Exception e){
                 date = "";
             }
+            if(!Util.isInteger(txtPhone.getText()))
+            {
+                JOptionPane.showMessageDialog(null, "The phonenumber isnt a number!");
+                txtPhone.setText("");
+            }
+            else
             if (txtUser.getText().equals("") || txtName.getText().equals("") || txtPass.getText().equals("") || txtSecondName.getText().equals("") || date.equals("") || txtEmail.getText().equals("")|| txtPhone.getText().equals("") || lblPicture.getText().equals("") || txtDescription.getText().equals("")) {
                 JOptionPane.showMessageDialog(null, "Fill all the fields!");
-            }else{
+            }
+            else{
                 //VALIDATE PASSWORD
                 ChangeProfile CP = new ChangeProfile();
                 jTextField1.setText(CP.PASSVER(txtPass.getText(), txtPass1.getText()));
@@ -363,6 +377,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(flagForADMIN)
         {
+            this.hide();
             Login regresar=new Login();
             regresar.show();
             
@@ -380,6 +395,10 @@ public class CrearUsuario extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPass1ActionPerformed
 
+    private void txtPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPhoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPhoneActionPerformed
+
     
     
     private void Iniciar() throws FileNotFoundException, IOException, Exception{
@@ -387,7 +406,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         ZoneId zonedId = ZoneId.of( "America/Guatemala" );
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
         
-        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), txtPass.getText(),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
+        Usuario usuario = new Usuario(txtUser.getText(), txtName.getText(), txtSecondName.getText(), crypt(txtPass.getText()),-1, txtDate.getDate().toString(), txtEmail.getText(), txtPhone.getText(), SaveImageMEIA(lblPicture.getText()), txtDescription.getText(),1);
         manejador.llenarBitacora(txtUser.getText(), zdt, usuario);
         //String user = txtUser.getText()+"|"+txtName.getText()+"|"+txtSecondName.getText()+"|"+txtPass.getText()+"|"+"-1"+"|"+txtDate.getDate().toString()+"|"+txtEmail.getText()+"|"+txtPhone.getText()+"|"+SaveImageMEIA(lblPicture.getText())+"|"+txtDescription.getText()+"|"+"1";
         //manejador.llenarBitacora(usuario,zdt);
@@ -452,8 +471,7 @@ public class CrearUsuario extends javax.swing.JFrame {
         fc.setFileFilter(filtro);
         int respuesta = fc.showOpenDialog(this);
         File archivoElegido = fc.getSelectedFile();
-        if (archivoElegido == null) {
-            
+        if (archivoElegido == null) { 
         }else{
             lblPicture.setText(archivoElegido.getPath());
             JOptionPane.showMessageDialog(null, "Picture selected!");

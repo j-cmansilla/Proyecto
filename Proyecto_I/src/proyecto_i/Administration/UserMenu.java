@@ -12,10 +12,16 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import proyecto_i.CrearUsuario;
 import proyecto_i.Login;
+import proyecto_i.ManejadorDeAmigos;
 import proyecto_i.ManejadorDeUsuarios;
+import proyecto_i.MantenimientoAsociacionAmigosGrupo;
 import proyecto_i.PerfilUsuario;
+import proyecto_i.REO;
 import proyecto_i.Usuario;
 import proyecto_i.Utilities;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+import proyecto_i.GroupsUtilities;
 
 
 /**
@@ -28,6 +34,7 @@ public class UserMenu {
         this.User = user;
     }
     public boolean FLAGDEactive = true;
+    public boolean  flagHideProfile = false;
     //public static void main(String[] a) throws FileNotFoundException //PARA PROBARLO*********** 
             //Volver funcion en la ultima version ********************************************** 
     public boolean Main() throws FileNotFoundException, IOException
@@ -36,7 +43,7 @@ public class UserMenu {
         ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
         Usuario MainUser = MDU.getUserData(User);
         Utilities Utilidades = new Utilities();
-        String[] chAdmin = { "Modify Profile", "Deactivate Account", "Sign in New User", "Search User", "Deactivate a User", "Modify Max. Number to Re-organize", "Back-Up" };
+        String[] chAdmin = { "Modify Profile", "Deactivate Account", "Sign in New User", "Search User", "Deactivate a User", "Modify Max. Number to Re-organize", "Back-Up" ,"Reorganize"};
         String[] choices = { "Modify Profile", "Deactivate Account", };
         
         if(MainUser.Rol()==1)
@@ -49,10 +56,12 @@ public class UserMenu {
             if(input.equals(choices[0])){
                 ChangeProfile CP2 = new ChangeProfile();
                 CP2.show();
+                flagHideProfile = true;
                 return true;
             }
             else if (input.equals(choices[1]))
-            {
+            {   if(MainUser.Rol()!=1)
+                {
                 JDialog.setDefaultLookAndFeelDecorated(true);
                 int response = JOptionPane.showConfirmDialog(null, "Are you sure you want to deactivate the account?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -61,12 +70,27 @@ public class UserMenu {
                     ManejadorDeUsuarios MDUU = new ManejadorDeUsuarios();
                     MDUU.ActualizarDEs(MainUser);
                     JOptionPane.showMessageDialog(null, "This will be your last session, after you log-out you won't be able to sign-in.");
+                    flagHideProfile = true;
+                    GroupsUtilities GU = new GroupsUtilities();
+                    GU.DeleteUser(MainUser.getUsuario());
+                    GU.deleteMainUser(MainUser.getUsuario());
                 } 
    
                 MDU.SetUserData(MainUser);
                 Login regresar=new Login();
                 regresar.show();
+                ManejadorDeAmigos objAmigos = new ManejadorDeAmigos(); 
+                ArrayList requestsToDelete = objAmigos.getUserRequestToDelete(MainUser.getUsuario());
+                ArrayList finalDel = new ArrayList();
+                    for (int i = 0; i < requestsToDelete.size(); i++) {
+                        String [] request = requestsToDelete.get(i).toString().split(Pattern.quote("|"));
+                        String updateRequest = request[0]+"|"+request[1] + "|0|" + request[3] + "|"+request[4] + "|0*" + System.getProperty("line.separator");
+                        finalDel.add(updateRequest);
+                    }
+                objAmigos.updateBM(finalDel);
                 return true;
+                 }
+                 JOptionPane.showMessageDialog(null, "You can't deactivate your account.");
                 
             }
             else if (input.equals(choices[2]))
@@ -139,6 +163,18 @@ public class UserMenu {
 
                Utilidades.createBackUp((String) result, User);
             }
+            else if(input.equals(choices[7]))
+            {
+                REO reorganize = new REO();
+                reorganize.Reorganize(MainUser.getUsuario());
+                MantenimientoAsociacionAmigosGrupo MAAG = new MantenimientoAsociacionAmigosGrupo();
+                MAAG.ReoIndex(MainUser.getUsuario());
+                ManejadorDeAmigos objManejadorDeAmigos = new ManejadorDeAmigos();
+                objManejadorDeAmigos.update();
+                reorganize.ReoGhost();
+       
+            }
+            
             return  false;
     }
  }

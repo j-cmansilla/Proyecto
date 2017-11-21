@@ -5,10 +5,8 @@
  */
 package proyecto_i;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,7 +28,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -48,6 +45,34 @@ public class REO {
     private int MaxforReorganize = 1;
     private String CreationDate;
     private int ActiveAccounts = 0;
+    
+    public void ReoGhost() throws FileNotFoundException, IOException
+    {
+        File usuarios = new File(USER_PATH);
+        List<String> Temp = new ArrayList<>();
+        Scanner UsuarioScanner = new Scanner(usuarios);
+        String currentLine = readLine(UsuarioScanner);
+        while (currentLine != null) {            
+            String [] credenciales = currentLine.split(Pattern.quote("|"));
+            if(Integer.parseInt(credenciales[10])!= 0)
+            {
+                Temp.add(System.lineSeparator()+ currentLine);
+            }
+            currentLine = readLine(UsuarioScanner);
+        }
+        UsuarioScanner.close();
+        PrintWriter writer = new PrintWriter(USER_PATH);
+        writer.print("");
+        writer.close();
+        for (int i = 0; i < Temp.size(); i++) {
+            Files.write(Paths.get(USER_PATH), Temp.get(i).getBytes(), StandardOpenOption.APPEND);
+        }
+        
+        GroupsUtilities GU = new GroupsUtilities();
+        GU.CleanEmptySpace(USER_PATH);
+        ChangeDESCBIT();
+
+    }
     
     public boolean CheckForREO(String MainUser) throws FileNotFoundException, IOException
     {
