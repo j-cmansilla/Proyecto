@@ -599,7 +599,6 @@ public class ManejadorDeGrupos {
             pasarDatosAlMaster(group.split("\\|")[0]);
             //Reorganizar reorganizar = new Reorganizar();
             //reorganizar.reordenarMaster();
-            REO reorganizar = new REO();
             //reorganizar.Reorganize(user.split("\\|")[0]);
             try {
                 writer = new BufferedWriter(new OutputStreamWriter(

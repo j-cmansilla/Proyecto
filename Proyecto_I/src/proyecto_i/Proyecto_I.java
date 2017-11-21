@@ -27,6 +27,7 @@ public class Proyecto_I {
         ManejadorDeAmigos manejadorA = new ManejadorDeAmigos();
         MantenimientoAsociacionAmigosGrupo manAAG = new MantenimientoAsociacionAmigosGrupo();
         ManejadorDeImagenes manejadorI = new ManejadorDeImagenes();
+        LocalMessageManejador locMeMa = new LocalMessageManejador();
         Middleware m = new Middleware();
         if (!directorio.exists()) {
             directorio.mkdirs();
@@ -36,6 +37,7 @@ public class Proyecto_I {
             manAAG.CrearArchivos();
             manejadorI.CrearArchivos();
             m.CrearArchivos();
+            locMeMa.CrearArchivos();
         }
         
         if(directorio.isDirectory() && directorio.list().length == 0) {
@@ -45,6 +47,7 @@ public class Proyecto_I {
             manAAG.CrearArchivos();
             manejadorI.CrearArchivos();
             m.CrearArchivos();
+            locMeMa.CrearArchivos();
         } 
 
         Login login = new Login();

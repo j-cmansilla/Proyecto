@@ -103,6 +103,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         jList1 = new javax.swing.JList<>();
         btnSendMessagetoGroups = new javax.swing.JButton();
         btnSendMessagetoGroups1 = new javax.swing.JButton();
+        btnLocalMessage = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         txtUsuarioLogueado = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
@@ -193,6 +194,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
         btnSendMessagetoGroups1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSendMessagetoGroups1ActionPerformed(evt);
+            }
+        });
+
+        btnLocalMessage.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnLocalMessage.setText("Local Message");
+        btnLocalMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLocalMessageActionPerformed(evt);
             }
         });
 
@@ -300,7 +309,8 @@ public class PerfilUsuario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnSendMessagetoGroups1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLocalMessage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -329,7 +339,9 @@ public class PerfilUsuario extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSendMessagetoGroups1, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLocalMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -343,14 +355,14 @@ public class PerfilUsuario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnGroups2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnGroups, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
                         .addContainerGap())))
         );
 
@@ -620,6 +632,17 @@ public class PerfilUsuario extends javax.swing.JFrame {
         objImages.show();
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
+    private void btnLocalMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocalMessageActionPerformed
+        // TODO add your handling code here:
+        MensajesLocales mensajes = null;
+        try {
+            mensajes = new MensajesLocales();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        mensajes.show();
+    }//GEN-LAST:event_btnLocalMessageActionPerformed
+
 
     /**
      * @param args the command line arguments
@@ -664,6 +687,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGroups;
     private javax.swing.JButton btnGroups2;
+    private javax.swing.JButton btnLocalMessage;
     private javax.swing.JButton btnSendMessagetoGroups;
     private javax.swing.JButton btnSendMessagetoGroups1;
     private javax.swing.JLabel jLabel3;
