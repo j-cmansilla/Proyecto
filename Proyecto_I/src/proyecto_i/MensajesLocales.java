@@ -293,7 +293,6 @@ public class MensajesLocales extends javax.swing.JFrame {
             if (!listaMensajes.getSelectedValue().equals("Public chat")) {
                 if (listaDeMensajesPrivados.get(listaMensajes.getSelectedIndex()).toString().split("\\|")[1].equals(userWhoSendMessage)) {
                     btnDeleteMessage.setEnabled(true);
-                    JOptionPane.showMessageDialog(null, "HOLI");
                     return;
                 }
             }
