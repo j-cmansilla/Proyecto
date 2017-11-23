@@ -20,7 +20,7 @@ public class Proyecto_I {
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
         // TODO code application logic here
-       // Singleton.getInstancia().conexion();
+        Singleton.getInstancia().conexion();
         File directorio = new File("c:\\MEIA");
         ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         ManejadorDeGrupos manejadorG = new ManejadorDeGrupos();

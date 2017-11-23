@@ -5,6 +5,10 @@
  */
 package proyecto_i;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author sebas
@@ -17,7 +21,6 @@ public class MessagetoGroups extends javax.swing.JFrame {
     public MessagetoGroups() {
         initComponents();
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,14 +123,21 @@ public class MessagetoGroups extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public String User ="";
     private void SendBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SendBtnActionPerformed
         // TODO add your handling code here:
         if(!"".equals(jTextArea1.getText()))
         {
             Middleware M = new Middleware();
-            M.GroupNumber = (Integer) Groupnumber.getValue();
-            M.messagestr = jTextArea1.getText();
-            M.Receptor = jTextField1.getText();
+            try {
+                /*  M.GroupNumber = (Integer) Groupnumber.getValue();
+                M.messagestr = jTextArea1.getText();
+                M.Receptor = jTextField1.getText();*/
+                //int group,String Message, String Receptor, String Emitter
+                M.SendMessage((Integer) Groupnumber.getValue(), jTextArea1.getText(), jTextField1.getText(), User);
+            } catch (SQLException ex) {
+                Logger.getLogger(MessagetoGroups.class.getName()).log(Level.SEVERE, null, ex);
+            }
             Error.setText("Message sent successfully");
             jTextArea1.setText("");
             jTextField1.setText("");

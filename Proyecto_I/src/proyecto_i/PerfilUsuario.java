@@ -581,7 +581,13 @@ public class PerfilUsuario extends javax.swing.JFrame {
 
     private void btnSendMessagetoGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroupsActionPerformed
         // TODO add your handling code here:
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
         MessagetoGroups MG = new MessagetoGroups();
+        try {
+            MG.User = manejador.getUserLogin();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
         MG.show();
     }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
 

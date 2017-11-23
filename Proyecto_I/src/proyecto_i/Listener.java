@@ -25,6 +25,11 @@ public class Listener extends Thread {
     private String grupoReceptor;
     private String grupoEmisor;
     private Notificacion not;  
+    private String User;
+    private String Receptor; 
+    private String Emitter;
+    private String Message;
+    
     
     Middleware middleware = new Middleware();
     Listener(Connection conn) throws SQLException {
@@ -56,7 +61,11 @@ public class Listener extends Thread {
                             
                             id = parameter.split("\\{")[2].replace("}","").split(",")[0].split(":")[1];
                             grupoReceptor = parameter.split("\\{")[2].replace("}","").split(",")[2].split(":")[1];
-                            grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1];                           
+                            grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1]; 
+                            User = parameter.split("\\{")[2].replace("}","").split(",")[4].split(":")[1]; 
+                            Emitter = parameter.split("\\{")[2].replace("}","").split(",")[6].split(":")[1]; 
+                            Receptor = parameter.split("\\{")[2].replace("}","").split(",")[3].split(":")[1]; 
+                            Message = parameter.split("\\{")[2].replace("}","").split(",")[5].split(":")[1]; 
                             boolean existe = false;
                             
                             if(grupoReceptor.equals("7")){
@@ -66,10 +75,10 @@ public class Listener extends Thread {
                                 not.setVisible(true);
   //////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 //si es para mi enviar el update con la respuesta de que el usuario existe
-                                try {   if(middleware.checkUserExist(id)) {
-                                        existe = true;}
-                                } catch (FileNotFoundException ex) { Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);}
-                             
+                                 if(middleware.checkUserExist(id)) {
+                                        existe = true;
+                                        middleware.ReceiveMessage(Message, Emitter, Receptor);
+                                 }
                                  //Agregar funcion enviar mensaje
                                 if(existe){
                                     Singleton.getInstancia().Update(id, existe);
@@ -111,6 +120,10 @@ public class Listener extends Thread {
             } catch (SQLException | InterruptedException sqle) {
                     sqle.printStackTrace();
             } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(Listener.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

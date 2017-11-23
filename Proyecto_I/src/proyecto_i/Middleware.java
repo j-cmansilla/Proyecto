@@ -11,8 +11,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,10 +28,9 @@ import java.util.regex.Pattern;
  */
 public class Middleware {
     ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
+    LocalMessageManejador LMM = new LocalMessageManejador();
+    Singleton S = new Singleton();
     //Message message = new Message();
-    public int GroupNumber =0;
-    public String messagestr = "";
-    public String Receptor="";
     
     public boolean checkUserExist(String usuario) throws FileNotFoundException
     {
@@ -36,41 +38,37 @@ public class Middleware {
         return (user!=null) ? true : false;
     }
     
-    public void ReceiveMessage(String message,String emitter ) throws IOException
-    {
-        saveMessage(CreateMessage(message,Integer.parseInt(emitter)));
+    public void ReceiveMessage(String message,String receptor, String emitter) throws IOException, Exception
+    {//(String usuario, String usuarioAmigo, String fecha, String mensaje, int tipoDeMensaje, int estatus)
+        ZoneId zonedId = ZoneId.of( "America/Guatemala" );
+        ZonedDateTime zdt = ZonedDateTime.now( zonedId );
+        LocalMessage m = new LocalMessage(emitter, receptor,zdt.toString(), message, 1, 1);
+        LMM.llenarBitacora(emitter, zdt, m);
     }
     
-    public boolean SendMessage(int group,String Message)
-    {
-        //Singleton
+    public boolean SendMessage(int group,String Message, String Receptor, String Emitter) throws SQLException
+    {//int grupoEmisor,int grupoReceptor, String emisor, String receptor, String mensaje
+        S.Insert(7, group, Emitter, Receptor, Message);
         return true;
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    private final String DEFAULT_MESSAGEGROUPS ="C:\\MEIA\\MessageGroups.txt";
     public void CrearArchivos() throws IOException{
-            File mess = new File(DEFAULT_MESSAGEGROUPS);
-            mess.createNewFile();
+           // File mess = new File(DEFAULT_MESSAGEGROUPS);
+           // mess.createNewFile();
     }
-   public Message CreateMessage(String message, int emitter)
-   {
-       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-       Date date = new Date();
-       Message m = new Message(emitter, message, message, dateFormat.format(date), message);
-       return m;
-   }
    
-   public void saveMessage(Message newmessage) throws IOException
+   public void saveMessage(LocalMessage newmessage) throws IOException
     {    // #grupo, usuario_emisor, usuario_receptor, fecha, mensaje.
-        CrearArchivos();
-        File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
+       // CrearArchivos();
+        /*File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
         MessageGroupsfile.createNewFile();
-        String b = newmessage.getGroupNumber()+"|"+newmessage.getEmitter()+"|"+newmessage.getReceptor()+"|"+newmessage.getDate()+ "|" + newmessage.getMessage();
+       String b = newmessage.getGroupNumber()+"|"+newmessage.getEmitter()+"|"+newmessage.getReceptor()+"|"+newmessage.getDate()+ "|" + newmessage.getMessage();
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(DEFAULT_MESSAGEGROUPS, true))) {
                 writer.newLine();
                 writer.append(b);
                 writer.close();
-            }
+            }*/
     }
     public List<Message> getUserMessageGroups(String user) throws FileNotFoundException
     {   //    0      1                   2             3      4
