@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -141,5 +142,27 @@ public class Middleware {
         resultMessage.clear();
         resultMessage.addAll(hs);
         return  resultMessage;
+    }
+    
+    public void checkR(String b, String user1, String user2) throws IOException
+    {
+      if (b=="false") { 
+           DEleteLine(user1, user2);
+      }
+    }
+    ///////////////////////////////////////////////////////////////
+    public void DEleteLine(String user1, String user2) throws FileNotFoundException, IOException
+    {
+        RandomAccessFile f = new RandomAccessFile(DEFAULT_MESSAGEGROUPS, "rw");
+        byte b ;
+        long length = f.length() - 1;
+        do {                     
+          length -= 1;
+          f.seek(length);
+           b = f.readByte();
+        } while(b != 10);
+        f.setLength(length+1);
+        f.close();
+        //LMM.deleteMessage(user2);
     }
 }

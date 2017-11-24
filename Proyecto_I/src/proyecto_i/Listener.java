@@ -95,6 +95,8 @@ public class Listener extends Thread {
                             id = parameter.split("\\{")[2].replace("}","").split(",")[0].split(":")[1];
                             grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1];
                             grupoReceptor = parameter.split("\\{")[2].replace("}","").split(",")[2].split(":")[1];
+                            Emitter = parameter.split("\\{")[2].replace("}","").split(",")[3].split(":")[1].replace("\"", ""); 
+                            Receptor = parameter.split("\\{")[2].replace("}","").split(",")[4].split(":")[1].replace("\"", ""); 
                             
                             if(grupoEmisor.equals("7")){
                                  String respuesta = parameter.split("\\{")[2].replace("}","").split(",")[7].split(":")[1];
@@ -103,12 +105,13 @@ public class Listener extends Thread {
                                     Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " dice que no encontro el usuario." );
                                     not = new Notificacion();
                                     not.setVisible(true);
-                                    //AGREGAR MIDLEWARE
                                  }else{
                                     Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " dice que ha recibido el mensaje." );
                                     not = new Notificacion();
                                     not.setVisible(true);
                                  }
+                               //AGREGAR MIDLEWARE
+                                   middleware.checkR(respuesta,Emitter,Receptor);
                                  //Eliminar la solicitud
                                  Singleton.getInstancia().Delete(id);
                             }

@@ -40,6 +40,7 @@ public class MessagetoGroups extends javax.swing.JFrame {
         Error = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
+        btnexit2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +65,14 @@ public class MessagetoGroups extends javax.swing.JFrame {
         Groupnumber.setModel(new javax.swing.SpinnerNumberModel(1, 1, 10, 1));
 
         jLabel4.setText("Send to:");
+
+        btnexit2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btnexit2.setText("Exit");
+        btnexit2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnexit2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,7 +103,9 @@ public class MessagetoGroups extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
-                        .addComponent(SendBtn)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(SendBtn)
+                            .addComponent(btnexit2))
                         .addGap(23, 23, 23))))
         );
         layout.setVerticalGroup(
@@ -116,7 +127,9 @@ public class MessagetoGroups extends javax.swing.JFrame {
                             .addComponent(Error)))
                     .addComponent(SendBtn))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnexit2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -148,6 +161,11 @@ public class MessagetoGroups extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_SendBtnActionPerformed
+
+    private void btnexit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexit2ActionPerformed
+        // TODO add your handling code here:
+        this.hide();
+    }//GEN-LAST:event_btnexit2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -188,6 +206,7 @@ public class MessagetoGroups extends javax.swing.JFrame {
     private javax.swing.JLabel Error;
     private javax.swing.JSpinner Groupnumber;
     private javax.swing.JButton SendBtn;
+    private javax.swing.JButton btnexit2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
