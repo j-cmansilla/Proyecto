@@ -7,6 +7,8 @@ package proyecto_i;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 
 /**
@@ -33,9 +35,12 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         btnSendMessagetoGroups = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
         btnexit2 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listaMensajes = new javax.swing.JList<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jFriendList = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,8 +55,6 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane1.setViewportView(jList1);
-
         btnexit2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btnexit2.setText("Exit");
         btnexit2.addActionListener(new java.awt.event.ActionListener() {
@@ -60,71 +63,129 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Friends:");
+
+        listaMensajes.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listaMensajesValueChanged(evt);
+            }
+        });
+        jScrollPane3.setViewportView(listaMensajes);
+
+        jFriendList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                jFriendListValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jFriendList);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 63, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnexit2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnexit2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(jLabel1))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(127, 127, 127)
+                                .addComponent(jLabel3)))
+                        .addGap(0, 149, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(32, 32, 32)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(32, 195, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3)
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnexit2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+                .addGap(2, 2, 2)
+                .addComponent(jLabel1)
+                .addGap(3, 3, 3)
+                .addComponent(btnSendMessagetoGroups, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE)
+                .addComponent(btnexit2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(77, 77, 77)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3))
+                    .addGap(0, 20, Short.MAX_VALUE)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-   
-    
-    public void SetData(String user) throws FileNotFoundException
+    public String User;
+    Middleware M = new Middleware();
+    public  void setData(String user) throws FileNotFoundException
     {
-        Middleware M = new Middleware();
-        List<Message> mess = M.getUserMessageGroups(user);
-        List<String> GroupsOfUser = (M.GetMessage(mess));
-        DefaultListModel model = new DefaultListModel();
-            for(String f : GroupsOfUser) {
+       List<String> mdsdf =  M.GetFriends(user);
+                 DefaultListModel model = new DefaultListModel();
+            for(String f : mdsdf) {
                 model.addElement(f);}
-        if(!model.isEmpty())
-            jList1.setModel(model);
-        if(model.isEmpty())
-        {
-            model.addElement("You dont have messages....");
-             jList1.setModel(model);
-        }
+        jFriendList.setModel(model);
+    }
+    public  void setMessages(String user, String user2) throws FileNotFoundException
+    {
+        List<LocalMessage> messssss = M.getUserMessageGroups(user, user2);
+        List<String> mdsdf = M.GetMessage(messssss);
+         DefaultListModel model = new DefaultListModel();
+            for(String f : mdsdf) {
+                model.addElement(f);}
+        listaMensajes.setModel(model);
     }
     
-    private void btnSendMessagetoGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroupsActionPerformed
-        // TODO add your handling code here:
-        MessagetoGroups MG = new MessagetoGroups();
-        MG.show();
-    }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
-
     private void btnexit2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnexit2ActionPerformed
         // TODO add your handling code here:
         this.hide();
     }//GEN-LAST:event_btnexit2ActionPerformed
 
+
+    
+    private void btnSendMessagetoGroupsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroupsActionPerformed
+        // TODO add your handling code here:
+        MessagetoGroups MG = new MessagetoGroups();
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        MG.show();
+        try {
+            MG.User = manejador.getUserLogin();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(ViewMesaggeGroups.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
+
+    private void listaMensajesValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaMensajesValueChanged
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_listaMensajesValueChanged
+
+    private void jFriendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jFriendListValueChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jFriendListValueChanged
+
+    
+   
+    
+   
+    
     /**
      * @param args the command line arguments
      */
@@ -162,11 +223,12 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSendMessagetoGroups;
-    private javax.swing.JButton btnexit;
-    private javax.swing.JButton btnexit1;
     private javax.swing.JButton btnexit2;
+    private javax.swing.JList<String> jFriendList;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JList<String> listaMensajes;
     // End of variables declaration//GEN-END:variables
 }

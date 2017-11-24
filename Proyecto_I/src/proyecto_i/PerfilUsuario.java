@@ -591,18 +591,6 @@ public class PerfilUsuario extends javax.swing.JFrame {
         MG.show();
     }//GEN-LAST:event_btnSendMessagetoGroupsActionPerformed
 
-    private void btnSendMessagetoGroups1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroups1ActionPerformed
-        try {
-            // TODO add your handling code here:
-            ViewMesaggeGroups VMG = new ViewMesaggeGroups();
-            ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
-            VMG.SetData(manejador.getUserLogin());
-            VMG.show();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnSendMessagetoGroups1ActionPerformed
-
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
@@ -648,6 +636,26 @@ public class PerfilUsuario extends javax.swing.JFrame {
         }
         mensajes.show();
     }//GEN-LAST:event_btnLocalMessageActionPerformed
+
+    private void btnSendMessagetoGroups1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendMessagetoGroups1ActionPerformed
+
+        // TODO add your handling code here:
+        ViewMesaggeGroups VMG = new ViewMesaggeGroups();
+        ManejadorDeUsuarios manejador = new ManejadorDeUsuarios();
+        try {
+            //VMG.SetData(manejador.getUserLogin());
+            VMG.User = manejador.getUserLogin();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            VMG.setData(VMG.User);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        VMG.show();
+
+    }//GEN-LAST:event_btnSendMessagetoGroups1ActionPerformed
 
 
     /**

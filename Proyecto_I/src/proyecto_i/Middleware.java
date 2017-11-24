@@ -18,8 +18,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -78,10 +80,10 @@ public class Middleware {
             }
         GUtilities.CleanEmptySpace(DEFAULT_MESSAGEGROUPS);
     }
-    public List<Message> getUserMessageGroups(String user) throws FileNotFoundException
-    {   //    0      1                   2             3      4
-        // #grupo, usuario_emisor, usuario_receptor, fecha, mensaje.
-        List<Message> resultMessage = new ArrayList<Message>();
+    public List<LocalMessage> getUserMessageGroups(String user, String user2) throws FileNotFoundException
+    {   //              0             1                   2             3          4              5             
+        //(String usuario, String usuarioAmigo, String fecha, String mensaje, int tipoDeMensaje, int estatus)
+        List<LocalMessage> resultMessage = new ArrayList<LocalMessage>();
         File Messagefile = new File(DEFAULT_MESSAGEGROUPS);
         String currentLine ="";
         String [] DATAMessage = new String[8];
@@ -90,9 +92,9 @@ public class Middleware {
            {
                currentLine =IndexDescScanner.nextLine();
                DATAMessage = currentLine.split(Pattern.quote("|"));
-                if(DATAMessage[1].equals(user)||DATAMessage[2].equals(user))
-                {
-                    Message m = new Message(Integer.parseInt(DATAMessage[0]), DATAMessage[1], DATAMessage[2], DATAMessage[3], DATAMessage[4]);
+                if(DATAMessage[0].equals(user)&&DATAMessage[1].equals(user2))
+                {             
+                    LocalMessage m  = new LocalMessage(DATAMessage[0], DATAMessage[1], DATAMessage[2], DATAMessage[3], Integer.parseInt(DATAMessage[4]), Integer.parseInt(DATAMessage[5]));
                     resultMessage.add(m);
                 }
             }
@@ -101,13 +103,43 @@ public class Middleware {
         return  resultMessage;
     }
     
-    public List<String> GetMessage(List<Message> mss)
+    public List<String> GetMessage(List<LocalMessage> mss)
     {
         List<String> resultMessage = new ArrayList<String>();
         for (int i = 0; i < mss.size(); i++) {
-            resultMessage.add("Group"+ mss.get(i).getGroupNumber() + " From: "+mss.get(i).getEmitter() 
-                    + " " + mss.get(i).getMessage()+" Date: "+mss.get(i).getDate());
+            resultMessage.add("From: "+mss.get(i).getUsuario()+ "  To: " + mss.get(i).getUsuarioAmigo()+" Message: "+mss.get(i).getMensaje());
         }
         return resultMessage;
+    }
+    
+    public List<String> GetFriends (String user) throws FileNotFoundException
+    {
+         //(String usuario, String usuarioAmigo, String fecha, String mensaje, int tipoDeMensaje, int estatus)
+        List<String> resultMessage = new ArrayList<String>();
+        File Messagefile = new File(DEFAULT_MESSAGEGROUPS);
+        String currentLine ="";
+        String [] DATAMessage = new String[8];
+         try (Scanner IndexDescScanner = new Scanner(Messagefile)) {
+           while(IndexDescScanner.hasNextLine())
+           {
+               currentLine =IndexDescScanner.nextLine();
+               DATAMessage = currentLine.split(Pattern.quote("|"));
+                if(DATAMessage[0].equals(user))
+                {             
+                    resultMessage.add(DATAMessage[1]);
+                }
+                if(DATAMessage[1].equals(user))
+                {             
+                    resultMessage.add(DATAMessage[0]);
+                }
+            }
+            IndexDescScanner.close();
+        }  
+        // add elements to al, including duplicates
+        Set<String> hs = new HashSet<>();
+        hs.addAll(resultMessage);
+        resultMessage.clear();
+        resultMessage.addAll(hs);
+        return  resultMessage;
     }
 }
