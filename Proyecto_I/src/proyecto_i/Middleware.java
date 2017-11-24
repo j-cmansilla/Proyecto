@@ -93,7 +93,7 @@ public class Middleware {
            {
                currentLine =IndexDescScanner.nextLine();
                DATAMessage = currentLine.split(Pattern.quote("|"));
-                if(DATAMessage[0].equals(user)&&DATAMessage[1].equals(user2))
+                if((DATAMessage[0].equals(user)&&DATAMessage[1].equals(user2))||(DATAMessage[0].equals(user2)&&DATAMessage[1].equals(user)))
                 {             
                     LocalMessage m  = new LocalMessage(DATAMessage[0], DATAMessage[1], DATAMessage[2], DATAMessage[3], Integer.parseInt(DATAMessage[4]), Integer.parseInt(DATAMessage[5]));
                     resultMessage.add(m);

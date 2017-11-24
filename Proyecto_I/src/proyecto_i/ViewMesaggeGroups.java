@@ -72,11 +72,6 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(listaMensajes);
 
-        jFriendList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jFriendListMouseClicked(evt);
-            }
-        });
         jFriendList.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 jFriendListValueChanged(evt);
@@ -182,19 +177,14 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
     }//GEN-LAST:event_listaMensajesValueChanged
 
     private void jFriendListValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_jFriendListValueChanged
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jFriendListValueChanged
-
-    private void jFriendListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFriendListMouseClicked
         try {
             // TODO add your handling code here:
-            String selectedChat = jFriendList.getSelectedValue();
+        String selectedChat = jFriendList.getSelectedValue();
             setMessages(User, selectedChat);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ViewMesaggeGroups.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jFriendListMouseClicked
+    }//GEN-LAST:event_jFriendListValueChanged
 
     
    
