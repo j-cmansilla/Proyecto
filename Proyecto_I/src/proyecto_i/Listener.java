@@ -25,7 +25,6 @@ public class Listener extends Thread {
     private String grupoReceptor;
     private String grupoEmisor;
     private Notificacion not;  
-    private String User;
     private String Receptor; 
     private String Emitter;
     private String Message;
@@ -62,10 +61,11 @@ public class Listener extends Thread {
                             id = parameter.split("\\{")[2].replace("}","").split(",")[0].split(":")[1];
                             grupoReceptor = parameter.split("\\{")[2].replace("}","").split(",")[2].split(":")[1];
                             grupoEmisor = parameter.split("\\{")[2].replace("}","").split(",")[1].split(":")[1]; 
-                            User = parameter.split("\\{")[2].replace("}","").split(",")[4].split(":")[1]; 
-                            Emitter = parameter.split("\\{")[2].replace("}","").split(",")[6].split(":")[1]; 
-                            Receptor = parameter.split("\\{")[2].replace("}","").split(",")[3].split(":")[1]; 
-                            Message = parameter.split("\\{")[2].replace("}","").split(",")[5].split(":")[1]; 
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////  
+                            Emitter = parameter.split("\\{")[2].replace("}","").split(",")[3].split(":")[1].replace("\"", ""); 
+                            Receptor = parameter.split("\\{")[2].replace("}","").split(",")[4].split(":")[1].replace("\"", ""); 
+                            Message = parameter.split("\\{")[2].replace("}","").split(",")[6].split(":")[1].replace("\"", ""); 
+   //////////////////////////////////////////////////////////////////////////////////////////////////////////  
                             boolean existe = false;
                             
                             if(grupoReceptor.equals("7")){
@@ -75,18 +75,17 @@ public class Listener extends Thread {
                                 not.setVisible(true);
   //////////////////////////////////////////////////////////////////////////////////////////////////////////
                                 //si es para mi enviar el update con la respuesta de que el usuario existe
-                                 if(middleware.checkUserExist(id)) {
+                                 if(middleware.checkUserExist(Receptor)) {
                                         existe = true;
-                                        middleware.ReceiveMessage(Message, Emitter, Receptor);
+                                        middleware.ReceiveMessage(Message, Receptor, Emitter);
                                  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////  
                                  //Agregar funcion enviar mensaje
                                 if(existe){
-                                    Singleton.getInstancia().Update(id, existe);
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////                                   
+                                    Singleton.getInstancia().Update(id, existe);                                 
                                 }else{
                                     Singleton.getInstancia().Update(id, existe);
-                                }                                        
+                                }                                     
                             }
                         }else{
                             //UPDATE
@@ -104,6 +103,7 @@ public class Listener extends Thread {
                                     Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " dice que no encontro el usuario." );
                                     not = new Notificacion();
                                     not.setVisible(true);
+                                    //AGREGAR MIDLEWARE
                                  }else{
                                     Singleton.getInstancia().setMensaje("El grupo " + grupoReceptor + " dice que ha recibido el mensaje." );
                                     not = new Notificacion();

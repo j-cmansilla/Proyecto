@@ -29,7 +29,7 @@ public class Singleton {
         if(instancia == null){
             instancia = new Singleton();
             Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection("jdbc:postgresql://baasu.db.elephantsql.com:5432/gqujomyc", "gqujomyc", "QP_oNAUhMm0SNSlk2Oz7fw8zlA4-N7CA");
+            con = DriverManager.getConnection("jdbc:postgresql://baasu.db.elephantsql.com:5432/vvwpqoue", "vvwpqoue", "jj6HWNr-0gLyX-kqW9ybfJDcC9YyJYIT");
            // con2 = DriverManager.getConnection("jdbc:postgresql://baasu.db.elephantsql.com:5432/gqujomyc", "gqujomyc", "QP_oNAUhMm0SNSlk2Oz7fw8zlA4-N7CA");
             stmt = con.createStatement();
             DriverManager.setLogWriter(new PrintWriter(System.out, true));          

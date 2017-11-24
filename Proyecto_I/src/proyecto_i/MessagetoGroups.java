@@ -129,15 +129,17 @@ public class MessagetoGroups extends javax.swing.JFrame {
         if(!"".equals(jTextArea1.getText()))
         {
             Middleware M = new Middleware();
+            
             try {
                 /*  M.GroupNumber = (Integer) Groupnumber.getValue();
                 M.messagestr = jTextArea1.getText();
                 M.Receptor = jTextField1.getText();*/
                 //int group,String Message, String Receptor, String Emitter
                 M.SendMessage((Integer) Groupnumber.getValue(), jTextArea1.getText(), jTextField1.getText(), User);
-            } catch (SQLException ex) {
+            } catch (Exception ex) {
                 Logger.getLogger(MessagetoGroups.class.getName()).log(Level.SEVERE, null, ex);
             }
+           
             Error.setText("Message sent successfully");
             jTextArea1.setText("");
             jTextField1.setText("");

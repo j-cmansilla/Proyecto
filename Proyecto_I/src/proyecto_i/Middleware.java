@@ -30,8 +30,8 @@ public class Middleware {
     ManejadorDeUsuarios MDU = new ManejadorDeUsuarios();
     LocalMessageManejador LMM = new LocalMessageManejador();
     Singleton S = new Singleton();
-    //Message message = new Message();
-    
+    GroupsUtilities GUtilities = new GroupsUtilities();
+
     public boolean checkUserExist(String usuario) throws FileNotFoundException
     {
         Usuario user = MDU.getUserData(usuario);
@@ -44,31 +44,39 @@ public class Middleware {
         ZonedDateTime zdt = ZonedDateTime.now( zonedId );
         LocalMessage m = new LocalMessage(emitter, receptor,zdt.toString(), message, 1, 1);
         LMM.llenarBitacora(emitter, zdt, m);
+        saveMessage(m);
     }
     
-    public boolean SendMessage(int group,String Message, String Receptor, String Emitter) throws SQLException
+    public boolean SendMessage(int group,String Message, String Receptor, String Emitter) throws SQLException, Exception
     {//int grupoEmisor,int grupoReceptor, String emisor, String receptor, String mensaje
         S.Insert(7, group, Emitter, Receptor, Message);
+        ZoneId zonedId = ZoneId.of( "America/Guatemala" );
+        ZonedDateTime zdt = ZonedDateTime.now( zonedId );
+        LocalMessage m = new LocalMessage(Emitter, Receptor,zdt.toString(), Message, 1, 1);
+        LMM.llenarBitacora(Emitter, zdt, m);
+        saveMessage(m);
         return true;
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    private final String DEFAULT_MESSAGEGROUPS ="C:\\MEIA\\MessageGroups.txt";
     public void CrearArchivos() throws IOException{
-           // File mess = new File(DEFAULT_MESSAGEGROUPS);
-           // mess.createNewFile();
+            File mess = new File(DEFAULT_MESSAGEGROUPS);
+            mess.createNewFile();
     }
    
    public void saveMessage(LocalMessage newmessage) throws IOException
     {    // #grupo, usuario_emisor, usuario_receptor, fecha, mensaje.
-       // CrearArchivos();
-        /*File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
+        //String usuario, String usuarioAmigo, String fecha, String mensaje, int tipoDeMensaje, int estatus
+        CrearArchivos();
+        File MessageGroupsfile = new File(DEFAULT_MESSAGEGROUPS);
         MessageGroupsfile.createNewFile();
-       String b = newmessage.getGroupNumber()+"|"+newmessage.getEmitter()+"|"+newmessage.getReceptor()+"|"+newmessage.getDate()+ "|" + newmessage.getMessage();
+        String b = newmessage.getUsuario()+"|"+newmessage.getUsuarioAmigo()+"|"+newmessage.getFecha()+"|"+newmessage.getMensaje()+ "|1|1";
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(DEFAULT_MESSAGEGROUPS, true))) {
                 writer.newLine();
                 writer.append(b);
                 writer.close();
-            }*/
+            }
+        GUtilities.CleanEmptySpace(DEFAULT_MESSAGEGROUPS);
     }
     public List<Message> getUserMessageGroups(String user) throws FileNotFoundException
     {   //    0      1                   2             3      4
