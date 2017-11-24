@@ -596,6 +596,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setAcceptAllFileFilterUsed(false);
         //FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image","PNG");
         fileChooser.setFileFilter(new FileNameExtensionFilter(".jpg", "JPG"));
         fileChooser.setFileFilter(new FileNameExtensionFilter(".jpeg", "JPEG"));
@@ -607,11 +608,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 objImagenes.SaveImage(selectedFile.getAbsolutePath(), manejador.getUserLogin());
+                JOptionPane.showMessageDialog(null, "Image Uploaded");
             } catch (IOException ex) {
                 Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        JOptionPane.showMessageDialog(null, "Image Uploaded");
         
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
