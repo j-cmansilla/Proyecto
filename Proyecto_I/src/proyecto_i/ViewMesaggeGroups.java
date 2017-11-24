@@ -6,6 +6,7 @@
 package proyecto_i;
 
 import java.io.FileNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,7 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jFriendList = new javax.swing.JList<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
         jLabel3.setText("Message from Groups");
@@ -137,6 +138,7 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
     public  void setData(String user) throws FileNotFoundException
     {
        List<String> mdsdf =  M.GetFriends(user);
+       
                  DefaultListModel model = new DefaultListModel();
             for(String f : mdsdf) {
                 model.addElement(f);}
@@ -146,6 +148,7 @@ public class ViewMesaggeGroups extends javax.swing.JFrame {
     {
         List<LocalMessage> messssss = M.getUserMessageGroups(user, user2);
         List<String> mdsdf = M.GetMessage(messssss);
+        Collections.reverse(mdsdf);
          DefaultListModel model = new DefaultListModel();
             for(String f : mdsdf) {
                 model.addElement(f);}

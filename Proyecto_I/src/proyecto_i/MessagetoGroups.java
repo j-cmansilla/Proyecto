@@ -42,7 +42,7 @@ public class MessagetoGroups extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         btnexit2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         SendBtn.setText("Send");
         SendBtn.addActionListener(new java.awt.event.ActionListener() {
