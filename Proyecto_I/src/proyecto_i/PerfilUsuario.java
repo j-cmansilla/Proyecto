@@ -620,11 +620,11 @@ public class PerfilUsuario extends javax.swing.JFrame {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 objImagenes.SaveImage(selectedFile.getAbsolutePath(), manejador.getUserLogin());
+                JOptionPane.showMessageDialog(null, "Image Uploaded");
             } catch (IOException ex) {
                 Logger.getLogger(PerfilUsuario.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        JOptionPane.showMessageDialog(null, "Image Uploaded");
         
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
