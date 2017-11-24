@@ -24,6 +24,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -60,6 +61,9 @@ public class ManejadorDeImagenes {
     {
         File entrada = new File(Path);
         File salida = new File(DEFAULT_IMAGE_DIRECTORY+entrada.getName());
+        if (salida.exists()) {
+            salida = new File(DEFAULT_IMAGE_DIRECTORY+ FilenameUtils.removeExtension(entrada.getName()) + "(1)." + FilenameUtils.getExtension(entrada.getName()));
+        }
         Files.copy(entrada.toPath(), salida.toPath());
         String node = createNode(user, salida.toPath().toString());
         ArrayList BTree = ReadBinaryTree();
@@ -146,6 +150,13 @@ public class ManejadorDeImagenes {
         Files.delete(path);
         File newFile = new File(newFilePath);
         FileUtils.moveFile(tempFile, newFile);
+        
+        ManejadorDeUsuarios objUsuarios = new ManejadorDeUsuarios();
+        Writer writerD = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(DEFAULT_DES_IMAGE_DIRECTORY+DEFAULT_IMAGENES_DIRECTORY), "utf-8"));
+        String[] pathStrings = BTree.get(BTree.size()-1).toString().split("\\|");
+        writerD.write(objUsuarios.getUserLogin() + System.getProperty("line.separator") + pathStrings[3] + System.getProperty("line.separator") + Integer.toString(BTree.size()));
+        writerD.close();
     }
     
     public ArrayList getPaths(String user) throws FileNotFoundException{

@@ -608,6 +608,7 @@ public class PerfilUsuario extends javax.swing.JFrame {
         ManejadorDeImagenes objImagenes = new ManejadorDeImagenes();
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setAcceptAllFileFilterUsed(false);
         //FileNameExtensionFilter filtro = new FileNameExtensionFilter("Image","PNG");
         fileChooser.setFileFilter(new FileNameExtensionFilter(".jpg", "JPG"));
         fileChooser.setFileFilter(new FileNameExtensionFilter(".jpeg", "JPEG"));
